@@ -62,8 +62,6 @@ SOL::Direcao direction(char eixo,int inicial, int final){
 }
 
 void moveTo(int * xAtual,int *yAtual,int *menorYmenorX,int *direcaoAtual, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
-    int distY = abs(*yAtual-*menorYmenorX);
-    int distX = abs(*xAtual-*(menorYmenorX+1));
     
     //if ele não precisa atravessar:
     SOL::Direcao direcaoDestino= direction('y',*yAtual,*menorYmenorX);
@@ -74,7 +72,10 @@ void moveTo(int * xAtual,int *yAtual,int *menorYmenorX,int *direcaoAtual, LightS
         }
     
     if(*yAtual<*menorYmenorX){
-        moveForSquare(distY, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+        while(*yAtual<*(menorYmenorX)){
+            moveForSquare(1, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+            *yAtual = *yAtual+1;
+        }
     }
     
     direcaoDestino= direction('x',*xAtual,*(menorYmenorX+1));
@@ -84,7 +85,10 @@ void moveTo(int * xAtual,int *yAtual,int *menorYmenorX,int *direcaoAtual, LightS
             corrigirDirecao(direcaoAtual);
         }
     if(*xAtual<*(menorYmenorX+1)){
-        moveForSquare(distX, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+        while(*xAtual<*(menorYmenorX+1)){
+            moveForSquare(1, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+            *xAtual = *xAtual+1;
+        }
     }
     
 }
