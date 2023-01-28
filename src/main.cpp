@@ -1,31 +1,34 @@
-#include<Arduino.h>
-#include<Wire.h>
+#include <Arduino.h>
+#include <Wire.h>
+#include <ColorSensor.h>
 
-#define IN1 22
-#define IN2 23
-#define IN3 24
-#define IN4 25
-#define PwM_left 3
-#define PwM_right 2
-void setup(){
-   pinMode(IN1, OUTPUT);
-   pinMode(IN2, OUTPUT);
-   pinMode(IN3, OUTPUT);
-   pinMode(IN4, OUTPUT);
+#define s0 30
+#define s1 28
+#define s2 29
+#define s3 26
+#define out 27
 
+
+//Variaveis cores
+int red = 0;
+int green = 0;
+int blue = 0;
+int no_filter = 0;
+
+ColorSensor frontalColorSensor(s0,s1,s2,s3,out);
+
+void setup()
+{
+
+  Serial.begin(9600);
 }
-void loop(){
-    for ( int i=0;i<250;i++){
-        digitalWrite(IN1, HIGH);
-        digitalWrite(IN1, LOW);
-        analogWrite(PwM_left, i);
-        delay(2000);
-    }
-    for ( int i=0;i<250;i++){
-        digitalWrite(IN3, HIGH);
-        digitalWrite(IN4, LOW);
-        analogWrite(PwM_right, i);
-        delay(2000);
-    }
-   
+
+
+
+void loop()
+{
+ 
+  frontalColorSensor.identify_color();
+  frontalColorSensor.print_color_components_RGB();
+  delay(1000);
 }
