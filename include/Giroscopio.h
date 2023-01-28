@@ -7,7 +7,6 @@ class Giroscopio{
     float angulo_atual();
     private:
 
-
 };
 
 #endif
