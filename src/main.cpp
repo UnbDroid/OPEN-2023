@@ -1,31 +1,42 @@
 #include<Arduino.h>
 #include<Wire.h>
+#include <MotorDC.h>
+#include <Ultrassonic.h>
 
 #define IN1 22
 #define IN2 23
 #define IN3 24
 #define IN4 25
+
 #define PwM_left 3
 #define PwM_right 2
+
+#define echoPin 50
+#define trigPin 51
+
+float velocidade = 255;
+float distance;
+
+Ultrassonic ultrassound(echoPin,trigPin);
+
+// MotorDC leftMotor(IN1,IN2,PwM_left);
+// MotorDC rightMotor(IN3,IN4,PwM_right);
+
 void setup(){
-   pinMode(IN1, OUTPUT);
-   pinMode(IN2, OUTPUT);
-   pinMode(IN3, OUTPUT);
-   pinMode(IN4, OUTPUT);
+    Serial.begin(9600);
 
 }
 void loop(){
-    for ( int i=0;i<250;i++){
-        digitalWrite(IN1, HIGH);
-        digitalWrite(IN1, LOW);
-        analogWrite(PwM_left, i);
-        delay(2000);
-    }
-    for ( int i=0;i<250;i++){
-        digitalWrite(IN3, HIGH);
-        digitalWrite(IN4, LOW);
-        analogWrite(PwM_right, i);
-        delay(2000);
-    }
-   
+
+    distance = ultrassound.distance_meters();
+
+    Serial.println("a distance que o pulso volta é que ta lendo em metros é:");
+    Serial.println(distance);
+
+    delay(100);
+
+    // rightMotor.andar_para_frente(&velocidade);
+    // leftMotor.andar_para_frente(&velocidade);
+
 }
+        

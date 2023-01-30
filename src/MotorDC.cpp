@@ -19,7 +19,6 @@ MotorDC::MotorDC(int pinoA, int pinoB, int pinoPwm){
     pinMode(this->pinoB, OUTPUT);
     pinMode(this->pinoPwm, OUTPUT);
 
-
     /*
     AQUI É O CONSTRUTOR DA NOSSA CLASSE, JA ESTAMOS SETANDO O MODO DOS PINOS BEM AQUI.
     */
@@ -36,7 +35,7 @@ void MotorDC::parar(){
     digitalWrite(this->pinoB, LOW);
 }
 
-void MotorDC::andar_para_tras(int * velocidade){
+void MotorDC::andar_para_tras(int *velocidade){
     digitalWrite(this->pinoA, LOW);
     digitalWrite(this->pinoB, HIGH);
     analogWrite(this->pinoPwm, *velocidade);
