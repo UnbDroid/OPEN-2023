@@ -25,12 +25,10 @@ float Ultrassonic::distance_meters(){
     return distance;
 }
 
-
 float Ultrassonic::distance_cm(){
     send_pulse();
     time = pulseIn(echoPin,HIGH);
     distance = ((time*0.000340)/2)*100;
-    
-    return distance;
 
+    return distance;
 }
