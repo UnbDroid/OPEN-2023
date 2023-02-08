@@ -41,7 +41,7 @@ void ColorSensor::read_values(){  //Rotina que lê as componentes RGB do sensor
 int ColorSensor::identify_color(){   // Lê os valores dos componentes RGB, identifica a cor e printa o nome da cor
   read_values();
   //Verifica se a cor vermelha foi detectada
-  if ((28 < this->red && this->red < 70) && (105 < this->green && this->green < 170) && (80 < this->blue && this->blue < 160) && this->red < this->blue && this->red < this->green){
+  if ((80 < this->red && this->red < 130 ) && (195 < this->green && this->green < 270) && (250 < this->blue && this->blue < 340) && this->red < this->blue && this->red < this->green){
     Serial.println("Vermelho");
     return 0;}
  
@@ -72,6 +72,7 @@ int ColorSensor::identify_color(){   // Lê os valores dos componentes RGB, iden
 
   else{
     Serial.println("Oi sdds");
+    return 6;
   }
   Serial.println();
 

@@ -15,7 +15,7 @@ TEMOS DIFERENTES TIPOS DE VISUALIZAÇÕES DAS COISAS, COMO PUBLIC, PRIVATE, PROT
         public: 
         
             MotorDC(int pinoA, int pinoB, int pinoPwm);
-            ~MotorDC();
+            // ~MotorDC();
             
             void andar_para_frente(int* velocidade);
             void andar_para_tras(int * velocidade);
