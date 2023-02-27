@@ -20,7 +20,7 @@ ColorSensor::ColorSensor(int s0, int s1, int s2, int s3, int out){
 
 }
 
-void ColorSensor::read_values(){  //Rotina que lê as componentes RGB do sensor
+void ColorSensor::read_values(){  //Rotina que lê as componentes RGB do sensor. Não é para ser chamada na main
   digitalWrite(this->s2, LOW);
   digitalWrite(this->s3, LOW);
   //count OUT, pRed, RED
@@ -38,45 +38,97 @@ void ColorSensor::read_values(){  //Rotina que lê as componentes RGB do sensor
 
 
 
-int ColorSensor::identify_color(){   // Lê os valores dos componentes RGB, identifica a cor e printa o nome da cor
+
+
+int ColorSensor::identify_color(int num){   // Lê os valores dos componentes RGB, identifica a cor e printa o nome da cor
+  
+  // num == 1 -> Frontal Sensor
+  // num == 2 -> Left Sensor
+  // num == 3 -> Right Sensor
+  
   read_values();
-  //Verifica se a cor vermelha foi detectada
-  if ((80 < this->red && this->red < 130 ) && (195 < this->green && this->green < 270) && (250 < this->blue && this->blue < 340) && this->red < this->blue && this->red < this->green){
-    Serial.println("Vermelho");
-    return 0;}
- 
-  //Verifica se a cor azul foi detectada
-  else if ((100 < this->red && this->red < 170) && (70 < this->green && this->green < 160) && (50 <this->blue && this->blue < 120) && this->blue < this->red && this->blue < this->green){
-    Serial.println("Azul");
-    return 1;}
- 
-  //Verifica se a cor verde foi detectada
-  else if ((90 < this->red && this->red < 160) && (65 < this->green && this->green < 140) && (70 < this->blue && this->blue < 130) && this->green < this->red && this->green < this->blue ){
-    Serial.println("Verde");
-    return 2;}
+  if (num == 1){ // Valores para o sensor frontal
+  
+    //Verifica se a cor vermelha foi detectada
+    if ((150 < this->red && this->red < 180 ) && (150 < this->green && this->green < 180) && (150 < this->blue && this->blue < 200) && this->red < this->blue && this->red < this->green){
+      Serial.println("Vermelho");
+      return 0;}
+  
+    //Verifica se a cor azul foi detectada
+    else if ((100 < this->red && this->red < 170) && (70 < this->green && this->green < 160) && (50 <this->blue && this->blue < 120) && this->blue < this->red && this->blue < this->green){
+      Serial.println("Azul");
+      return 1;}
+  
+    //Verifica se a cor verde foi detectada
+    else if ((90 < this->red && this->red < 160) && (65 < this->green && this->green < 140) && (70 < this->blue && this->blue < 130) && this->green < this->red && this->green < this->blue ){
+      Serial.println("Verde");
+      return 2;}
 
-    //Verifica se a cor amarela foi detectada
-  else if ((10 < this->red && this->red < 60) && (30 < this->green && this->green < 90) && (45 < this->blue && this->blue < 100) && this->blue > this->red && this->blue > this->green){
-    Serial.println("Amarelo");
-    return 3;}
+      //Verifica se a cor amarela foi detectada
+    else if ((10 < this->red && this->red < 60) && (30 < this->green && this->green < 90) && (45 < this->blue && this->blue < 100) && this->blue > this->red && this->blue > this->green){
+      Serial.println("Amarelo");
+      return 3;}
 
-    //Verifica se a cor branca foi detectada
-  else if ((0 < this->red && this->red < 70) && (0 < this->green && this->green < 70) && (0 < this->blue && this->blue < 70)){
-    Serial.println("Branco");
-    return 4;}
+      //Verifica se a cor branca foi detectada
+    else if ((0 < this->red && this->red < 70) && (0 < this->green && this->green < 70) && (0 < this->blue && this->blue < 70)){
+      Serial.println("Branco");
+      return 4;}
 
-    //Verifica se a cor preta foi detectada
-  else if ((110 < this->red && this->red < 180) && (110 < this->green && this->green < 220) && (110 < this->blue && this->blue < 190)){
-    Serial.println("Preto");
-    return 5;}
+      //Verifica se a cor preta foi detectada
+    else if ((110 < this->red && this->red < 180) && (110 < this->green && this->green < 220) && (110 < this->blue && this->blue < 190)){
+      Serial.println("Preto");
+      return 5;}
 
-  else{
-    Serial.println("Oi sdds");
+    else{
+      Serial.println("Nenhuma Cor Identificada");
+      return 6;
+    }
+  }
+  else if (num == 2){
+    //Verifica se a cor vermelha foi detectada
+    if ((80 < this->red && this->red < 130 ) && (195 < this->green && this->green < 270) && (250 < this->blue && this->blue < 340) && this->red < this->blue && this->red < this->green){
+      Serial.println("Vermelho");
+      return 0;}
+  
+    //Verifica se a cor azul foi detectada
+    else if ((100 < this->red && this->red < 170) && (70 < this->green && this->green < 160) && (50 <this->blue && this->blue < 120) && this->blue < this->red && this->blue < this->green){
+      Serial.println("Azul");
+      return 1;}
+  
+    //Verifica se a cor verde foi detectada
+    else if ((90 < this->red && this->red < 160) && (65 < this->green && this->green < 140) && (70 < this->blue && this->blue < 130) && this->green < this->red && this->green < this->blue ){
+      Serial.println("Verde");
+      return 2;}
+
+      //Verifica se a cor amarela foi detectada
+    else if ((10 < this->red && this->red < 60) && (30 < this->green && this->green < 90) && (45 < this->blue && this->blue < 100) && this->blue > this->red && this->blue > this->green){
+      Serial.println("Amarelo");
+      return 3;}
+
+      //Verifica se a cor branca foi detectada
+    else if ((0 < this->red && this->red < 70) && (0 < this->green && this->green < 70) && (0 < this->blue && this->blue < 70)){
+      Serial.println("Branco");
+      return 4;}
+
+      //Verifica se a cor preta foi detectada
+    else if ((110 < this->red && this->red < 180) && (110 < this->green && this->green < 220) && (110 < this->blue && this->blue < 190)){
+      Serial.println("Preto");
+      return 5;}
+
+    else{
+      Serial.println("Nenhuma Cor Identificada");
+      return 6;
+    }
+  }
+  else
+  {
     return 6;
   }
-  Serial.println();
 
 }
+
+
+
 
 void ColorSensor::print_color_components_RGB(){
 

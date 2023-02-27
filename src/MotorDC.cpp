@@ -24,11 +24,12 @@ MotorDC::MotorDC(int pinoA, int pinoB, int pinoPwm){
     AQUI É O CONSTRUTOR DA NOSSA CLASSE, JA ESTAMOS SETANDO O MODO DOS PINOS BEM AQUI.
     */
 }
-MotorDC::~MotorDC(){
-    ~this->pinoA;
-    ~this->pinoB;
-    ~this->pinoPwm;
-}
+
+// MotorDC::~MotorDC(){
+//     ~this->pinoA;
+//     ~this->pinoB;
+//     ~this->pinoPwm;
+// }
 
 void MotorDC::andar_para_frente(int *velocidade){
     digitalWrite(this->pinoA, HIGH);

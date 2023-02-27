@@ -8,7 +8,7 @@ class ColorSensor{
 
         void read_values();
         void print_color_components_RGB();
-        int identify_color();
+        int identify_color(int num);
 
 
     private:
