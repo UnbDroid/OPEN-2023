@@ -1,5 +1,6 @@
 #ifndef GIROSCOPIO_H
 #define GIROSCOPIO_H
+
 class Giroscopio{
     public:
     Giroscopio();

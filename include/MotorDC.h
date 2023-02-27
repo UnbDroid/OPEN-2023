@@ -8,7 +8,6 @@ TEMOS DIFERENTES TIPOS DE VISUALIZAÇÕES DAS COISAS, COMO PUBLIC, PRIVATE, PROT
 
 */
 
-
 #ifndef MOTORDC_H
 #define MOTORDC_H
     class MotorDC{
@@ -16,9 +15,8 @@ TEMOS DIFERENTES TIPOS DE VISUALIZAÇÕES DAS COISAS, COMO PUBLIC, PRIVATE, PROT
         
             MotorDC(int pinoA, int pinoB, int pinoPwm);
             // ~MotorDC();
-            
-            void andar_para_frente(int* velocidade);
-            void andar_para_tras(int * velocidade);
+            void andar_para_frente(int *velocidade);
+            void andar_para_tras(int *velocidade);
             void parar();
 
         private:
@@ -26,5 +24,6 @@ TEMOS DIFERENTES TIPOS DE VISUALIZAÇÕES DAS COISAS, COMO PUBLIC, PRIVATE, PROT
             int pinoA;
             int pinoB;
             int pinoPwm; //de 0 ate 250
+            
     };
 #endif
