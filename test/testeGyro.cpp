@@ -22,12 +22,8 @@ void loop(){
     gx = Wire.read()<<8 | Wire.read();
     gy = Wire.read()<<8 | Wire.read();
     gz = Wire.read()<<8 | Wire.read();
-    Serial.print("Valor em X ");
-    Serial.print(gx);
-    Serial.print(" Valor em y ");
-    Serial.println(gy);
-    Serial.print(" Valor em z ");
-    Serial.println(gz);
+
+    Serial.println(gx);
     delay(400);
 
 }
