@@ -2,6 +2,11 @@
 #include<Arduino.h>
 #include<Wire.h>
 
+
+int lim_inf_red_frontalsensor = 73;
+int lim_sup_red_frontalsensor = 131;
+
+
 ColorSensor::ColorSensor(int s0, int s1, int s2, int s3, int out){
     this->s0 = s0;
     this->s1 = s1;
@@ -50,7 +55,7 @@ int ColorSensor::identify_color(int num){   // Lê os valores dos componentes RG
   if (num == 1){ // Valores para o sensor frontal
   
     //Verifica se a cor vermelha foi detectada
-    if ((150 < this->red && this->red < 180 ) && (150 < this->green && this->green < 180) && (150 < this->blue && this->blue < 200) && this->red < this->blue && this->red < this->green){
+    if ((73 < this->red && this->red < 131 ) && (158 < this->green && this->green < 222) && (190 < this->blue && this->blue < 247) && this->red < this->blue && this->red < this->green){
       Serial.println("Vermelho");
       return 0;}
   
@@ -86,7 +91,7 @@ int ColorSensor::identify_color(int num){   // Lê os valores dos componentes RG
   }
   else if (num == 2){
     //Verifica se a cor vermelha foi detectada
-    if ((80 < this->red && this->red < 130 ) && (195 < this->green && this->green < 270) && (250 < this->blue && this->blue < 340) && this->red < this->blue && this->red < this->green){
+    if ((35 < this->red && this->red < 50 ) && (70 < this->green && this->green < 900) && (90 < this->blue && this->blue < 110) && this->red < this->blue && this->red < this->green){
       Serial.println("Vermelho");
       return 0;}
   
