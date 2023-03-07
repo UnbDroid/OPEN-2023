@@ -1,23 +1,17 @@
+#include "MPU9250.h"
 #include<Arduino.h>
-#include<Wire.h>
+MPU9250 mpu; // You can also use MPU9255 as is
 
-#define eca 2
-
-#define ecb 3
-
-
-void meudeus(){
-
-    Serial.println("a");
-    
-}
-void setup(){
+void setup() {
     Serial.begin(9600);
-    pinMode(7, INPUT);
-    pinMode(6, INPUT);
-    delay(100);
-    attachInterrupt(digitalPinToInterrupt(ecb), meudeus, RISING);
+    Wire.begin();
+    delay(2000);
 
+    mpu.setup(0x68);  // change to your own address
 }
-void loop(){
+
+void loop() {
+    if (mpu.update()) {
+        Serial.println(mpu.getMagX());
+    }
 }
