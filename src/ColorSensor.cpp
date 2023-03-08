@@ -1,10 +1,9 @@
 #include<ColorSensor.h>
 #include<Arduino.h>
 #include<Wire.h>
+#include <EEPROM.h>
 
 
-int lim_inf_red_frontalsensor = 73;
-int lim_sup_red_frontalsensor = 131;
 
 
 ColorSensor::ColorSensor(int s0, int s1, int s2, int s3, int out){
@@ -32,10 +31,10 @@ void ColorSensor::read_values(){  //Rotina que lê as componentes RGB do sensor.
   this->red = pulseIn(this->out, HIGH);
   digitalWrite(this->s3, HIGH);
   //count out, pBLUE, BLUE
-  this->green = pulseIn(this->out, HIGH);
+  this->blue = pulseIn(this->out, HIGH);
   digitalWrite(this->s2, HIGH);
   //count out, pGreen, GREEN
-  this->blue = pulseIn(this->out, HIGH);
+  this->green = pulseIn(this->out, HIGH);
   digitalWrite(this->s3, LOW);
   // count out -> no filter
   this->no_filter = pulseIn(this->out, HIGH);
@@ -45,93 +44,49 @@ void ColorSensor::read_values(){  //Rotina que lê as componentes RGB do sensor.
 
 
 
-int ColorSensor::identify_color(int num){   // Lê os valores dos componentes RGB, identifica a cor e printa o nome da cor
+int ColorSensor::identify_color(){   // Lê os valores dos componentes RGB, identifica a cor e printa o nome da cor
+// Para identificar a cor, ele checa se as componentes rgb estão dentro dos limites correspondentes por cada cor, por exemplo:
+// Para a cor ser considerada vermelha,a componente R do RGB deve estar entre 20 e 40, a G entre 60 e 80, e a B entre 60 e 80
   
-  // num == 1 -> Frontal Sensor
-  // num == 2 -> Left Sensor
-  // num == 3 -> Right Sensor
-  
+
   read_values();
-  if (num == 1){ // Valores para o sensor frontal
   
-    //Verifica se a cor vermelha foi detectada
-    if ((73 < this->red && this->red < 131 ) && (158 < this->green && this->green < 222) && (190 < this->blue && this->blue < 247) && this->red < this->blue && this->red < this->green){
-      Serial.println("Vermelho");
-      return 0;}
-  
-    //Verifica se a cor azul foi detectada
-    else if ((100 < this->red && this->red < 170) && (70 < this->green && this->green < 160) && (50 <this->blue && this->blue < 120) && this->blue < this->red && this->blue < this->green){
-      Serial.println("Azul");
-      return 1;}
-  
-    //Verifica se a cor verde foi detectada
-    else if ((90 < this->red && this->red < 160) && (65 < this->green && this->green < 140) && (70 < this->blue && this->blue < 130) && this->green < this->red && this->green < this->blue ){
-      Serial.println("Verde");
-      return 2;}
+  //Verifica se a cor vermelha foi detectada
+  if ((this -> lim_inf_red_r < this->red && this->red < this->lim_sup_red_r ) && (this -> lim_inf_red_g < this->green && this->green < this -> lim_sup_red_g) && (this -> lim_inf_red_b < this->blue && this->blue < this -> lim_sup_red_b) && this->red < this->blue && this->red < this->green){
+    Serial.println("Vermelho");
+    return 0;}
 
-      //Verifica se a cor amarela foi detectada
-    else if ((10 < this->red && this->red < 60) && (30 < this->green && this->green < 90) && (45 < this->blue && this->blue < 100) && this->blue > this->red && this->blue > this->green){
-      Serial.println("Amarelo");
-      return 3;}
+  //Verifica se a cor azul foi detectada
+  else if ((this -> lim_inf_blue_r < this->red && this->red < this->lim_sup_blue_r ) && (this -> lim_inf_blue_g < this->green && this->green < this -> lim_sup_blue_g) && (this -> lim_inf_blue_b < this->blue && this->blue < this -> lim_sup_blue_b) && this->blue < this->red && this->blue < this->green){
+    Serial.println("Azul");
+    return 1;}
 
-      //Verifica se a cor branca foi detectada
-    else if ((0 < this->red && this->red < 70) && (0 < this->green && this->green < 70) && (0 < this->blue && this->blue < 70)){
-      Serial.println("Branco");
-      return 4;}
+  //Verifica se a cor verde foi detectada
+  else if ((this -> lim_inf_green_r < this->red && this->red < this->lim_sup_green_r ) && (this -> lim_inf_green_g < this->green && this->green < this -> lim_sup_green_g) && (this -> lim_inf_green_b < this->blue && this->blue < this -> lim_sup_green_b)&& this->green < this->red && this->green < this->blue){
+    Serial.println("Verde");
+    return 2;}
 
-      //Verifica se a cor preta foi detectada
-    else if ((110 < this->red && this->red < 180) && (110 < this->green && this->green < 220) && (110 < this->blue && this->blue < 190)){
-      Serial.println("Preto");
-      return 5;}
+    //Verifica se a cor amarela foi detectada
+  else if ((this -> lim_inf_yellow_r < this->red && this->red < this->lim_sup_yellow_r ) && (this -> lim_inf_yellow_g < this->green && this->green < this -> lim_sup_yellow_g) && (this -> lim_inf_yellow_b < this->blue && this->blue < this -> lim_sup_yellow_b) && this->blue > this->red && this->blue > this->green){
+    Serial.println("Amarelo");
+    return 3;}
 
-    else{
-      Serial.println("Nenhuma Cor Identificada");
-      return 6;
-    }
-  }
-  else if (num == 2){
-    //Verifica se a cor vermelha foi detectada
-    if ((35 < this->red && this->red < 50 ) && (70 < this->green && this->green < 900) && (90 < this->blue && this->blue < 110) && this->red < this->blue && this->red < this->green){
-      Serial.println("Vermelho");
-      return 0;}
-  
-    //Verifica se a cor azul foi detectada
-    else if ((100 < this->red && this->red < 170) && (70 < this->green && this->green < 160) && (50 <this->blue && this->blue < 120) && this->blue < this->red && this->blue < this->green){
-      Serial.println("Azul");
-      return 1;}
-  
-    //Verifica se a cor verde foi detectada
-    else if ((90 < this->red && this->red < 160) && (65 < this->green && this->green < 140) && (70 < this->blue && this->blue < 130) && this->green < this->red && this->green < this->blue ){
-      Serial.println("Verde");
-      return 2;}
+    //Verifica se a cor branca foi detectada
+  else if ((this -> lim_inf_white_r < this->red && this->red < this->lim_sup_white_r ) && (this -> lim_inf_white_g < this->green && this->green < this -> lim_sup_white_g) && (this -> lim_inf_white_b < this->blue && this->blue < this -> lim_sup_white_b)) {
+    Serial.println("Branco");
+    return 4;}
 
-      //Verifica se a cor amarela foi detectada
-    else if ((10 < this->red && this->red < 60) && (30 < this->green && this->green < 90) && (45 < this->blue && this->blue < 100) && this->blue > this->red && this->blue > this->green){
-      Serial.println("Amarelo");
-      return 3;}
+    //Verifica se a cor preta foi detectada
+  else if ((this -> lim_inf_black_r < this->red && this->red < this->lim_sup_black_r ) && (this -> lim_inf_black_g < this->green && this->green < this -> lim_sup_black_g) && (this -> lim_inf_black_b < this->blue && this->blue < this -> lim_sup_black_b)) {
+    Serial.println("Preto");
+    return 5;}
 
-      //Verifica se a cor branca foi detectada
-    else if ((0 < this->red && this->red < 70) && (0 < this->green && this->green < 70) && (0 < this->blue && this->blue < 70)){
-      Serial.println("Branco");
-      return 4;}
-
-      //Verifica se a cor preta foi detectada
-    else if ((110 < this->red && this->red < 180) && (110 < this->green && this->green < 220) && (110 < this->blue && this->blue < 190)){
-      Serial.println("Preto");
-      return 5;}
-
-    else{
-      Serial.println("Nenhuma Cor Identificada");
-      return 6;
-    }
-  }
-  else
-  {
+  else{
+    Serial.println("Nenhuma Cor Identificada");
     return 6;
   }
 
 }
-
 
 
 
@@ -154,70 +109,72 @@ void ColorSensor::read_limit_values(){ // Função que lê os valores dos limite
   int count = 0;
   // Lendo os valores da cor vermelha
   EEPROM.get(count, this ->lim_inf_red_r);
-  EEPROM.get(count + 2, this ->lim_inf_red_r);
+  EEPROM.get(count + 2, this ->lim_sup_red_r);
 
   EEPROM.get(count + 4, this ->lim_inf_red_g);
-  EEPROM.get(count + 6, this ->lim_inf_red_g);
+  EEPROM.get(count + 6, this ->lim_sup_red_g);
 
   EEPROM.get(count+8, this ->lim_inf_red_b);
-  EEPROM.get(count + 10, this ->lim_inf_red_b);
+  EEPROM.get(count + 10, this ->lim_sup_red_b);
+
+
 
 
   // Lendo os valores da cor azul
   count +=12;
   EEPROM.get(count, this ->lim_inf_blue_r);
-  EEPROM.get(count + 2, this ->lim_inf_blue_r);
+  EEPROM.get(count + 2, this ->lim_sup_blue_r);
 
   EEPROM.get(count + 4, this ->lim_inf_blue_g);
-  EEPROM.get(count + 6, this ->lim_inf_blue_g);
+  EEPROM.get(count + 6, this ->lim_sup_blue_g);
 
   EEPROM.get(count+8, this ->lim_inf_blue_b);
-  EEPROM.get(count + 10, this ->lim_inf_blue_b);
+  EEPROM.get(count + 10, this ->lim_sup_blue_b);
 
   // Lendo os valores da cor verde
   count +=12;
   EEPROM.get(count, this ->lim_inf_green_r);
-  EEPROM.get(count + 2, this ->lim_inf_green_r);
+  EEPROM.get(count + 2, this ->lim_sup_green_r);
 
   EEPROM.get(count + 4, this ->lim_inf_green_g);
-  EEPROM.get(count + 6, this ->lim_inf_green_g);
+  EEPROM.get(count + 6, this ->lim_sup_green_g);
 
   EEPROM.get(count+8, this ->lim_inf_green_b);
-  EEPROM.get(count + 10, this ->lim_inf_green_b);
+  EEPROM.get(count + 10, this ->lim_sup_green_b);
 
   // Lendo os valores da cor amarela
   count +=12;
   EEPROM.get(count, this ->lim_inf_yellow_r);
-  EEPROM.get(count + 2, this ->lim_inf_yellow_r);
+  EEPROM.get(count + 2, this ->lim_sup_yellow_r);
 
   EEPROM.get(count + 4, this ->lim_inf_yellow_g);
-  EEPROM.get(count + 6, this ->lim_inf_yellow_g);
+  EEPROM.get(count + 6, this ->lim_sup_yellow_g);
 
   EEPROM.get(count+8, this ->lim_inf_yellow_b);
-  EEPROM.get(count + 10, this ->lim_inf_yellow_b);
+  EEPROM.get(count + 10, this ->lim_sup_yellow_b);
 
 
   // Lendo os valores da cor branca
   count +=12;
   EEPROM.get(count, this ->lim_inf_white_r);
-  EEPROM.get(count + 2, this ->lim_inf_white_r);
+  EEPROM.get(count + 2, this ->lim_sup_white_r);
 
   EEPROM.get(count + 4, this ->lim_inf_white_g);
-  EEPROM.get(count + 6, this ->lim_inf_white_g);
+  EEPROM.get(count + 6, this ->lim_sup_white_g);
 
   EEPROM.get(count+8, this ->lim_inf_white_b);
-  EEPROM.get(count + 10, this ->lim_inf_white_b);
+  EEPROM.get(count + 10, this ->lim_sup_white_b);
 
   // Lendo os valores da cor preta
   count +=12;
   EEPROM.get(count, this ->lim_inf_black_r);
-  EEPROM.get(count + 2, this ->lim_inf_black_r);
+  EEPROM.get(count + 2, this ->lim_sup_black_r);
 
   EEPROM.get(count + 4, this ->lim_inf_black_g);
-  EEPROM.get(count + 6, this ->lim_inf_black_g);
+  EEPROM.get(count + 6, this ->lim_sup_black_g);
 
   EEPROM.get(count+8, this ->lim_inf_black_b);
-  EEPROM.get(count + 10, this ->lim_inf_black_b);
+  EEPROM.get(count + 10, this ->lim_sup_black_b);
 
 }
 

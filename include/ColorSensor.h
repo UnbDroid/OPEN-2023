@@ -8,7 +8,9 @@ class ColorSensor{
 
         void read_values();
         void print_color_components_RGB();
-        int identify_color(int num);
+        void calibra_sensor();
+        int identify_color();
+        void read_limit_values();
 
 
     private:
@@ -21,6 +23,50 @@ class ColorSensor{
         int green;
         int blue;
         int no_filter;
+
+        int lim_inf_red_r;
+        int lim_sup_red_r;
+        int lim_inf_red_g;
+        int lim_sup_red_g;
+        int lim_inf_red_b;
+        int lim_sup_red_b;
+
+        int lim_inf_blue_r;
+        int lim_sup_blue_r;
+        int lim_inf_blue_g;
+        int lim_sup_blue_g;
+        int lim_inf_blue_b;
+        int lim_sup_blue_b;
+
+        int lim_inf_green_r;
+        int lim_sup_green_r;
+        int lim_inf_green_g;
+        int lim_sup_green_g;
+        int lim_inf_green_b;
+        int lim_sup_green_b;
+
+        int lim_inf_yellow_r;
+        int lim_sup_yellow_r;
+        int lim_inf_yellow_g;
+        int lim_sup_yellow_g;
+        int lim_inf_yellow_b;
+        int lim_sup_yellow_b;
+
+        int lim_inf_white_r;
+        int lim_sup_white_r;
+        int lim_inf_white_g;
+        int lim_sup_white_g;
+        int lim_inf_white_b;
+        int lim_sup_white_b;
+
+        int lim_inf_black_r;
+        int lim_sup_black_r;
+        int lim_inf_black_g;
+        int lim_sup_black_g;
+        int lim_inf_black_b;
+        int lim_sup_black_b;
+
+    
 
 };
 #endif
