@@ -149,3 +149,207 @@ void ColorSensor::print_color_components_RGB(){
   Serial.println();
 
 }
+
+void ColorSensor::read_limit_values(){ // Função que lê os valores dos limites dos ranges de cores que estão armazenados na memória do arduíno
+  int count = 0;
+  // Lendo os valores da cor vermelha
+  EEPROM.get(count, this ->lim_inf_red_r);
+  EEPROM.get(count + 2, this ->lim_inf_red_r);
+
+  EEPROM.get(count + 4, this ->lim_inf_red_g);
+  EEPROM.get(count + 6, this ->lim_inf_red_g);
+
+  EEPROM.get(count+8, this ->lim_inf_red_b);
+  EEPROM.get(count + 10, this ->lim_inf_red_b);
+
+
+  // Lendo os valores da cor azul
+  count +=12;
+  EEPROM.get(count, this ->lim_inf_blue_r);
+  EEPROM.get(count + 2, this ->lim_inf_blue_r);
+
+  EEPROM.get(count + 4, this ->lim_inf_blue_g);
+  EEPROM.get(count + 6, this ->lim_inf_blue_g);
+
+  EEPROM.get(count+8, this ->lim_inf_blue_b);
+  EEPROM.get(count + 10, this ->lim_inf_blue_b);
+
+  // Lendo os valores da cor verde
+  count +=12;
+  EEPROM.get(count, this ->lim_inf_green_r);
+  EEPROM.get(count + 2, this ->lim_inf_green_r);
+
+  EEPROM.get(count + 4, this ->lim_inf_green_g);
+  EEPROM.get(count + 6, this ->lim_inf_green_g);
+
+  EEPROM.get(count+8, this ->lim_inf_green_b);
+  EEPROM.get(count + 10, this ->lim_inf_green_b);
+
+  // Lendo os valores da cor amarela
+  count +=12;
+  EEPROM.get(count, this ->lim_inf_yellow_r);
+  EEPROM.get(count + 2, this ->lim_inf_yellow_r);
+
+  EEPROM.get(count + 4, this ->lim_inf_yellow_g);
+  EEPROM.get(count + 6, this ->lim_inf_yellow_g);
+
+  EEPROM.get(count+8, this ->lim_inf_yellow_b);
+  EEPROM.get(count + 10, this ->lim_inf_yellow_b);
+
+
+  // Lendo os valores da cor branca
+  count +=12;
+  EEPROM.get(count, this ->lim_inf_white_r);
+  EEPROM.get(count + 2, this ->lim_inf_white_r);
+
+  EEPROM.get(count + 4, this ->lim_inf_white_g);
+  EEPROM.get(count + 6, this ->lim_inf_white_g);
+
+  EEPROM.get(count+8, this ->lim_inf_white_b);
+  EEPROM.get(count + 10, this ->lim_inf_white_b);
+
+  // Lendo os valores da cor preta
+  count +=12;
+  EEPROM.get(count, this ->lim_inf_black_r);
+  EEPROM.get(count + 2, this ->lim_inf_black_r);
+
+  EEPROM.get(count + 4, this ->lim_inf_black_g);
+  EEPROM.get(count + 6, this ->lim_inf_black_g);
+
+  EEPROM.get(count+8, this ->lim_inf_black_b);
+  EEPROM.get(count + 10, this ->lim_inf_black_b);
+
+}
+
+void ColorSensor::calibra_sensor() {
+  
+
+  int count;
+  
+  count  = 0;
+  // Calibrando cor vermelha
+  Serial.println("Calibrando cor Vermelha - Versão Perto");  // Colocar o robô o mais perto possível do azul
+  while(!Serial.available()){}                  // Espera até que uma tecla seja clicada (NÃO CLICAR O ENTER POIS SÃO 2 CARACTERES)
+  while (Serial.available()){Serial.read();}  // Limpa os bytes de entrada, fazendo com que a outra tecla tenha que ser clicada novamente na próxima leitura
+  read_values();
+  EEPROM.put(count, this->red);
+  EEPROM.put(count + 4, this->green); // Cada inteiro é salvo em 2 bytes, por isso o primeiro argumento da função é sempre par
+  EEPROM.put(count + 8, this->blue);
+  print_color_components_RGB();
+
+
+  Serial.println("Calibrando cor Vermelha - Versão Longe");
+  while(!Serial.available()){}
+  while (Serial.available()){Serial.read();}
+  read_values();
+  EEPROM.put(count + 2, this->red);
+  EEPROM.put(count + 6, this->green);
+  EEPROM.put(count + 10, this->blue);
+  print_color_components_RGB();
+
+  count += 12;
+  // Calibrando cor azul
+  Serial.println("Calibrando cor azul - Versão Perto");  // Colocar o robô o mais perto possível do azul
+  while(!Serial.available()){}                  // Espera até que uma tecla seja clicada (NÃO CLICAR O ENTER POIS SÃO 2 CARACTERES)
+  while (Serial.available()){Serial.read();}  // Limpa os bytes de entrada, fazendo com que a outra tecla tenha que ser clicada novamente na próxima leitura
+  read_values();
+  EEPROM.put(count, this->red);
+  EEPROM.put(count + 4, this->green);
+  EEPROM.put(count + 8, this->blue);
+  print_color_components_RGB();
+
+
+  Serial.println("Calibrando cor azul - Versão Longe");
+  while(!Serial.available()){}
+  while (Serial.available()){Serial.read();}
+  read_values();
+  EEPROM.put(count + 2, this->red);
+  EEPROM.put(count + 6, this->green);
+  EEPROM.put(count + 10, this->blue);
+  print_color_components_RGB();
+
+  count += 12;
+  // Calibrando cor verde
+  Serial.println("Calibrando cor verde - Versão Perto");  // Colocar o robô o mais perto possível do verde
+  while(!Serial.available()){}                  // Espera até que uma tecla seja clicada (NÃO CLICAR O ENTER POIS SÃO 2 CARACTERES)
+  while (Serial.available()){Serial.read();}  // Limpa os bytes de entrada, fazendo com que a outra tecla tenha que ser clicada novamente na próxima leitura
+  read_values();
+  EEPROM.put(count, this->red);
+  EEPROM.put(count + 4, this->green);
+  EEPROM.put(count + 8, this->blue);
+  print_color_components_RGB();
+
+
+  Serial.println("Calibrando cor verde - Versão Longe");
+  while(!Serial.available()){}
+  while (Serial.available()){Serial.read();}
+  read_values();
+  EEPROM.put(count + 2, this->red);
+  EEPROM.put(count + 6, this->green);
+  EEPROM.put(count + 10, this->blue);
+  print_color_components_RGB();
+
+  count += 12;
+  // Calibrando amarelo
+  Serial.println("Calibrando cor amarelo - Versão Perto");  // Colocar o robô o mais perto possível do amarelo
+  while(!Serial.available()){}                  // Espera até que uma tecla seja clicada (NÃO CLICAR O ENTER POIS SÃO 2 CARACTERES)
+  while (Serial.available()){Serial.read();}  // Limpa os bytes de entrada, fazendo com que a outra tecla tenha que ser clicada novamente na próxima leitura
+  read_values();
+  EEPROM.put(count, this->red);
+  EEPROM.put(count + 4, this->green);
+  EEPROM.put(count + 8, this->blue);
+  print_color_components_RGB();
+
+
+  Serial.println("Calibrando cor amarelo - Versão Longe");
+  while(!Serial.available()){}
+  while (Serial.available()){Serial.read();}
+  read_values();
+  EEPROM.put(count + 2, this->red);
+  EEPROM.put(count + 6, this->green);
+  EEPROM.put(count + 10, this->blue);
+  print_color_components_RGB();
+
+
+  count += 12;
+  // Calibrando cor branco
+  Serial.println("Calibrando cor branco - Versão Perto");  // Colocar o robô o mais perto possível do branco
+  while(!Serial.available()){}                  // Espera até que uma tecla seja clicada (NÃO CLICAR O ENTER POIS SÃO 2 CARACTERES)
+  while (Serial.available()){Serial.read();}  // Limpa os bytes de entrada, fazendo com que a outra tecla tenha que ser clicada novamente na próxima leitura
+  read_values();
+  EEPROM.put(count, this->red);
+  EEPROM.put(count + 4, this->green);
+  EEPROM.put(count + 8, this->blue);
+  print_color_components_RGB();
+
+
+  Serial.println("Calibrando cor branco - Versão Longe");
+  while(!Serial.available()){}
+  while (Serial.available()){Serial.read();}
+  read_values();
+  EEPROM.put(count + 2, this->red);
+  EEPROM.put(count + 6, this->green);
+  EEPROM.put(count + 10, this->blue);
+  print_color_components_RGB();
+
+  count += 12;
+  // Calibrando cor preto
+  Serial.println("Calibrando cor preto - Versão Perto");  // Colocar o robô o mais perto possível do preto
+  while(!Serial.available()){}                  // Espera até que uma tecla seja clicada (NÃO CLICAR O ENTER POIS SÃO 2 CARACTERES)
+  while (Serial.available()){Serial.read();}  // Limpa os bytes de entrada, fazendo com que a outra tecla tenha que ser clicada novamente na próxima leitura
+  read_values();
+  EEPROM.put(count, this->red);
+  EEPROM.put(count + 4, this->green);
+  EEPROM.put(count + 8, this->blue);
+  print_color_components_RGB();
+
+
+  Serial.println("Calibrando cor preto - Versão Longe");
+  while(!Serial.available()){}
+  while (Serial.available()){Serial.read();}
+  read_values();
+  EEPROM.put(count + 2, this->red);
+  EEPROM.put(count + 6, this->green);
+  EEPROM.put(count + 10, this->blue);   
+  print_color_components_RGB();
+}
