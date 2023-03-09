@@ -9,7 +9,7 @@ void setup() {
     delay(2000);
 
     mpu.setup(0x68);  // change to your own address
-    mpu.setMagneticDeclination(21);
+    mpu.setMagneticDeclination(-21.091666); //minuto/60
 }
 
 
@@ -23,11 +23,9 @@ void loop() {
         float anguloInclinacao = asin(-mpu.getMagY()/B);
         float roll = atan2(mpu.getMagX(),mpu.getMagY());
         float angulo = (roll *180)/PI;
-        if(angulo>40){
-            Serial.println(angulo*2);
-        }
-        else{
-            Serial.println(angulo*0.4);
-        }
+        //Serial.println((angulo*2)-10);
+        
+        float anguloReal = (mpu.getYaw());
+       Serial.println(anguloReal);
     }
 }
