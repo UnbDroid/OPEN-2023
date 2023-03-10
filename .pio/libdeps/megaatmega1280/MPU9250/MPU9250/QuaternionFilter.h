@@ -1,15 +1,14 @@
 #pragma once
 #ifndef QUATERNIONFILTER_H
 #define QUATERNIONFILTER_H
-#include<Arduino.h>
-#include<math.h>
 
 enum class QuatFilterSel {
     NONE,
     MADGWICK,
     MAHONY,
 };
-
+#include<Arduino.h>
+#include<math.h>
 class QuaternionFilter {
     // for madgwick
     float GyroMeasError = PI * (40.0f / 180.0f);     // gyroscope measurement error in rads/s (start at 40 deg/s)
