@@ -23,14 +23,14 @@ ColorSensor TestColorSensor(s0,s1,s2,s3,out);
 void setup() {
   Serial.begin(9600);
   Serial.println("Testandoooo");
-  // TestColorSensor.calibra_sensor(0);
-  TestColorSensor.read_limit_values(0);
+  // TestColorSensor.calibra_sensor();
+  TestColorSensor.read_limit_values();
 
  
 }
 
 void loop(){
-  // delay(500);
-  color = TestColorSensor.identify_color2();
+  // delay(1000);
+  color = TestColorSensor.identify_color();
   // TestColorSensor.print_color_components_RGB();
 }
