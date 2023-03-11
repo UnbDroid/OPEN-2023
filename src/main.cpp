@@ -10,22 +10,17 @@ void setup() {
 
     mpu.setup(0x68);  // change to your own address
     mpu.setMagneticDeclination(-21.091666); //minuto/60
+    mpu.setMagBias(1,0,0);
 }
 
-
+float Norte = 5.5;//6.5;
+float leste = 25;//30;
+float oeste = 14;//19;
+float sul = 32;//37
 void loop() {
     if (mpu.update()) {
-        float x = pow(mpu.getMagX(),2);
-        float y = pow(mpu.getMagY(),2);
-        float z = pow(mpu.getMagZ(),2);
-        float result = x+y+z;
-        float B = sqrt(result);
-        float anguloInclinacao = asin(-mpu.getMagY()/B);
-        float roll = atan2(mpu.getMagX(),mpu.getMagY());
-        float angulo = (roll *180)/PI;
-        //Serial.println((angulo*2)-10);
-        
-        float anguloReal = (mpu.getYaw());
-       Serial.println(anguloReal);
+      
+       Serial.println(mpu.getYaw());
+       //Serial.println(((pow(pow(anguloReal,2)+ pow(angulo2, 2), 0.5))*180)/PI);
     }
 }
