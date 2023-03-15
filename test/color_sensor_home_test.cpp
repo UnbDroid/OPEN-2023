@@ -8,7 +8,7 @@
 
 
 
-// Definição dos Pinos do Sensor de Cor Inferior Esquerdo
+// Definição dos Pinos do Sensor de Cor - Teste em Casa
 #define s0 30
 #define s1 31
 #define s2 46
@@ -23,14 +23,14 @@ ColorSensor TestColorSensor(s0,s1,s2,s3,out);
 void setup() {
   Serial.begin(9600);
   Serial.println("Testandoooo");
-  // TestColorSensor.calibra_sensor();
-  TestColorSensor.read_limit_values();
+  // TestColorSensor.calibra_sensor(0);
+  TestColorSensor.read_limit_values(0);
 
  
 }
 
 void loop(){
-  // delay(1000);
-  color = TestColorSensor.identify_color();
+  // delay(500);
+  color = TestColorSensor.identify_color2();
   // TestColorSensor.print_color_components_RGB();
 }

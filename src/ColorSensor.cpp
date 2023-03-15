@@ -19,9 +19,11 @@ ColorSensor::ColorSensor(int s0, int s1, int s2, int s3, int out){
     pinMode(this->s3, OUTPUT);
     pinMode(this->out, INPUT);
 
-    digitalWrite(this->s0, HIGH);
+    digitalWrite(this->s0, HIGH);  // Escala 20%
     digitalWrite(this->s1, LOW);
 
+    digitalWrite(this->s1, HIGH);  // Escala 2%
+    digitalWrite(this->s0, HIGH);
 
 }
 
@@ -97,8 +99,8 @@ int ColorSensor::identify_color2(){   // Lê os valores dos componentes RGB, ide
 // Para identificar a cor, ele checa se as componentes rgb estão dentro dos limites correspondentes por cada cor, por exemplo:
 // Para a cor ser considerada vermelha,a componente R do RGB deve estar entre 20 e 40, a G entre 60 e 80, e a B entre 60 e 80
   
-
   read_values();
+  Serial.println("Entrei");
   normalize_reading();
   
   //Verifica se a cor vermelha foi detectada
