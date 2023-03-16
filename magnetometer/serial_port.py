@@ -31,9 +31,8 @@ for k in range(max):
         if k == 0:
             values = decoded_bytes.split(",")
         else:
-            #values = [float(x) for x in decoded_bytes.split(" ")]
-            entrada =decoded_bytes.split(" ")
-            values =decoded_bytes.split(" ")
+            #values = 
+            values =[float(x) for x in decoded_bytes.split(" ")]
             
             x = float(values[0])
             y = float(values[1])
