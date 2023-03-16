@@ -24,8 +24,8 @@ void setup() {
             Serial.println("MPU connection failed. Please check your connection with `connection_check` example.");
         }
     }
-    mpu.setMagBias(5446.005,628.4300000000001,0.);
-    mpu.setMagScale(0.00018362083765989932,-0.054884742041712405,1.);
+    mpu.setMagBias(-0.020000000000000018,-18.21500000000000,0.);
+    mpu.setMagScale(-49.99999999999996,1.,1.);
     mpu.setMagneticDeclination(-21.091666); //minuto/60;
     Serial.print("Mag X, ");
     Serial.println("Mag y " );    
