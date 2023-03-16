@@ -16,7 +16,7 @@ serialCon.setDTR(False)
 time.sleep(1)
 serialCon.flushInput()
 serialCon.setDTR(True)
-max = 600
+max = 1000
 maxX =-999999999
 maxY=-99999999999
 lowX=10000000000
