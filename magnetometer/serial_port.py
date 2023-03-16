@@ -29,7 +29,7 @@ for k in range(max):
         print("valores inicio : ",decoded_bytes)
         # Parse the line
         if k == 0:
-            values = decoded_bytes.split(",")
+            values = decoded_bytes.split(","
         else:
             #values = 
             values =[float(x) for x in decoded_bytes.split(" ")]
