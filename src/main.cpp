@@ -30,7 +30,6 @@ void setup() {
     Serial.print("Mag X, ");
     Serial.println("Mag y " );    
 
-<<<<<<< HEAD
 }
 
 void loop() {
@@ -40,22 +39,6 @@ void loop() {
             print_roll_pitch_yaw();
             prev_ms = millis();
         }  
-=======
-    mpu.setup(0x68);  // change to your own address
-    mpu.setMagneticDeclination(-21.091666); //minuto/60
-    mpu.setMagBias(1,0,0);
-}
-
-float Norte = 5.5;//6.5;
-float leste = 25;//30;
-float oeste = 14;//19;
-float sul = 32;//37
-void loop() {
-    if (mpu.update()) {
-      
-       Serial.println(mpu.getYaw());
-       //Serial.println(((pow(pow(anguloReal,2)+ pow(angulo2, 2), 0.5))*180)/PI);
->>>>>>> e2f0f193bd91116825c18b88009f1fcb15b04076
     }
 }
 
