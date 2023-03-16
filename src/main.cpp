@@ -8,12 +8,16 @@ float lowestY=1000;
 float higherY=0;
 float lowestX=1000;
 void print_roll_pitch_yaw() {
-    
+    float heading = atan2(mpu.getMagY(), mpu.getMagX()) * 180.0 / PI;
+    if (heading < 0) {
+        heading += 360.0;
+    }
     // float angulo = atan2(mpu.getMagX(), mpu.getMagY());
     // Serial.println(angulo*180/PI);
-    Serial.print(mpu.getMagX());
-    Serial.print(" ");
-    Serial.println(mpu.getMagY());
+    // Serial.print(mpu.getMagX());
+    // Serial.print(" ");
+    // Serial.println(mpu.getMagY());
+    Serial.println(heading);
 }
 void setup() {
     Serial.begin(9600);
@@ -24,11 +28,12 @@ void setup() {
             Serial.println("MPU connection failed. Please check your connection with `connection_check` example.");
         }
     }
-    mpu.setMagBias(5446.005,628.4300000000001,0.);
-    mpu.setMagScale(0.00018362083765989932,-0.054884742041712405,1.);
+    mpu.setMagBias(-99.86,564.67,0.);
+    mpu.setMagScale(0.004441680731988985, 0.004357108622717965,1.);
     mpu.setMagneticDeclination(-21.091666); //minuto/60;
-    Serial.print("Mag X, ");
-    Serial.println("Mag y " );    
+    Serial.print('X');
+    Serial.print(" ");
+    Serial.println('Y');    
 
 }
 
