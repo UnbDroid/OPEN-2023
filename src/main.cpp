@@ -17,7 +17,7 @@ void print_roll_pitch_yaw() {
     // Serial.print(mpu.getMagX());
     // Serial.print(" ");
     // Serial.println(mpu.getMagY());
-    Serial.println(heading);
+    Serial.println(heading)
 }
 void setup() {
     Serial.begin(9600);
