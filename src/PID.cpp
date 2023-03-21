@@ -1,89 +1,72 @@
 #include<PID.h>
 #include<Arduino.h>
 #include<Wire.h>
+#include<MotorDC.h>
 
-extern int NMOTORS;
-extern long prevT;
-extern volatile int posi[];
-extern float target_f[];
-extern long target[];
+SimplePID::SimplePID(int kp, int kd, int ki, int umax, int eprevious, int eintegral, int ENCA, int ENCB){
+  this-> kp = kp; 
+  this-> kd = kd;
+  this-> ki = ki;
+  this-> umax = umax;
+  this-> umin = umin;
+  this-> eintegral = eintegral;
+  this-> erroPrevious = erroPrevious;
 
-// função que seta os parâmetros:
-void SimplePID::setParameters(float kpIn, float kdIn, float kiIn, float umaxIn){
-    kp = kpIn; 
-    kd = kdIn; 
-    ki = kiIn; 
-    umax = umaxIn;
-}
+  this-> ENCA = ENCA;
+  this-> ENCB = ENCB;
 
-//função para computar o controle em si:
-void SimplePID::evalu(int value, int target, float deltaT, int &pwr, int &dir){
-  //ATÉ A LINHA 27, ESSES SÃO OS CÁLCULOS DOS VALORES DE PID, ou seja    
-  //erro no valor do encoder 
-  int e = target - value; //a posição que ele assume - a posição que eu quero que ele assuma
+  pinMode(ENCA,INPUT);
+  pinMode(ENCB,INPUT);
+
+} 
+
+//função para computar o controle em si, retorna o sinal "u_PID" que será usado para enviar pros motores:
+int SimplePID::controlValue(int positionRight, int positionLeft, int target, float deltaT, int &pwr, int KP, int KD, int KI){
+
+  int erro = positionLeft - positionRight; // meu objetivo é que  a diferença de ambos seja nula, ou seja, que o erro seja 0
 
   //derivative: calcula a o quão rápido o erro está mudando
-  float dedt = (e-eprev)/(deltaT); 
+  float dedt = (erro-erroPrevious)/(deltaT); 
 
   //integral: acumula o erro ao longo do tempo
-  eintegral = eintegral + e*deltaT;
+  eintegral = eintegral + erro*deltaT;
 
   //o valor PID que vai ser mandado de fato
-  float u = kp*e + kd*dedt + ki*eintegral;
-
-  //intensidade do motor
-  pwr = (int)fabs(u);
-  if (pwr > umax){  
-  pwr = umax;
-  }
-
-  //sentido do motor que queremos mandar. Usamos isso na chamada da própria função
-  dir = 1; 
-  if(u<0){
-  dir = -1;
-}
+  float sumPID = KP*erro + KD*dedt + KI*eintegral;
+  
   //armazena o erro anterior:
-  eprev = e;
+  erroPrevious = erro;
+  return sumPID;
+
 }
 
-
-void setTarget(float t, float deltat){ // em que "t" é o momento no tempo atual
-  float positionChange[] = {0.2,0.2};
-  for (int k = 0; k<2; k++){
-      target_f[k] = target_f[k]+ positionChange[k]; // 
+// Calcula a potencia que será enviada para os motores, bem como a direção com que girarão
+void SimplePID::setMotorsPID(int sumPID, int umax, int umin){
+  //intensidade que será enviada pro motor
+  int pwr = (int) sumPID;
+  if (fabs(pwr) > umax){  
+  pwr = umax;
+  } else if (fabs(pwr) < umin){
+  pwr = 150; // valor experimental que se refere ao mínimo de potencia a ser enviado pros motores de forma a ainda fazer o robô andar. NÂO É ESSE VALOR PRO PELAS
   }
-  target[0] = (long) target_f[0];
-  target[1] = (long) -target_f[1];
-}
 
-//instanciando a classe
-SimplePID pid[NMOTORS];
-// SimplePID pidA;
-
-// função coriga pra qualquer motor. 
-//Toda vez que o sensor B do encoder é gatilhado, a gente soma nessa função
-template <int j>
-void readEncoder(){
-  int b = digitalRead(encb[j]);
-  if (b>0){
-    posi[j]++;
+  if (sumPID > 0){
+    // frente
   } else{
-    posi[j]--;
+    //tras
   }
+  
+// Não terminei essa função pois só consegui pensar nela depois da ajuda da thamires e do Luan ao refatorar o código kk. Mas a ideia é retornar uma lista
+// com, tanto a potência do motor quanto a direção que deve girar (se usamos motor.andar_pra_frente ou motor.andar_pra_tras)
 }
 
-void setMotor(int dir, int pwmVal, int pwm, int in1, int in2){
-  analogWrite(pwm,pwmVal);
-  if(dir == 1){
-    digitalWrite(in1,HIGH);
-    digitalWrite(in2,LOW);
-  }
-  else if(dir == -1){
-    digitalWrite(in1,LOW);
-    digitalWrite(in2,HIGH);
-  }
-  else{
-    digitalWrite(in1,LOW);
-    digitalWrite(in2,LOW);
+//Toda vez que o sensor B do encoder é gatilhado, a gente soma/subtrai 1 nessa função, usada no attachInterrupt()
+void SimplePID::readEncoder(int ENCB, int posicao){
+  int b = digitalRead(ENCB);
+  if (b>0){
+    posicao++;
+  } else{
+    posicao--;
+
   }
 }

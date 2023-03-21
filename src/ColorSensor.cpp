@@ -71,7 +71,7 @@ int ColorSensor::identify_color(){   // Lê os valores dos componentes RGB, iden
     return 5;}
 
   else{
-    Serial.println("Oi sdds");
+    Serial.println("não li nenhuma cor");
     return 6;
   }
   Serial.println();
