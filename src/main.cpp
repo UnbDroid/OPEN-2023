@@ -85,9 +85,11 @@ Ultrassonic leftUltrassonic(echoPin_left, trigPin_left);
 void setup(){
     Serial.begin(9600);
     // leftColorSensor.calibra_sensor(0);
-    leftColorSensor.read_limit_values(0);
+    // leftColorSensor.read_limit_values(0);
     // leftColorSensor.calibra_sensor(1);
     // leftColorSensor.read_limit_values(1);
+    // frontalColorSensor.calibra_sensor(0);
+    // frontalColorSensor.read_limit_values(0);
     Serial.println("Iniciando...");
 
 }
@@ -97,8 +99,23 @@ void setup(){
 void loop()
 {
   delay(500);
-  homeColorSensor.read_values();
-  homeColorSensor.print_color_components_RGB();
+  // leftColorSensor.read_values();
+  // leftColorSensor.print_color_components_RGB();
+  // homeColorSensor.read_values();
+  // homeColorSensor.print_color_components_RGB();
+  // frontalColorSensor.read_values();
+  // frontalColorSensor.print_color_components_RGB();
+  // rightColorSensor.read_values();
+  // rightColorSensor.print_color_components_RGB();
+
+  frontal_distance = frontalUltrassonic.distance_cm();
+  Serial.println(frontal_distance);
+  if (frontal_distance < 100){
+    velocidade = 0;
+  }
+  else{
+    velocidade = 70;
+  }
 
   // color = leftColorSensor.identify_color2();
   // leftColorSensor.print_color_components_RGB();
@@ -128,6 +145,6 @@ void loop()
 
   // velocidade = 70;
   // // delay(1000);
-  // LeftMotor.andar_para_frente(&velocidade);
-  // RightMotor.andar_para_frente(&velocidade);
+  LeftMotor.andar_para_frente(&velocidade);
+  RightMotor.andar_para_frente(&velocidade);
 }

@@ -19,11 +19,9 @@ ColorSensor::ColorSensor(int s0, int s1, int s2, int s3, int out){
     pinMode(this->s3, OUTPUT);
     pinMode(this->out, INPUT);
 
-    digitalWrite(this->s0, HIGH);  // Escala 20%
+    digitalWrite(this->s0, HIGH); 
     digitalWrite(this->s1, LOW);
 
-    digitalWrite(this->s1, HIGH);  // Escala 2%
-    digitalWrite(this->s0, HIGH);
 
 }
 
