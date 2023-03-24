@@ -8,11 +8,14 @@ class ColorSensor{
 
         void read_values();
         void print_color_components_RGB();
-        void calibra_sensor(int num);
+        void calibra_sensor_frontal(int num);
+        void calibra_sensor_inferior(int num);
         int identify_color();
         int identify_color2();
+        int identify_color3();
         void read_limit_values(int num);
-        void calibra_cor(char cor[20], int count);
+        void calibra_cor_inferior(char cor[20], int count);
+        void calibra_cor_frontal(char cor[20], int count);
         void normalize_reading();
 
 

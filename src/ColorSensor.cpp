@@ -5,6 +5,11 @@
 
 
 
+int variancia(int x, int y, int z) {
+    int media = (x + y + z) / 3; // Média dos valores
+    int variancia = ((x - media) * (x - media) + (y - media) * (y - media) + (z - media) * (z - media)) / 3; // Variância dos valores
+    return variancia; // Retorna a variância dos valores
+}
 
 
 ColorSensor::ColorSensor(int s0, int s1, int s2, int s3, int out){
@@ -43,9 +48,13 @@ void ColorSensor::read_values(){  //Rotina que lê as componentes RGB do sensor.
 
 
 void ColorSensor::normalize_reading(){ // Função que calibra o sensor de cor, fazendo as leituras variarem entre 0 e 1000
-  this->red = (this->red - lim_white_r) * (1000/(lim_nothing_r - lim_white_r));
-  this->green = (this->green - lim_white_g) * (1000/(lim_nothing_g - lim_white_g));
-  this->blue = (this->blue - lim_white_b) * (1000/(lim_nothing_b - lim_white_b));
+
+
+
+  this->red = int((this->red - this->lim_white_r) * (1000.0/(this->lim_nothing_r - this->lim_white_r)));
+  this->green = int((this->green - this->lim_white_g) * (1000.0/(this->lim_nothing_g - this->lim_white_g)));
+  this->blue = int((this->blue - this->lim_white_b) * (1000.0/(this->lim_nothing_b - this->lim_white_b)));
+
 }
 
 
@@ -97,9 +106,9 @@ int ColorSensor::identify_color2(){   // Lê os valores dos componentes RGB, ide
 // Para identificar a cor, ele checa se as componentes rgb estão dentro dos limites correspondentes por cada cor, por exemplo:
 // Para a cor ser considerada vermelha,a componente R do RGB deve estar entre 20 e 40, a G entre 60 e 80, e a B entre 60 e 80
   
-  read_values();
-  Serial.println("Entrei");
-  normalize_reading();
+  this->read_values();
+  // Serial.println("Entrei");
+  this->normalize_reading();
   
   //Verifica se a cor vermelha foi detectada
   if ((this -> lim_inf_red_r < this->red && this->red < this->lim_sup_red_r ) && this->red < this->blue && this->red < this->green){
@@ -128,6 +137,52 @@ int ColorSensor::identify_color2(){   // Lê os valores dos componentes RGB, ide
 
     //Verifica se a cor preta foi detectada
   else if ((this -> lim_inf_black_r < this->red && this->red < this->lim_sup_black_r ) && (this -> lim_inf_black_g < this->green && this->green < this -> lim_sup_black_g) && (this -> lim_inf_black_b < this->blue && this->blue < this -> lim_sup_black_b)) {
+    Serial.println("Preto");
+    return 5;}
+
+  else{
+    Serial.println("Nenhuma Cor Identificada");
+    return 6;
+  }
+
+}
+
+int ColorSensor::identify_color3(){   // Lê os valores dos componentes RGB, identifica a cor e printa o nome da cor - Versão 3
+// Para identificar a cor, ele checa se as componentes rgb estão dentro dos limites correspondentes por cada cor, por exemplo:
+// Para a cor ser considerada vermelha,a componente R do RGB deve estar entre 20 e 40, a G entre 60 e 80, e a B entre 60 e 80
+  
+  this->read_values();
+  // Serial.println("Entrei");
+  this->normalize_reading();
+  // Serial.println(variancia(this->red, this->green, this->blue));
+  
+  //Verifica se a cor vermelha foi detectada
+  // if ((this -> lim_inf_red_r < this->red && this->red < this->lim_sup_red_r ) && this->red < this->blue && this->red < this->green){
+  //   Serial.println("Vermelho");
+  //   return 0;}
+
+  //Verifica se a cor azul foi detectada
+  /*else*/ if (this->blue < this->red/3.0 && this->blue < this->green/1.5 && this->blue < this->red - 200 && this->blue < this->green - 40 ){
+    Serial.println("Azul");
+    return 1;}
+
+  //Verifica se a cor verde foi detectada
+  // else if ((this -> lim_inf_green_g < this->green && this->green < this -> lim_sup_green_g) && this->green < this->red && this->green < this->blue){
+  //   Serial.println("Verde");
+  //   return 2;}
+
+    //Verifica se a cor amarela foi detectada
+  // else if ((this -> lim_inf_yellow_b < this->blue && this->blue < this -> lim_sup_yellow_b) && this->blue > this->red && this->blue > this->green){
+  //   Serial.println("Amarelo");
+  //   return 3;}
+
+    //Verifica se a cor branca foi detectada
+  else if ((this->red < 30 ) && (this->green < 30) && (this->blue < 30)) {
+    Serial.println("Branco");
+    return 4;}
+
+    //Verifica se a cor preta foi detectada
+  else if ((this->red >  0.9 * lim_inf_black_r ) && (this->green > 0.9 * lim_inf_black_g) && (this->blue > 0.9 * lim_inf_black_b) && variancia(this->red, this->green, this->blue) < 100  && variancia(this->red, this->green, this->blue) > 0) {
     Serial.println("Preto");
     return 5;}
 
@@ -247,19 +302,20 @@ void ColorSensor::read_limit_values(int num){ // Função que lê os valores dos
 
 }
 
-void ColorSensor::calibra_cor(char cor[20], int count){ // Calibra os limites das cores, já normalizando os valores
+void ColorSensor::calibra_cor_frontal(char cor[20], int count){ // Calibra os limites das cores, já normalizando os valores
   int red_aux, green_aux, blue_aux;
 
   Serial.print("Calibrando cor versão perto: ");  // Colocar o robô o mais perto possível da cor
   Serial.println(cor);
   while(!Serial.available()){}                  // Espera até que uma tecla seja clicada (NÃO CLICAR O ENTER POIS SÃO 2 CARACTERES)
   while (Serial.available()){Serial.read();}  // Limpa os bytes de entrada, fazendo com que a outra tecla tenha que ser clicada novamente na próxima leitura
-  read_values();
+  this->read_values();
+
 
   // Normalizando os valores na faixa entre 0 a 1000:
-  normalize_reading();
+  this->normalize_reading();
 
-  print_color_components_RGB(); // Printando os valores já normalizados
+  this->print_color_components_RGB(); // Printando os valores já normalizados
   red_aux = this->red;
   green_aux = this->green;
   blue_aux = this -> blue;
@@ -269,12 +325,12 @@ void ColorSensor::calibra_cor(char cor[20], int count){ // Calibra os limites da
   Serial.println(cor);
   while(!Serial.available()){}
   while (Serial.available()){Serial.read();}
-  read_values();
+  this->read_values();
 
   // Normalizando os valores na faixa entre 0 a 1000:
-  normalize_reading();
+  this->normalize_reading();
 
-  print_color_components_RGB(); // Printando os valores já normalizados
+  this->print_color_components_RGB(); // Printando os valores já normalizados
  
   
 
@@ -306,17 +362,11 @@ void ColorSensor::calibra_cor(char cor[20], int count){ // Calibra os limites da
     EEPROM.put(count + 10, this->blue);
   }
   
-  
-
-  EEPROM.put(count + 4, green_aux);
-  EEPROM.put(count + 6, this->green);  
-  EEPROM.put(count + 8, blue_aux);
-  EEPROM.put(count + 10, this->blue);
 
 }
 
 
-void ColorSensor::calibra_sensor(int num) {
+void ColorSensor::calibra_sensor_frontal(int num) {
   
 
   int count;
@@ -327,48 +377,148 @@ void ColorSensor::calibra_sensor(int num) {
   Serial.println("Calibrando com nada perto do sensor: ");  // Tirar qualquer coisa de perto do sensor
   while(!Serial.available()){}                  // Espera até que uma tecla seja clicada (NÃO CLICAR O ENTER POIS SÃO 2 CARACTERES)
   while (Serial.available()){Serial.read();}  // Limpa os bytes de entrada, fazendo com que a outra tecla tenha que ser clicada novamente na próxima leitura
-  read_values();
-  print_color_components_RGB();
+  this->read_values();
+  this->print_color_components_RGB();
   EEPROM.put(count, this->red);
   EEPROM.put(count+2, this->green);
   EEPROM.put(count+4, this->blue);
-  lim_nothing_r = this->red;
-  lim_nothing_g = this->green;
-  lim_nothing_b = this->blue;
+  this->lim_nothing_r = this->red;
+  this->lim_nothing_g = this->green;
+  this->lim_nothing_b = this->blue;
   count +=6;
   
 
   Serial.println("Calibrando com papel branco: ");  // Colocar a coisa mais branca possível no sensor
   while(!Serial.available()){}                  // Espera até que uma tecla seja clicada (NÃO CLICAR O ENTER POIS SÃO 2 CARACTERES)
   while (Serial.available()){Serial.read();}  // Limpa os bytes de entrada, fazendo com que a outra tecla tenha que ser clicada novamente na próxima leitura
-  read_values();
-  print_color_components_RGB();
+  this->read_values();
+  this->print_color_components_RGB();
   EEPROM.put(count, this->red);
   EEPROM.put(count+2, this->green);
   EEPROM.put(count+4, this->blue);
-  lim_white_r = this->red;
-  lim_white_g = this->green;
-  lim_white_b = this->blue;
+  this->lim_white_r = this->red;
+  this->lim_white_g = this->green;
+  this->lim_white_b = this->blue;
 
   count +=6;
 
   strcpy(cor, "Vermelho");
-  calibra_cor(cor, count);
+  this->calibra_cor_frontal(cor, count);
 
   strcpy(cor, "Azul");
-  calibra_cor(cor, count+12);
+  this->calibra_cor_frontal(cor, count+12);
 
   strcpy(cor, "Verde");
-  calibra_cor(cor, count+24);
+  this->calibra_cor_frontal(cor, count+24);
 
   strcpy(cor, "Amarelo");
-  calibra_cor(cor, count+36);
+  this->calibra_cor_frontal(cor, count+36);
 
   strcpy(cor, "Branco");
-  calibra_cor(cor, count+48);
+  this->calibra_cor_frontal(cor, count+48);
 
   strcpy(cor, "Preto");
-  calibra_cor(cor, count+60);
+  this->calibra_cor_frontal(cor, count+60);
 
   while(!Serial.available()){}
 }
+
+
+void ColorSensor::calibra_cor_inferior(char cor[20], int count){ // Calibra os limites das cores, já normalizando os valores
+
+  Serial.print("Calibrando cor: ");  // Colocar o robô na cor
+  Serial.println(cor);
+  while(!Serial.available()){}                  // Espera até que uma tecla seja clicada (NÃO CLICAR O ENTER POIS SÃO 2 CARACTERES)
+  while (Serial.available()){Serial.read();}  // Limpa os bytes de entrada, fazendo com que a outra tecla tenha que ser clicada novamente na próxima leitura
+  this->read_values();
+
+
+  // Normalizando os valores na faixa entre 0 a 1000:
+  this->normalize_reading();
+
+  this->print_color_components_RGB(); // Printando os valores já normalizados
+
+  // Sabendo que os valores estão normalizados, vamos encontrar os limites superiores e inferiores aumentando e diminuindo 50% do valor lido
+  // Por exemplo, se para o componente R de Azul foi lido 100, os limites inferiores e superiores serão 50 e 200 respectivamente
+
+  // ----------------------------------------------------------------------------------------------------------------------------
+  // Colocandos os ranges de vermelho na memória, sendo a metade e o dobro desse valor
+  EEPROM.put(count, int(this->red * 0.5));
+  EEPROM.put(count + 2, int(this->red * 2.0));
+  EEPROM.put(count, int(this->red - 1));
+  EEPROM.put(count + 2, int(this->red + 1));
+
+  // Colocandos os ranges de verde na memória, sendo a metade e o dobro desse valor
+  EEPROM.put(count+4, int(this->green * 0.5));
+  EEPROM.put(count + 6, int(this->green * 2.0));
+  EEPROM.put(count+4, int(this->green - 1));
+  EEPROM.put(count + 6, int(this->green + 1));
+
+  // Colocandos os ranges de azul na memória, sendo a metade e o dobro desse valor
+  EEPROM.put(count+8, int(this->blue * 0.5));
+  EEPROM.put(count + 10, int(this->blue * 2.0));
+  EEPROM.put(count+8, int(this->blue - 1));
+  EEPROM.put(count + 10, int(this->blue +1));
+  
+
+}
+
+
+
+void ColorSensor::calibra_sensor_inferior(int num) {
+  
+
+  int count;
+  char cor[20];
+  
+  count  = num * 84; // Cada sensor de cor utiliza 78 espaços de memória para armazenar os dados das 6 cores (72 espaços) e do vazio e branco (12 espaços)
+
+  Serial.println("Calibrando com o  robô o mais levantado possível: ");  // Tirar qualquer coisa de perto do sensor
+  while(!Serial.available()){}                  // Espera até que uma tecla seja clicada (NÃO CLICAR O ENTER POIS SÃO 2 CARACTERES)
+  while (Serial.available()){Serial.read();}  // Limpa os bytes de entrada, fazendo com que a outra tecla tenha que ser clicada novamente na próxima leitura
+  this->read_values();
+  this->print_color_components_RGB();
+  EEPROM.put(count, this->red);
+  EEPROM.put(count+2, this->green);
+  EEPROM.put(count+4, this->blue);
+  this->lim_nothing_r = this->red;
+  this->lim_nothing_g = this->green;
+  this->lim_nothing_b = this->blue;
+  count +=6;
+  
+
+  Serial.println("Calibrando no chão branco: ");  // Colocar a coisa mais branca possível no sensor
+  while(!Serial.available()){}                  // Espera até que uma tecla seja clicada (NÃO CLICAR O ENTER POIS SÃO 2 CARACTERES)
+  while (Serial.available()){Serial.read();}  // Limpa os bytes de entrada, fazendo com que a outra tecla tenha que ser clicada novamente na próxima leitura
+  this->read_values();
+  this->print_color_components_RGB();
+  EEPROM.put(count, this->red);
+  EEPROM.put(count+2, this->green);
+  EEPROM.put(count+4, this->blue);
+  this->lim_white_r = this->red;
+  this->lim_white_g = this->green;
+  this->lim_white_b = this->blue;
+
+  count +=6;
+
+  strcpy(cor, "Vermelho");
+  // this->calibra_cor_inferior(cor, count);
+
+  strcpy(cor, "Azul");
+  this->calibra_cor_inferior(cor, count+12);
+
+  strcpy(cor, "Verde");
+  // this->calibra_cor_inferior(cor, count+24);
+
+  strcpy(cor, "Amarelo");
+  // this->calibra_cor_inferior(cor, count+36);
+
+  strcpy(cor, "Branco");
+  this->calibra_cor_inferior(cor, count+48);
+
+  strcpy(cor, "Preto");
+  this->calibra_cor_inferior(cor, count+60);
+
+  while(!Serial.available()){}
+}
+
