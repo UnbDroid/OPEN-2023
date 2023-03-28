@@ -3,4 +3,5 @@
 .vscode/launch.json
 .vscode/ipch
 .__pycache
-.pio
+.pio*
+.pio/*
