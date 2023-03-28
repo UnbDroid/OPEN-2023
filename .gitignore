@@ -8,3 +8,4 @@
 .pio/*
 .pioenvs
 .pio
+.pio/build
