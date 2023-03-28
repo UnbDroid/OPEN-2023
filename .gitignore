@@ -9,3 +9,5 @@
 .pioenvs
 .pio
 .pio/build
+.pio/build/project.checksum
+
