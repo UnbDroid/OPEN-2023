@@ -11,16 +11,16 @@
 #define s3 29
 #define out 35
 
-#define IN1 22
-#define IN2 23
-#define IN3 24
-#define IN4 25
+#define IN1 22 
+#define IN2 24 
+#define IN3 25 
+#define IN4 23
 
 #define echoPin 45
 #define trigPin 43
 
-#define PWM_Left 3
-#define PWM_Right 2
+#define PWM_Left 4
+#define PWM_Right 5
 
 #define ENCA_Left 2
 #define ENCB_Left 3
@@ -43,7 +43,7 @@ int green = 0;
 int blue = 0;
 int no_filter = 0;
 float dist = 0;
-int velocidade = 70;
+int velocidade = 255;
 int color = 100;
 
 
@@ -61,60 +61,65 @@ ColorSensor frontalColorSensor(s0,s1,s2,s3,out);
 MotorDC leftMotor(IN1, IN2, PWM_Left);
 MotorDC rightMotor(IN4, IN3, PWM_Right);
 
-// instanciando o PID de cada motor
-SimplePID pidLeft(KP_Left,KD_Left,UMAX,UMIN,ENCA_Left,ENCB_Left);
-SimplePID pidRight(KP_Right,KD_Right,UMAX,UMIN,ENCB_Right,ENCB_Right);
+// // instanciando o PID de cada motor
+// SimplePID pidLeft(KP_Left,KD_Left,UMAX,UMIN,ENCA_Left,ENCB_Left);
+// SimplePID pidRight(KP_Right,KD_Right,UMAX,UMIN,ENCB_Right,ENCB_Right);
 
-// Váriaveis globais
-long previousTime = 0;
+// // Váriaveis globais
+// long previousTime = 0;
 
-void readEncoderLeft(){
-  pidLeft.readEncoder(ENCB_Left,positionLeft);
-}
-void readEncoderRight(){
-  pidRight.readEncoder(ENCB_Right,positionRight);
+// void readEncoderLeft(){
+//   pidLeft.readEncoder(ENCB_Left,positionLeft);
+// }
+// void readEncoderRight(){
+//   pidRight.readEncoder(ENCB_Right,positionRight);
 
-}
+// }
 
-void setup(){
-  Serial.begin(9600);
-  attachInterrupt(digitalPinToInterrupt(ENCA_Left),readEncoderLeft, RISING);
-  attachInterrupt(digitalPinToInterrupt(ENCA_Right),readEncoderRight, RISING);
+// void setup(){
+//   Serial.begin(9600);
+//   attachInterrupt(digitalPinToInterrupt(ENCA_Left),readEncoderLeft, RISING);
+//   attachInterrupt(digitalPinToInterrupt(ENCA_Right),readEncoderRight, RISING);
 
-}
+// }
 
-void loop() {
-  long currentTime = micros();
-  float deltaT = ((float)(currentTime-previousTime)/(1.0e6)); // divide por 10e6 paa converter de microsec para sec. Esse deltaT vai ser usado no detivativo/integrativo
-  previousTime = currentTime;
+// void loop() {
+//   long currentTime = micros();
+//   float deltaT = ((float)(currentTime-previousTime)/(1.0e6)); // divide por 10e6 paa converter de microsec para sec. Esse deltaT vai ser usado no detivativo/integrativo
+//   previousTime = currentTime;
 
-  // aqui devemos puxar a função que calcula a potencia dos motores e de fato enviá-la, porém não consegui finalizar isso.
-  // ControlValue retorna uma soma de PID que deve ser enviada para outra função, setMotorsPID, que de fato indica a potência dos motores e a direção que devem girar
-  // Começamos chamando essas:
-  // pidLeft.controlValue(positionLeft, targetLeft, deltaT,pwrLeft, KP_Left,KD_Left,KI_Left); 
-  // pidRight.controlValue(positionRight, targetRight, deltaT,pwrRight,KP_Right,KD_Right,KI_Right);
+//   // aqui devemos puxar a função que calcula a potencia dos motores e de fato enviá-la, porém não consegui finalizar isso.
+//   // ControlValue retorna uma soma de PID que deve ser enviada para outra função, setMotorsPID, que de fato indica a potência dos motores e a direção que devem girar
+//   // Começamos chamando essas:
+//   // pidLeft.controlValue(positionLeft, targetLeft, deltaT,pwrLeft, KP_Left,KD_Left,KI_Left); 
+//   // pidRight.controlValue(positionRight, targetRight, deltaT,pwrRight,KP_Right,KD_Right,KI_Right);
   
 
-  }
+//   }
 
 //-------------------------------------
 
 
 
 
-// void setup()
-// {
-//   Serial.begin(9600); 
-// }
+void setup()
+{
+  Serial.begin(9600); 
+  // leftMotor.andar_para_frente(&velocidade);
+  // rightMotor.andar_para_frente(&velocidade);
+}
 
-// void loop()
-// {
-//   // dist = ultrassound.distance_meters();
-//   // Serial.println(dist);
-//   // dist = ultrassound.distance_meters();
-//   // Serial.println(dist);
-//   // color = frontalColorSensor.identify_color();
-//   // frontalColorSensor.print_color_components_RGB();
+void loop()
+{
+  leftMotor.andar_para_frente(&velocidade);
+  rightMotor.andar_para_frente(&velocidade);
+  
+  // dist = ultrassound.distance_meters();
+  // Serial.println(dist);
+  // dist = ultrassound.distance_meters();
+  // Serial.println(dist);
+  // color = frontalColorSensor.identify_color();
+  // frontalColorSensor.print_color_components_RGB();
 
 //   if(ultrassound.distance_cm() < 10){
 //     velocidade = 0;
@@ -127,19 +132,19 @@ void loop() {
 //   leftMotor.andar_para_frente(&velocidade);
 //   rightMotor.andar_para_frente(&velocidade);
 
-//   // color = frontalColorSensor.identify_color();
-//   // frontalColorSensor.print_color_components_RGB();
-//   // if (color == 0){
-//   //   Serial.println("Viiii vermelhoooooo");
-//   //   velocidade = 0;
-//   //   leftMotor.andar_para_frente(&velocidade);
-//   //   rightMotor.andar_para_frente(&velocidade);
-//   //   delay(5000);
+  // color = frontalColorSensor.identify_color();
+  // frontalColorSensor.print_color_components_RGB();
+  // if (color == 0){
+  //   Serial.println("Viiii vermelhoooooo");
+  //   velocidade = 0;
+  //   leftMotor.andar_para_frente(&velocidade);
+  //   rightMotor.andar_para_frente(&velocidade);
+  //   delay(5000);
     
-//   // }
+  // }
   
-//   // velocidade = 50;
-//   // // delay(1000);
-//   // leftMotor.andar_para_frente(&velocidade);
-//   // rightMotor.andar_para_frente(&velocidade);
-// }
+  // velocidade = 50;
+  // // delay(1000);
+  // leftMotor.andar_para_frente(&velocidade);
+  // rightMotor.andar_para_frente(&velocidade);
+}
