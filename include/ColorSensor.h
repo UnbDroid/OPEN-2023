@@ -13,6 +13,7 @@ class ColorSensor{
         int identify_color();
         int identify_color2();
         int identify_color3();
+        int identify_color4();
         void read_limit_values(int num);
         void calibra_cor_inferior(char cor[20], int count);
         void calibra_cor_frontal(char cor[20], int count);

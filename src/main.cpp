@@ -101,7 +101,7 @@ void setup(){
 void loop()
 {
   // delay(500);
-  homeColorSensor.identify_color3();
+  homeColorSensor.identify_color4();
   // homeColorSensor.print_color_components_RGB();
 
   // frontal_distance = leftUltrassonic.distance_cm();
