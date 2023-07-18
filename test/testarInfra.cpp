@@ -1,8 +1,11 @@
 #include<Arduino.h>
 #include"LightSensor.h"
-#define PIN_A0      A11
-#define pinA02      A12
-LightSensor lightSensor(PIN_A0);
+#include<Pins.h>
+
+LightSensor lightSensorDireitaFrente(A0_DIREITA_FRENTE);
+LightSensor lightSensorEsquerdaFrente(A0_ESQUERDA_FRENTE);
+LightSensor lightSensorDireitaMeio(A0_DIREITA_MEIO);
+LightSensor lightSensorEsquerdaMeio(A0_ESQUERDA_MEIO);
 
 void setup(){
 
@@ -11,5 +14,14 @@ void setup(){
 }
 
 void loop(){
-    Serial.println(lightSensor.read());
+    // Serial.print(" EsquerdaFrente ");
+    // Serial.print(lightSensorEsquerdaFrente.read());
+    // Serial.print(" DireitaFrente ");
+    // Serial.println(lightSensorDireitaFrente.read());
+    
+    Serial.print(" EsquerdaMeio ");
+    Serial.print(lightSensorEsquerdaMeio.read());
+    Serial.print(" DireitaMeio ");
+    Serial.println(lightSensorDireitaMeio.read());
+ 
 }
