@@ -2,11 +2,12 @@
 #include<Arduino.h>
 #include<MotorDC.h>
 #include<Move.h>
-
-void move(Directions direction, int *velocity ,MotorDC* motorLeft, MotorDC* motorRight){
+#include<LightSensor.h>
+void move(Directions direction, int *velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
     switch (direction)
     {
     case FOWARD:
+        
         motorLeft->moveFoward(velocity);
         motorRight->moveFoward(velocity);    
         break;

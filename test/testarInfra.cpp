@@ -18,10 +18,9 @@ void loop(){
     // Serial.print(lightSensorEsquerdaFrente.read());
     // Serial.print(" DireitaFrente ");
     // Serial.println(lightSensorDireitaFrente.read());
-    
-    Serial.print(" EsquerdaMeio ");
-    Serial.print(lightSensorEsquerdaMeio.read());
-    Serial.print(" DireitaMeio ");
-    Serial.println(lightSensorDireitaMeio.read());
- 
+    Serial.print("aaaaaaaaa ");
+    Serial.print("aaaaaaaaa ");
+    Serial.print(lightSensorDireitaFrente.lastestChanges[0]);
+    Serial.print(lightSensorDireitaFrente.lastestChanges[1]);
+    Serial.println(lightSensorDireitaFrente.lastestChanges[2]);
 }

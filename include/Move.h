@@ -5,10 +5,11 @@
 #include<MotorDC.h>
 #include"MPU9250.h"
 #include<LightSensor.h>
+#include<LightSensor.h>
 
 enum Directions{FOWARD, BACKWARD};
 enum RotateDirections{LEFT, RIGHT};
-void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight);
+void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor *lightSensorLeft,LightSensor* lightSensorRight);
 void movePid(Directions direction, int velocity ,MotorDC * motorLeft, MotorDC * motorRight);
 void initialPosition(MPU9250 * mpu);
 void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight);
