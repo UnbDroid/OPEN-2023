@@ -1,7 +1,7 @@
 #include<Arduino.h>
 #include"LightSensor.h"
-#define PIN_A0      12
-#define pinA02      13
+#define PIN_A0      A11
+#define pinA02      A12
 LightSensor lightSensor(PIN_A0);
 
 void setup(){
