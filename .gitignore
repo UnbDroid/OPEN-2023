@@ -4,9 +4,6 @@
 .vscode/ipch
 .__pycache
 .pio*
-<<<<<<< HEAD
-.pio/*
-=======
 .piolibdeps
 .pio/*
 .pioenvs
@@ -14,4 +11,3 @@
 .pio/build
 .pio/build/project.checksum
 
->>>>>>> Gyroscope
