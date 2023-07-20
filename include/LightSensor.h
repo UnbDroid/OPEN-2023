@@ -8,10 +8,10 @@ class LightSensor{
     char * lastRead;
     LightSensor(int pinoA0);
     bool acrossed();
-    char lastestChanges[3]={'A','A','A'};
     void setLastestChanges(char latestRead[3]);
     char * getLastestChanges();
     private:
+    char lastestChanges[3]={'A','A','A'};
     int pinoA0;
 };
 

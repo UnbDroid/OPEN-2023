@@ -21,11 +21,11 @@ float LightSensor::read(){
     else{
     this->lastRead--;
     char lastInArray = *this->lastRead;
-    for(int i=0;i<3;i++){
-        this->lastestChanges[i]='A';
-    }
+    char aa[3]{'A','A','A'};
+    setLastestChanges(aa);
     this->lastRead = getLastestChanges();
-    *this->lastRead++=lastInArray;
+    *this->lastRead=lastInArray;
+    this->lastRead++;
     }
     return read;
 };
@@ -35,4 +35,9 @@ bool LightSensor::acrossed(){
 }
 char * LightSensor::getLastestChanges(){
     return this->lastestChanges;
+}
+void LightSensor::setLastestChanges(char array[3]){
+    for(int i=0;i<3;i++){
+        this->lastestChanges[i]=array[i];
+    }
 }

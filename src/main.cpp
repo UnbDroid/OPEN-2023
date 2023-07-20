@@ -19,7 +19,7 @@ void loop(){
     // Serial.print(" DireitaFrente ");
     // Serial.println(lightSensorDireitaFrente.read());
     lightSensorDireitaFrente.read();
-    Serial.print(lightSensorDireitaFrente.lastestChanges[0]);
-    Serial.print(lightSensorDireitaFrente.lastestChanges[1]);
-    Serial.println(lightSensorDireitaFrente.lastestChanges[2]);
+    Serial.print(lightSensorDireitaFrente.getLastestChanges()[0]);
+    Serial.print(lightSensorDireitaFrente.getLastestChanges()[1]);
+    Serial.println(lightSensorDireitaFrente.getLastestChanges()[2]);
 }
