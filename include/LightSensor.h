@@ -7,12 +7,15 @@ class LightSensor{
     float read();
     char * lastRead;
     LightSensor(int pinoA0);
-    bool acrossed();
-    void setLastestChanges(char latestRead[3]);
-    char * getLastestChanges();
+    
+    void setLastestChanges(char value);
+    char getLastestChanges();
+    void setAcrossed(bool value);
+    bool getAcrossed();
     private:
-    char lastestChanges[3]={'A','A','A'};
+    char lastestChange;
     int pinoA0;
+    bool acrossed;
 };
 
 #endif
