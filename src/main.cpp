@@ -3,7 +3,7 @@
 #include <ColorSensor.h>
 #include <MotorDC.h>
 #include <Ultrassonic.h>
-#include <PID.h>
+#include <Move.h>
 
 #define s0 33
 #define s1 31
@@ -26,15 +26,6 @@
 #define ENCB_Left 3
 #define ENCA_Right 19
 #define ENCB_Right 18
-
-#define KP_Left 1
-#define KP_Right 1
-#define KD_Left 0
-#define KD_Right 0
-#define KI_Left 0
-#define KI_Right 0
-#define UMAX 255
-#define UMIN 0
 
 
 //Variaveis cores
@@ -61,44 +52,15 @@ ColorSensor frontalColorSensor(s0,s1,s2,s3,out);
 MotorDC leftMotor(IN1, IN2, PWM_Left);
 MotorDC rightMotor(IN4, IN3, PWM_Right);
 
-// // instanciando o PID de cada motor
-// SimplePID pidLeft(KP_Left,KD_Left,UMAX,UMIN,ENCA_Left,ENCB_Left);
-// SimplePID pidRight(KP_Right,KD_Right,UMAX,UMIN,ENCB_Right,ENCB_Right);
 
-// // Váriaveis globais
-// long previousTime = 0;
 
-// void readEncoderLeft(){
-//   pidLeft.readEncoder(ENCB_Left,positionLeft);
-// }
-// void readEncoderRight(){
-//   pidRight.readEncoder(ENCB_Right,positionRight);
+void TakeMemoryLeftMotor(){ // fica na main
+  LeftMotor.getEncoderLeft();
+}
 
-// }
-
-// void setup(){
-//   Serial.begin(9600);
-//   attachInterrupt(digitalPinToInterrupt(ENCA_Left),readEncoderLeft, RISING);
-//   attachInterrupt(digitalPinToInterrupt(ENCA_Right),readEncoderRight, RISING);
-
-// }
-
-// void loop() {
-//   long currentTime = micros();
-//   float deltaT = ((float)(currentTime-previousTime)/(1.0e6)); // divide por 10e6 paa converter de microsec para sec. Esse deltaT vai ser usado no detivativo/integrativo
-//   previousTime = currentTime;
-
-//   // aqui devemos puxar a função que calcula a potencia dos motores e de fato enviá-la, porém não consegui finalizar isso.
-//   // ControlValue retorna uma soma de PID que deve ser enviada para outra função, setMotorsPID, que de fato indica a potência dos motores e a direção que devem girar
-//   // Começamos chamando essas:
-//   // pidLeft.controlValue(positionLeft, targetLeft, deltaT,pwrLeft, KP_Left,KD_Left,KI_Left); 
-//   // pidRight.controlValue(positionRight, targetRight, deltaT,pwrRight,KP_Right,KD_Right,KI_Right);
-  
-
-//   }
-
-//-------------------------------------
-
+void TakeMemoryRightMotor(){ // fica na main
+  RightMotor.getEncoderRight();
+}
 
 
 
@@ -107,12 +69,20 @@ void setup()
   Serial.begin(9600); 
   // leftMotor.andar_para_frente(&velocidade);
   // rightMotor.andar_para_frente(&velocidade);
+    
+  attachInterrupt(digitalPinToInterrupt(encb_right), TakeMemoryRightMotor, RISING); //deixa na main
+  attachInterrupt(digitalPinToInterrupt(encb_left),TakeMemoryLeftMotor, RISING); // deixa na main
 }
 
 void loop()
 {
-  leftMotor.andar_para_frente(&velocidade);
-  rightMotor.andar_para_frente(&velocidade);
+    
+  moveForwardPid(&LeftMotor, &RightMotor,255);
+
+  Serial.print(LeftMotor.getEncoderLeft());
+  Serial.print(" ");
+  Serial.print(RightMotor.getEncoderRight());
+  Serial.println();
   
   // dist = ultrassound.distance_meters();
   // Serial.println(dist);
