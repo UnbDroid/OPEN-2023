@@ -1,15 +1,36 @@
 #include<Wire.h>
 #include<Arduino.h>
 #include<MotorDC.h>
-
-void move_foward(MotorDC* motor1, MotorDC* motor2, int * velocity){
-    motor1->andar_para_frente(velocity);
-    motor2->andar_para_frente(velocity);
+#include<Move.h>
+#include<LightSensor.h>
+void move(Directions direction, int *velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
+    switch (direction)
+    {
+    case FOWARD:
+        
+        motorLeft->moveFoward(velocity);
+        motorRight->moveFoward(velocity);    
+        break;
+    case BACKWARD:
+        motorLeft->moveBackward(velocity);
+        motorRight->moveBackward(velocity);
+        break;    
+    default:
+        break;
+    }
 }
-void move_backward(MotorDC* motor1, MotorDC* motor2, int * velocity){
-    motor1->andar_para_tras(velocity);
-    motor2->andar_para_tras(velocity);
+void movePid(Directions direction, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
+    int a;
 }
-void move_PiD(){
-    
+void initialPosition(MPU9250 * mpu){
+    int a;
+}
+void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
+    int a;
+}
+void rotates180(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
+    int a;
+}
+void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity){
+    int a;
 }

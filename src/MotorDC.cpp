@@ -18,32 +18,25 @@ MotorDC::MotorDC(int pinoA, int pinoB, int pinoPwm){
     pinMode(this->pinoA, OUTPUT);
     pinMode(this->pinoB, OUTPUT);
     pinMode(this->pinoPwm, OUTPUT);
+    pinMode(this->pinEnc, INPUT);
 
     /*
     AQUI É O CONSTRUTOR DA NOSSA CLASSE, JA ESTAMOS SETANDO O MODO DOS PINOS BEM AQUI.
     */
 }
 
-
-// MotorDC::~MotorDC(){
-//     ~this->pinoA;
-//     ~this->pinoB;
-//     ~this->pinoPwm;
-// }
-
-
-void MotorDC::andar_para_frente(int *velocidade){
+void MotorDC::moveFoward(int *velocidade){
     digitalWrite(this->pinoA, HIGH);
     digitalWrite(this->pinoB, LOW);
     analogWrite(this->pinoPwm, *velocidade);
 }
 
-void MotorDC::parar(){
+void MotorDC::stop(){
     digitalWrite(this->pinoA, LOW);
     digitalWrite(this->pinoB, LOW);
 }
 
-void MotorDC::andar_para_tras(int *velocidade){
+void MotorDC::moveBackward(int *velocidade){
     digitalWrite(this->pinoA, LOW);
     digitalWrite(this->pinoB, HIGH);
     analogWrite(this->pinoPwm, *velocidade);
