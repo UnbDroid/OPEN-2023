@@ -58,65 +58,23 @@ void ColorSensor::normalize_reading(){ // Função que calibra o sensor de cor, 
 }
 
 
-int ColorSensor::identify_color(){   // Lê os valores dos componentes RGB, identifica a cor e printa o nome da cor
-// Para identificar a cor, ele checa se as componentes rgb estão dentro dos limites correspondentes por cada cor, por exemplo:
-// Para a cor ser considerada vermelha,a componente R do RGB deve estar entre 20 e 40, a G entre 60 e 80, e a B entre 60 e 80
-  
 
-  read_values();
-  
-  //Verifica se a cor vermelha foi detectada
-  if ((this -> lim_inf_red_r < this->red && this->red < this->lim_sup_red_r ) && (this -> lim_inf_red_g < this->green && this->green < this -> lim_sup_red_g) && (this -> lim_inf_red_b < this->blue && this->blue < this -> lim_sup_red_b) && this->red < this->blue && this->red < this->green){
-    Serial.println("Vermelho");
-    return 0;}
 
-  //Verifica se a cor azul foi detectada
-  else if ((this -> lim_inf_blue_r < this->red && this->red < this->lim_sup_blue_r ) && (this -> lim_inf_blue_g < this->green && this->green < this -> lim_sup_blue_g) && (this -> lim_inf_blue_b < this->blue && this->blue < this -> lim_sup_blue_b) && this->blue < this->red && this->blue < this->green){
-    Serial.println("Azul");
-    return 1;}
-
-  //Verifica se a cor verde foi detectada
-  else if ((this -> lim_inf_green_r < this->red && this->red < this->lim_sup_green_r ) && (this -> lim_inf_green_g < this->green && this->green < this -> lim_sup_green_g) && (this -> lim_inf_green_b < this->blue && this->blue < this -> lim_sup_green_b)&& this->green < this->red && this->green < this->blue){
-    Serial.println("Verde");
-    return 2;}
-
-    //Verifica se a cor amarela foi detectada
-  else if ((this -> lim_inf_yellow_r < this->red && this->red < this->lim_sup_yellow_r ) && (this -> lim_inf_yellow_g < this->green && this->green < this -> lim_sup_yellow_g) && (this -> lim_inf_yellow_b < this->blue && this->blue < this -> lim_sup_yellow_b) && this->blue > this->red && this->blue > this->green){
-    Serial.println("Amarelo");
-    return 3;}
-
-    //Verifica se a cor branca foi detectada
-  else if ((this -> lim_inf_white_r < this->red && this->red < this->lim_sup_white_r ) && (this -> lim_inf_white_g < this->green && this->green < this -> lim_sup_white_g) && (this -> lim_inf_white_b < this->blue && this->blue < this -> lim_sup_white_b)) {
-    Serial.println("Branco");
-    return 4;}
-
-    //Verifica se a cor preta foi detectada
-  else if ((this -> lim_inf_black_r < this->red && this->red < this->lim_sup_black_r ) && (this -> lim_inf_black_g < this->green && this->green < this -> lim_sup_black_g) && (this -> lim_inf_black_b < this->blue && this->blue < this -> lim_sup_black_b)) {
-    Serial.println("Preto");
-    return 5;}
-
-  else{
-    Serial.println("Nenhuma Cor Identificada");
-    return 6;
-  }
-
-}
-
-int ColorSensor::identify_color2(){   // Lê os valores dos componentes RGB, identifica a cor e printa o nome da cor
+int ColorSensor::identify_color(){   // Lê os valores dos componentes RGB, identifica a cor e printa o nome da cor - Versão 3
 // Para identificar a cor, ele checa se as componentes rgb estão dentro dos limites correspondentes por cada cor, por exemplo:
 // Para a cor ser considerada vermelha,a componente R do RGB deve estar entre 20 e 40, a G entre 60 e 80, e a B entre 60 e 80
   
   this->read_values();
-  // Serial.println("Entrei");
   this->normalize_reading();
+  // Serial.println(variancia(this->red, this->green, this->blue));
   
-  //Verifica se a cor vermelha foi detectada
+  // Verifica se a cor vermelha foi detectada
   if ((this -> lim_inf_red_r < this->red && this->red < this->lim_sup_red_r ) && this->red < this->blue && this->red < this->green){
     Serial.println("Vermelho");
     return 0;}
 
   //Verifica se a cor azul foi detectada
-  else if ((this -> lim_inf_blue_b < this->blue && this->blue < this -> lim_sup_blue_b) && this->blue < this->red && this->blue < this->green){
+  /*else*/ if (this->blue < this->red/3.0 && this->blue < this->green/1.5 && this->blue < this->red - 200 && this->blue < this->green - 40 ){
     Serial.println("Azul");
     return 1;}
 
@@ -129,52 +87,6 @@ int ColorSensor::identify_color2(){   // Lê os valores dos componentes RGB, ide
   else if ((this -> lim_inf_yellow_b < this->blue && this->blue < this -> lim_sup_yellow_b) && this->blue > this->red && this->blue > this->green){
     Serial.println("Amarelo");
     return 3;}
-
-    //Verifica se a cor branca foi detectada
-  else if ((this -> lim_inf_white_r < this->red && this->red < this->lim_sup_white_r ) && (this -> lim_inf_white_g < this->green && this->green < this -> lim_sup_white_g) && (this -> lim_inf_white_b < this->blue && this->blue < this -> lim_sup_white_b)) {
-    Serial.println("Branco");
-    return 4;}
-
-    //Verifica se a cor preta foi detectada
-  else if ((this -> lim_inf_black_r < this->red && this->red < this->lim_sup_black_r ) && (this -> lim_inf_black_g < this->green && this->green < this -> lim_sup_black_g) && (this -> lim_inf_black_b < this->blue && this->blue < this -> lim_sup_black_b)) {
-    Serial.println("Preto");
-    return 5;}
-
-  else{
-    Serial.println("Nenhuma Cor Identificada");
-    return 6;
-  }
-
-}
-
-int ColorSensor::identify_color3(){   // Lê os valores dos componentes RGB, identifica a cor e printa o nome da cor - Versão 3
-// Para identificar a cor, ele checa se as componentes rgb estão dentro dos limites correspondentes por cada cor, por exemplo:
-// Para a cor ser considerada vermelha,a componente R do RGB deve estar entre 20 e 40, a G entre 60 e 80, e a B entre 60 e 80
-  
-  this->read_values();
-  // Serial.println("Entrei");
-  this->normalize_reading();
-  // Serial.println(variancia(this->red, this->green, this->blue));
-  
-  //Verifica se a cor vermelha foi detectada
-  // if ((this -> lim_inf_red_r < this->red && this->red < this->lim_sup_red_r ) && this->red < this->blue && this->red < this->green){
-  //   Serial.println("Vermelho");
-  //   return 0;}
-
-  //Verifica se a cor azul foi detectada
-  /*else*/ if (this->blue < this->red/3.0 && this->blue < this->green/1.5 && this->blue < this->red - 200 && this->blue < this->green - 40 ){
-    Serial.println("Azul");
-    return 1;}
-
-  //Verifica se a cor verde foi detectada
-  // else if ((this -> lim_inf_green_g < this->green && this->green < this -> lim_sup_green_g) && this->green < this->red && this->green < this->blue){
-  //   Serial.println("Verde");
-  //   return 2;}
-
-    //Verifica se a cor amarela foi detectada
-  // else if ((this -> lim_inf_yellow_b < this->blue && this->blue < this -> lim_sup_yellow_b) && this->blue > this->red && this->blue > this->green){
-  //   Serial.println("Amarelo");
-  //   return 3;}
 
     //Verifica se a cor branca foi detectada
   else if ((this->red < 30 ) && (this->green < 30) && (this->blue < 30)) {
@@ -192,7 +104,6 @@ int ColorSensor::identify_color3(){   // Lê os valores dos componentes RGB, ide
   }
 
 }
-
 
 
 void ColorSensor::print_color_components_RGB(){
@@ -502,16 +413,16 @@ void ColorSensor::calibra_sensor_inferior(int num) {
   count +=6;
 
   strcpy(cor, "Vermelho");
-  // this->calibra_cor_inferior(cor, count);
+  this->calibra_cor_inferior(cor, count);
 
   strcpy(cor, "Azul");
   this->calibra_cor_inferior(cor, count+12);
 
   strcpy(cor, "Verde");
-  // this->calibra_cor_inferior(cor, count+24);
+  this->calibra_cor_inferior(cor, count+24);
 
   strcpy(cor, "Amarelo");
-  // this->calibra_cor_inferior(cor, count+36);
+  this->calibra_cor_inferior(cor, count+36);
 
   strcpy(cor, "Branco");
   this->calibra_cor_inferior(cor, count+48);
