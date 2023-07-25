@@ -20,7 +20,7 @@ def write_bgr_on_screen(frame, bgr_values):
         # Display the RGB values on the screen
         font = cv2.FONT_HERSHEY_SIMPLEX
         font_scale = 0.7
-        font_color = (255, 255, 255)  # White color in BGR format
+        font_color = (255, 0, 255)  # White color in BGR format
         thickness = 2
         text = f"BGR: {bgr_values}"
         text_size = cv2.getTextSize(text, font, font_scale, thickness)[0]
@@ -29,11 +29,27 @@ def write_bgr_on_screen(frame, bgr_values):
 
 
 def show_red_part_only(frame):
-    lower_red = np.array([0, 0, 40])    # Lower bound of red color in BGR
-    upper_red = np.array([5, 5, 255])  # Upper bound of red color in BGR
-    mask = cv2.inRange(frame, lower_red, upper_red)
-    red_part = cv2.bitwise_and(frame, frame, mask=mask)
+    # Define lower bounds of red color in BGR
+    lower_red = np.array([0, 0, 0])
+    # Define upper bounds of red color in BGR
+    upper_red = np.array([255, 255, 255])
+    
+    # Apply the first mask to get the red region within the BGR limits
+    mask_red = cv2.inRange(frame, lower_red, upper_red)
+    
+    # Apply the additional condition b + g < r and r > 170 to filter the red region
+    b, g, r = cv2.split(frame)
+    print(b,g,r)
+    mask_custom = (b + g < r - 100)
+    # Combine the two masks
+    final_mask = mask_red & ~mask_custom
+    
+    # Apply the combined mask to get only the red part that meets the condition
+    red_part = cv2.bitwise_and(frame, frame, mask=final_mask)
+    
     return red_part
+
+
 
 def show_green_part_only(frame):
     lower_green = np.array([0, 100, 0])    # Lower bound of green color in BGR
@@ -101,8 +117,8 @@ def detect_red_cube(frame):
     hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     # Definir as faixas de cores para a cor vermelha em HSV
-    lower_red = np.array([0, 100, 100])
-    upper_red = np.array([10, 255, 255])
+    lower_red = np.array([50, 50, 100])
+    upper_red = np.array([100, 100, 255])
     mask1 = cv2.inRange(hsv_frame, lower_red, upper_red)
 
     lower_red = np.array([160, 100, 100])
@@ -127,15 +143,42 @@ def detect_red_cube(frame):
     return False
 
 
-def main():
-    cap = cv2.VideoCapture(0)
+def get_edges(frame):
+    # Convert the frame to grayscale
+    gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    # Apply Gaussian blur to reduce noise
+    blurred_frame = cv2.GaussianBlur(gray_frame, (5, 5), 0)
+    
+    # Use the Canny edge detection algorithm to get the edges
+    edges = cv2.Canny(blurred_frame, threshold1=30, threshold2=100)
+    
+    # Create a 3-channel black image to draw the edges on
+    edges_frame = np.zeros_like(frame)
+    edges_frame[:, :] = (0, 0, 0)
+    
+    # Copy the edges to the corresponding channels of the black image
+    edges_frame[edges != 0] = (255, 255, 255)
+    
+    return edges_frame
 
+
+    
+
+def main():
+    cap = cv2.VideoCapture(1)
+    i = 2
     while True:
         ret, frame = cap.read()
-
+ 
         if not ret:
             break
 
+        frame = cv2.flip(frame, 1)
+        i+=1
+        cv2.imwrite("cubes.png", frame)
+        edges = draw_contours(frame)
+        cv2.imshow("Bordas", edges)
         # Get the RGB values of the central pixel
         center_pixel_bgr = get_central_pixel_bgr(frame)
 
@@ -151,7 +194,7 @@ def main():
 
 
 
-        # Show the frame with the circle on the central pixel
+
         cv2.imshow('Video', frame_with_circle)
 
         # Exit when 'q' is pressed
