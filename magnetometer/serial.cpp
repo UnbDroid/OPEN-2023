@@ -55,6 +55,7 @@ void setup() {
             Serial.println("Conexão com o MPU FALHOU");
         }
     }
+    mpu.setMagneticDeclination(-21.091666);
     Serial.print("Mag X, ");   
     Serial.println("Mag y " );  
 }
@@ -69,7 +70,7 @@ void coletarValoresParaCalibracao(){
 }
 
 void loop() {
-
+    coletarValoresParaCalibracao();
 }
 
 

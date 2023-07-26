@@ -1,50 +1,24 @@
-#include "MPU9250.h"
 #include<Arduino.h>
+#include"LightSensor.h"
+#include<Pins.h>
+#include<Mag.h>
 
-MPU9250 mpu;
-float magX_list[200];
-float higherX=0;
-float lowestY=1000;
-float higherY=0;
-float lowestX=1000;
-void print_roll_pitch_yaw() {
-    float heading = atan2(mpu.getMagY(), mpu.getMagX()) * 180.0 / PI;
-    if (heading < 0) {
-        heading += 360.0;
-    }
-    float angulo = atan2(mpu.getMagX(), mpu.getMagY());
-    Serial.println(angulo*180/PI);
-    Serial.print(mpu.getMagX());
-    Serial.print(" ");
-    Serial.println(mpu.getMagY());
-    Serial.println(heading);
-}
-void setup() {
+Mag mag;
+void setup(){
     Serial.begin(9600);
     Wire.begin();
-    delay(2000);
-    if (!mpu.setup(0x68)) {  // change to your own address
+    delay(200);
+    if(!mag.setup(0x68)){
         while (1) {
-            Serial.println("MPU connection failed. Please check your connection with `connection_check` example.");
+            Serial.println("Conexão com o MPU FALHOU");
         }
     }
-    
-    mpu.setMagBias(-98.95499999999998,566.49,0.);
-    mpu.setMagScale(0.005029801574327893,0.004901720503896868,1.);
-    mpu.setMagneticDeclination(-21.091666); //minuto/60; 
-    Serial.print('X');  
-    Serial.print(" ");
-    Serial.println('Y');    
-
+    mag.setMagneticDeclination(-21.96);
+    mag.setMagBias(343.46,-13.32,0);
+    mag.setCorrection(6);
+    mag.setMagScale(194.51,191.10,0);
 }
 
-void loop() {
-    if (mpu.update()) {
-        static uint32_t prev_ms = millis();
-        if (millis() > prev_ms + 25) {
-            print_roll_pitch_yaw();
-            prev_ms = millis();
-        }  
-    }
+void loop(){
+    Serial.println(mag.getDegree());
 }
-

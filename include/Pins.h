@@ -13,7 +13,7 @@
 #define M_PWM_RIGHT 4
 #define ENC_A_RIGHT 19
 #define ENC_B_RIGHT 18
-#define Kp 1
+
 //
 
 /* Infravermelhos
