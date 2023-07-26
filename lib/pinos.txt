@@ -1,0 +1,32 @@
+Sensor de Cor Frontal - TCS3200:
+
+s0 -> 21
+s1 -> 20
+s2 -> 41
+s3 -> 39
+out -> 37
+
+Sensor de Cor Inferior Esquerdo TCS3200:
+
+s0 -> 33
+s1 -> 31
+s2 -> 27
+s3 -> 29 
+out -> 35
+
+Motor Esquerdo:
+
+In1 -> 22
+In2 -> 23
+PWM -> 3
+
+Motor Direito:
+
+In3 -> 24
+In4 -> 25
+PWM -> 2
+
+Ultrassom:
+
+echopin -> 43
+trigpin -> 45

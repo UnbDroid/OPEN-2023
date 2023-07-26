@@ -25,21 +25,6 @@ MotorDC::MotorDC(int pinoA, int pinoB, int pinoPwm){
     */
 }
 
-MotorDC::MotorDC(int pinoA, int pinoB, int pinoPwm, int pinEnc){
-    this->pinoA = pinoA;
-    this->pinoB = pinoB;
-    this->pinoPwm = pinoPwm;
-    this->pinEnc=pinEnc;
-    pinMode(this->pinoA, OUTPUT);
-    pinMode(this->pinoB, OUTPUT);
-    pinMode(this->pinoPwm, OUTPUT);
-    
-
-    /*
-    AQUI É O CONSTRUTOR DA NOSSA CLASSE, JA ESTAMOS SETANDO O MODO DOS PINOS BEM AQUI.
-    */
-}
-
 void MotorDC::moveFoward(int *velocidade){
     digitalWrite(this->pinoA, HIGH);
     digitalWrite(this->pinoB, LOW);
