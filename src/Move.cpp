@@ -1,30 +1,78 @@
 #include<Wire.h>
 #include<Arduino.h>
 #include<MotorDC.h>
+#include<Move.h>
+#include<LightSensor.h>
+#include <Pins.h>
 
-#define Kp 1
-
-void move_forward(MotorDC* motor1, MotorDC* motor2, int velocity){
-    motor1->andar_para_frente(velocity);
-    motor2->andar_para_frente(velocity);
+void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
+    switch (direction)
+    {
+    case FORWARD:
+        
+        motorLeft->moveForward(velocity);
+        motorRight->moveForward(velocity);    
+        break;
+    case BACKWARD:
+        motorLeft->moveBackward(velocity);
+        motorRight->moveBackward(velocity);
+        break;    
+    default:
+        break;
+    }
 }
-void move_backward(MotorDC* motor1, MotorDC* motor2, int velocity){
-    motor1->andar_para_tras(velocity);
-    motor2->andar_para_tras(velocity);
+
+void initialPosition(MPU9250 * mpu){
+    int a;
+}
+void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
+    int a;
+}
+void rotates180(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
+    int a;
+}
+void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity){
+    int a;
 }
 
-void moveForwardPid(MotorDC* motorLeft, MotorDC* motorRight, int velocity){
-    int posEncoderLeft = motorLeft->getEncoderLeft();
-    int posEncoderRight = motorRight->getEncoderRight();
+// void moveForwardPid(MotorDC* motorLeft, MotorDC* motorRight, int velocity){
+//     int posEncoderLeft = motorLeft->getEncoder();
+//     int posEncoderRight = motorRight->getEncoder();
+
+//     int erro = posEncoderLeft - posEncoderRight;
+//     int incremento = erro*KP;
+//     int parameterVelocityLeft = velocity - incremento;
+//     int parameterVelocityRight = velocity + incremento;
+
+//     motorLeft->moveFoward(parameterVelocityLeft);
+//     motorLeft->moveFoward(parameterVelocityRight);
+// }
+
+
+void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
+    int posEncoderLeft = motorLeft->getEncoder();
+    int posEncoderRight = motorRight->getEncoder();
 
     int erro = posEncoderLeft - posEncoderRight;
-    int incremento = erro*Kp;
+    int incremento = erro*KP;
     int parameterVelocityLeft = velocity - incremento;
     int parameterVelocityRight = velocity + incremento;
 
-    motorLeft->andar_para_frente(parameterVelocityLeft);
-    motorLeft->andar_para_frente(parameterVelocityRight);
 
+    switch (direction)
+    {
+    case FORWARD:
+        
+        motorLeft->moveForward(parameterVelocityLeft);
+        motorRight->moveForward(parameterVelocityRight);    
+        break;
 
+    case BACKWARD:
+        motorLeft->moveBackward(parameterVelocityLeft);
+        motorRight->moveBackward(parameterVelocityRight);
+        break;    
+
+    default:
+        break;
+    }
 }
-
