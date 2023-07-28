@@ -49,7 +49,7 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
 // }
 
 
-void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
+void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight){
     int posEncoderLeft = motorLeft->getEncoder();
     int posEncoderRight = motorRight->getEncoder();
 

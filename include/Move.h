@@ -10,7 +10,7 @@
 enum Directions{FORWARD, BACKWARD};
 enum RotateDirections{LEFT, RIGHT};
 void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor *lightSensorLeft,LightSensor* lightSensorRight);
-void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor *lightSensorLeft,LightSensor* lightSensorRight);
+void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight);
 void initialPosition(MPU9250 * mpu);
 void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight);
 void rotates180(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight);
