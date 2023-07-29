@@ -5,17 +5,19 @@
 class LightSensor{
     public:
     float read();
-    char * lastRead;
     LightSensor(int pinoA0);
-    
-    void setLastestChanges(char value);
-    char getLastestChanges();
-    void setAcrossed(bool value);
-    bool getAcrossed();
+    void setLastestChange(char value);
+    char getLastestChange();
+    void setCrossed(bool value);
+    bool getCrossed();
+    char getCurrentColor();
+    void setCurrentColor(char color);
     private:
+    char currentColor;
+    int changesCounter;
     char lastestChange;
     int pinoA0;
-    bool acrossed;
+    bool crossed;
 };
 
 #endif

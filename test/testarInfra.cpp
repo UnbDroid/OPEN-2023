@@ -19,7 +19,7 @@ void loop(){
     // Serial.print(" DireitaFrente ");
     // Serial.println(lightSensorDireitaFrente.read());
     lightSensorDireitaFrente.read();
-    if(lightSensorDireitaFrente.getAcrossed()){
+    if(lightSensorDireitaFrente.getCrossed()){
         Serial.println("Atravesouu");
     }
     // Serial.print(lightSensorDireitaFrente.getLastestChanges()[0]);
