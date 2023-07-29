@@ -4,7 +4,7 @@
 #include<Move.h>
 #include<LightSensor.h>
 #include <Pins.h>
-
+int count =0;
 void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
     switch (direction)
     {
@@ -34,6 +34,17 @@ void rotates180(RotateDirections rotateDirection, int velocity ,MotorDC * motorL
 void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity){
     int a;
 }
+void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
+    while(count<quantityToMove){
+        lightSensorLeft->read();
+        lightSensorRight->read();
+        movePID(FORWARD, 255 ,leftMotor, rightMotor);
+        if(lightSensorRight->getCrossed()){
+            count++;
+        }
+    }
+}
+
 
 // void moveForwardPid(MotorDC* motorLeft, MotorDC* motorRight, int velocity){
 //     int posEncoderLeft = motorLeft->getEncoder();

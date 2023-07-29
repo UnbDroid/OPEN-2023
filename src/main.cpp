@@ -5,7 +5,8 @@
 
 MotorDC LeftMotor(M_LEFT_IN1, M_LEFT_IN2, PWM_LEFT,ENC_A_LEFT,ENC_B_LEFT);
 MotorDC RightMotor(M_RIGHT_IN3, M_RIGHT_IN4, M_PWM_RIGHT,ENC_A_RIGHT,ENC_B_RIGHT);
-
+LightSensor sensorDireita(A13);
+LightSensor sensorEsquerda(A14);
 void TakeMemoryLeftMotor(){ // fica na main
   LeftMotor.readEncoder();
 }
@@ -23,13 +24,19 @@ void setup()
 
 void loop()
 {
-movePID(FORWARD, 255 ,&LeftMotor, &RightMotor);
+sensorDireita.read();
+sensorEsquerda.read();
+
+moveForSquare(1,&sensorDireita,&sensorEsquerda,&LeftMotor,&RightMotor);
+// movePID(FORWARD, 255 ,&LeftMotor, &RightMotor);
+//     Serial.println(sensorDireita.read());
+    
 
 // Usando o serial, podemos ver o que os encoders estão retornando:
-Serial.print(LeftMotor.getEncoder());
-Serial.print(" ");
-Serial.print(RightMotor.getEncoder());
-Serial.println();
+// Serial.print(LeftMotor.getEncoder());
+// Serial.print(" ");
+// Serial.print(RightMotor.getEncoder());
+// Serial.println();
 
 
 }

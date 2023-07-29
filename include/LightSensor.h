@@ -12,9 +12,10 @@ class LightSensor{
     bool getCrossed();
     char getCurrentColor();
     void setCurrentColor(char color);
+    int mediaPonderada=150;
     private:
     char currentColor;
-    int changesCounter;
+    int changesCounter=0;
     char lastestChange;
     int pinoA0;
     bool crossed;

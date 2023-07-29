@@ -1,31 +1,37 @@
 #include"LightSensor.h"
 
-int changesCounter=0;
+#define ALPHA 0.5
+
+
+
 LightSensor::LightSensor(int pinoA0){
     pinMode(pinoA0, INPUT);
     this->pinoA0=pinoA0;
-    
+    this->setLastestChange('b');
+    this->setCrossed(false);
+    this->changesCounter=0;
 };
 
 float LightSensor::read(){
     float read =analogRead(this->pinoA0);
-    char color = read>250?'b':'w';
+    this->mediaPonderada = (float)this->mediaPonderada *ALPHA +(1 -ALPHA)*read;
+    char color = read>=200?'b':'w';
     this->setCurrentColor(color);
-    if(this->changesCounter<3){
-        if(this->currentColor!=this->getLastestChange()){
-        this->changesCounter++;
-        this->setLastestChange(this->currentColor);
+    if(this->mediaPonderada>=200 or (this->mediaPonderada<=40 and this->mediaPonderada>=24)){
+        if(this->changesCounter<2){
+            if(this->currentColor!=this->getLastestChange()){
+                this->changesCounter++;
+                this->setLastestChange(this->currentColor);   
+            }
+            setCrossed(false);
         }
-        setCrossed(false);
-    }
-    else{
-        this->changesCounter=1;
-        if(this->currentColor!=this->getLastestChange()){
+        else{
+            this->changesCounter=1;
+            setCrossed(true);
             setLastestChange(this->currentColor);
         }
-        setCrossed(true);
     }
-    return read;   
+    return mediaPonderada;   
 };
 
 char  LightSensor::getLastestChange(){
