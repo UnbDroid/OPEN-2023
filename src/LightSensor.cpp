@@ -9,35 +9,41 @@ LightSensor::LightSensor(int pinoA0){
 
 float LightSensor::read(){
     float read =analogRead(this->pinoA0);
-    char currentCharColor;
-    currentCharColor = read>250?'b':'w';
-    if(changesCounter<3){
-        if(currentCharColor!=this->getLastestChanges()){
-        changesCounter++;
-        this->setLastestChanges(currentCharColor);
+    char color = read>250?'b':'w';
+    this->setCurrentColor(color);
+    if(this->changesCounter<3){
+        if(this->currentColor!=this->getLastestChange()){
+        this->changesCounter++;
+        this->setLastestChange(this->currentColor);
         }
-        setAcrossed(false);
+        setCrossed(false);
     }
     else{
-        changesCounter=1;
-        if(currentCharColor!=this->getLastestChanges()){
-            setLastestChanges(currentCharColor);
+        this->changesCounter=1;
+        if(this->currentColor!=this->getLastestChange()){
+            setLastestChange(this->currentColor);
         }
-        setAcrossed(true);
+        setCrossed(true);
     }
-    return changesCounter;   
+    return read;   
 };
 
-char  LightSensor::getLastestChanges(){
+char  LightSensor::getLastestChange(){
     return this->lastestChange;
 };
-void LightSensor::setAcrossed(bool value){
-    this->acrossed=value;
+void LightSensor::setCrossed(bool value){
+    this->crossed=value;
 };
-bool LightSensor::getAcrossed(){
-    return this->acrossed;
+bool LightSensor::getCrossed(){
+    return this->crossed;
 }
-void LightSensor::setLastestChanges(char value){
+void LightSensor::setLastestChange(char value){
     this->lastestChange=value;
 };
 
+char LightSensor::getCurrentColor(){
+    return this->currentColor;
+}
+void LightSensor::setCurrentColor(char color){
+     this->currentColor=color;
+}
