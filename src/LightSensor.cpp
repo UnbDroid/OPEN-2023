@@ -15,20 +15,28 @@ LightSensor::LightSensor(int pinoA0){
 float LightSensor::read(){
     float read =analogRead(this->pinoA0);
     this->mediaPonderada = (float)this->mediaPonderada *ALPHA +(1 -ALPHA)*read;
-    char color = read>=200?'b':'w';
+    char color = mediaPonderada>=200?'b':'w';
     this->setCurrentColor(color);
     if(this->mediaPonderada>=200 or (this->mediaPonderada<=40 and this->mediaPonderada>=24)){
         if(this->changesCounter<2){
+            /* 
+               Talvez o problema é que ele está contabilizando errado que atravessou, pois ele não está contando o
+               preto do quadrado dele, só o próximo, o que é um problema. 
+            */
             if(this->currentColor!=this->getLastestChange()){
                 this->changesCounter++;
-                this->setLastestChange(this->currentColor);   
+                this->setLastestChange(this->currentColor);
+                setCrossed(false);   
+                /*
+                    Alterei para ele colocar como falso apenas quando ele achar dnv o branco, pois assim talvez 
+                    na lógica eu consigo contabilizar que ele atravessou apenas quando os dois
+                    estiverem como true
+                */
             }
-            setCrossed(false);
         }
         else{
-            this->changesCounter=1;
+            this->changesCounter=0;
             setCrossed(true);
-            setLastestChange(this->currentColor);
         }
     }
     return mediaPonderada;   

@@ -39,9 +39,11 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
         lightSensorLeft->read();
         lightSensorRight->read();
         movePID(FORWARD, 255 ,leftMotor, rightMotor);
-        if(lightSensorRight->getCrossed()){
+        if(lightSensorRight->getCrossed()&&lightSensorLeft->getCrossed()){
+            Serial.println("Atravessei ");
             count++;
         }
+        
     }
 }
 
