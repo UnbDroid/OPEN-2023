@@ -35,15 +35,15 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
     int a;
 }
 void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
+    quantityToMove++;
     while(count<quantityToMove){
-        lightSensorLeft->read();
-        lightSensorRight->read();
-        movePID(FORWARD, 255 ,leftMotor, rightMotor);
+      lightSensorLeft->read();
+      lightSensorRight->read();
         if(lightSensorRight->getCrossed()&&lightSensorLeft->getCrossed()){
-            Serial.println("Atravessei ");
             count++;
+            lightSensorLeft->setCrossed(false);
+            lightSensorRight->setCrossed(false);
         }
-        
     }
 }
 
