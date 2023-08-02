@@ -17,7 +17,7 @@ float LightSensor::read(){
     this->mediaPonderada = (float)this->mediaPonderada *ALPHA +(1 -ALPHA)*read;
     char color = mediaPonderada>=200?'b':'w';
     this->setCurrentColor(color);
-    if(this->mediaPonderada>=200 or (this->mediaPonderada<=40 and this->mediaPonderada>=24)){
+    if(this->mediaPonderada>=200 or (this->mediaPonderada<=110 and this->mediaPonderada>=24)){
         if(this->changesCounter<2){
             /* 
                Talvez o problema é que ele está contabilizando errado que atravessou, pois ele não está contando o

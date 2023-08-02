@@ -58,7 +58,7 @@ MotorDC RightMotor(IN2, IN4, PWM_Right);
 void setup(){
     Serial.begin(9600);
     // frontalColorSensor.calibra_sensor(0);
-    frontalColorSensor.read_limit_values(0);
+    //frontalColorSensor.read_limit_values(0);
     // leftColorSensor.calibra_sensor(1);
     // leftColorSensor.read_limit_values(1);
 
