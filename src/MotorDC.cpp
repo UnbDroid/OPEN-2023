@@ -25,11 +25,15 @@ MotorDC::MotorDC(int pinoA, int pinoB, int pinoPwm, int pinEncA, int pinEncB){
     AQUI É O CONSTRUTOR DA NOSSA CLASSE, JA ESTAMOS SETANDO O MODO DOS PINOS BEM AQUI.
     */
 }
-
+MotorDC::MotorDC(int RPWM,int LPWM, int pinEncA,int pinEncB){
+  this->pinoA=RPWM;
+  this->pinoB= LPWM;
+  this->encA=pinEncA;
+  this->encB=pinEncB;
+}
 void MotorDC::moveForward(int velocidade){
-    digitalWrite(this->pinoA, HIGH);
-    digitalWrite(this->pinoB, LOW);
-    analogWrite(this->pinoPwm, velocidade);
+    analogWrite(this->pinoA, 0);
+    analogWrite(this->pinoB, velocidade);
 }
 
 void MotorDC::stop(){

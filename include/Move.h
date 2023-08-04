@@ -17,5 +17,6 @@ void rotates180(RotateDirections rotateDirection, int velocity ,MotorDC * motorL
 void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity);
 
 void moveForSquare(int quantityToMove,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight);
+void move2(int quantityToMove,LightSensor * lightSensorLeft, LightSensor *lightSensorRight);
 
 #endif

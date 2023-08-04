@@ -89,3 +89,25 @@ void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* mo
         break;
     }
 }
+void move2(int quantityToMove,LightSensor * lightSensorLeft, LightSensor *lightSensorRight){
+    quantityToMove++;
+    while(count<quantityToMove){
+        analogWrite(A12,0);
+        analogWrite(A11, 255);
+        analogWrite(A9, 255);
+        analogWrite(A10, 0);
+      
+      lightSensorLeft->read();
+      lightSensorRight->read();
+        if(lightSensorRight->getCrossed()){
+            Serial.println("atravessei");
+            count++;
+            lightSensorLeft->setCrossed(false);
+            lightSensorRight->setCrossed(false);
+        }
+    }
+    analogWrite(A12,0);
+    analogWrite(A11, 0);
+    analogWrite(A9, 0);
+    analogWrite(A10, 0);
+}
