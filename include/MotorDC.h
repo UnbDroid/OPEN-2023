@@ -12,8 +12,7 @@ TEMOS DIFERENTES TIPOS DE VISUALIZAÇÕES DAS COISAS, COMO PUBLIC, PRIVATE, PROT
 #define MOTORDC_H
     class MotorDC{
         public: 
-            MotorDC(int pinoA, int pinoB, int pinoPwm, int pinEncA, int pinEncB);
-            MotorDC(int pinoA, int pinoB, int pinoPwm);
+            MotorDC(int RPWM,int LPWM);
             MotorDC(int RPWM,int LPWM, int pinEncA,int pinEncB);
             // ~MotorDC();
             void moveForward(int velocity);

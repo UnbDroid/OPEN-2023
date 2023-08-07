@@ -10,26 +10,21 @@ PARA FAZER O CONTROLE, CASO NÃO SAIBAM O QUE É, POSSO TENTAR EXPLICAR COMO FUN
 
 */
 
-
-MotorDC::MotorDC(int pinoA, int pinoB, int pinoPwm, int pinEncA, int pinEncB){
-    this->pinoA = pinoA;
-    this->pinoB = pinoB;
-    this->pinoPwm = pinoPwm;
+MotorDC::MotorDC(int RPWM,int LPWM, int pinEncA,int pinEncB){
+    this->pinoA=RPWM;
+    this->pinoB= LPWM;
+    this->encA=pinEncA;
+    this->encB=pinEncB;
     pinMode(this->pinoA, OUTPUT);
     pinMode(this->pinoB, OUTPUT);
-    pinMode(this->pinoPwm, OUTPUT);
     pinMode(this->pinEncA, INPUT);
     pinMode(this->pinEncB, INPUT);
-
-    /*
-    AQUI É O CONSTRUTOR DA NOSSA CLASSE, JA ESTAMOS SETANDO O MODO DOS PINOS BEM AQUI.
-    */
 }
-MotorDC::MotorDC(int RPWM,int LPWM, int pinEncA,int pinEncB){
-  this->pinoA=RPWM;
-  this->pinoB= LPWM;
-  this->encA=pinEncA;
-  this->encB=pinEncB;
+MotorDC::MotorDC(int RPWM,int LPWM){
+    this->pinoA=RPWM;
+    this->pinoB= LPWM;
+    pinMode(this->pinoA, OUTPUT);
+    pinMode(this->pinoB, OUTPUT);
 }
 void MotorDC::moveForward(int velocidade){
     analogWrite(this->pinoA, 0);
