@@ -3,8 +3,8 @@
 #include <MotorDC.h>
 #include <Move.h>
 
-MotorDC LeftMotor(M_LEFT_IN1, M_LEFT_IN2, PWM_LEFT,ENC_A_LEFT,ENC_B_LEFT);
-MotorDC RightMotor(M_RIGHT_IN3, M_RIGHT_IN4, M_PWM_RIGHT,ENC_A_RIGHT,ENC_B_RIGHT);
+MotorDC LeftMotor(M_LEFT_LPWM, M_LEFT_RPWM,ENC_A_LEFT,ENC_B_LEFT);
+MotorDC RightMotor(M_RIGHT_LPWM, M_RIGHT_RPWM,ENC_A_RIGHT,ENC_B_RIGHT);
 
 void TakeMemoryLeftMotor(){ // fica na main
   LeftMotor.readEncoder();
@@ -23,7 +23,7 @@ void setup()
 
 void loop()
 {
-movePID(FORWARD, 255 ,&LeftMotor, &RightMotor);
+movePID(FORWARD, 170 ,&LeftMotor, &RightMotor);
 
 // Usando o serial, podemos ver o que os encoders estão retornando:
 Serial.print(LeftMotor.getEncoder());
