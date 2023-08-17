@@ -26,8 +26,6 @@ MotorDC::MotorDC(int pinoLpwm, int pinoRpwm, int pinEncA, int pinEncB){
 }
 
 void MotorDC::moveForward(int velocidade){
-    // digitalWrite(this->pinoA, HIGH);
-    // digitalWrite(this->pinoB, LOW);
     analogWrite(this->pinoLpwm, velocidade);
     analogWrite(this->pinoRpwm, 0);
 }
@@ -38,13 +36,14 @@ void MotorDC::stop(){
 }
 
 void MotorDC::moveBackward(int velocidade){
-  analogWrite(this->pinoLpwm, 0);
+    analogWrite(this->pinoLpwm, 0);
     analogWrite(this->pinoRpwm, velocidade);
 }
 
 
 void MotorDC::readEncoder(){
   int b = digitalRead(pinEncA);
+  // Serial.println(b);
 
   if (b>0){
     posEncoder++;
@@ -55,6 +54,10 @@ void MotorDC::readEncoder(){
 
 int MotorDC::getEncoder(){
     return posEncoder;
+}
+
+int MotorDC::setEncoder(int value){
+    posEncoder = value;
 }
 
 // int MotorDC::getEncoderRight(){

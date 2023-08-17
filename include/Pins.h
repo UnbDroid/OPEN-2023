@@ -14,13 +14,13 @@
 // #define ENC_A_RIGHT 3
 // #define ENC_B_RIGHT 2
 
-#define M_LEFT_RPWM A10 //ANTIGO IN1
-#define M_LEFT_LPWM A9
-#define ENC_A_LEFT 19
-#define ENC_B_LEFT 18
+#define M_LEFT_RPWM A8 //ANTIGO IN1
+#define M_LEFT_LPWM A7
+#define ENC_A_LEFT 18
+#define ENC_B_LEFT 19
 
-#define M_RIGHT_RPWM A12//ANTIGO IN3
-#define M_RIGHT_LPWM A11//ANTIGO IN4
+#define M_RIGHT_RPWM A6//ANTIGO IN3
+#define M_RIGHT_LPWM A5//ANTIGO IN4
 #define ENC_A_RIGHT 3
 #define ENC_B_RIGHT 2
 
@@ -37,6 +37,6 @@
 
 */
 
-#define KP 1
+#define KP 0.5
 
 #endif
