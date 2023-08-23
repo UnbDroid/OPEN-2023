@@ -29,8 +29,8 @@
 /* Infravermelhos
 
 */
-#define A0_DIREITA_FRENTE   A11
-#define A0_ESQUERDA_FRENTE  A12
+#define A0_DIREITA_FRENTE   A12
+#define A0_ESQUERDA_FRENTE  A11
 #define A0_ESQUERDA_MEIO 9
 #define A0_DIREITA_MEIO 10
 /*  Sensores de Cor
