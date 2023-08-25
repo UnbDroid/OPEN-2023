@@ -18,11 +18,14 @@
 #define M_LEFT_LPWM A7
 #define ENC_A_LEFT 18
 #define ENC_B_LEFT 19
+#define EN_LEFT_MOTOR 13
 
 #define M_RIGHT_RPWM A6//ANTIGO IN3
 #define M_RIGHT_LPWM A5//ANTIGO IN4
 #define ENC_A_RIGHT 3
 #define ENC_B_RIGHT 2
+#define EN_RIGHT_MOTOR 11
+
 
 //
 
@@ -37,6 +40,6 @@
 
 */
 
-#define KP 0.5
+#define KP 0.1
 
 #endif

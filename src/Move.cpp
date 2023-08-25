@@ -39,7 +39,7 @@ void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLe
     case LEFT:
         motorLeft->moveBackward(velocity);
         motorRight->moveForward(velocity);
-        while (abs(motorLeft->getEncoder()) < 1000 && abs(motorRight->getEncoder()) < 1000){
+        while (abs(motorLeft->getEncoder()) < 910 && abs(motorRight->getEncoder()) < 910){
             motorLeft->moveBackward(velocity);
             motorRight->moveForward(velocity);
         }
@@ -51,7 +51,7 @@ void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLe
         motorLeft->moveForward(velocity);
         motorRight->moveBackward(velocity);
 
-        while (abs(motorLeft->getEncoder()) < 1000 && abs(motorRight->getEncoder()) < 1000){
+        while (abs(motorLeft->getEncoder()) < 900 && abs(motorRight->getEncoder()) < 900){
             motorLeft->moveForward(velocity);
             motorRight->moveBackward(velocity);
             
@@ -77,10 +77,10 @@ void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* mo
     int posEncoderLeft = motorLeft->getEncoder();
     int posEncoderRight = motorRight->getEncoder();
 
-    int erro = posEncoderLeft - posEncoderRight;
+    int erro = posEncoderRight - posEncoderLeft;
     int incremento = erro*KP;
-    int parameterVelocityLeft = velocity - incremento;
-    int parameterVelocityRight = velocity + incremento;
+    int parameterVelocityLeft = velocity + incremento;
+    int parameterVelocityRight = velocity - incremento;
 
 
     switch (direction)

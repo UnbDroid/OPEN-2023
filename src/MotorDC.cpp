@@ -11,12 +11,16 @@ PARA FAZER O CONTROLE, CASO NÃO SAIBAM O QUE É, POSSO TENTAR EXPLICAR COMO FUN
 */
 
 
-MotorDC::MotorDC(int pinoLpwm, int pinoRpwm, int pinEncA, int pinEncB){
+MotorDC::MotorDC(int pinoLpwm, int pinoRpwm, int pinoEN, int pinEncA, int pinEncB){
     this->pinoLpwm = pinoLpwm;
     this->pinoRpwm = pinoRpwm;
+    this->pinoEN = pinoEN;
+    // this-> pinEncA = pinEncA; // não sei se devia add isso
+    // this-> pinEncB = pinEncB; // não sei se devia add isso
     
     pinMode(this->pinoLpwm, OUTPUT);
     pinMode(this->pinoRpwm, OUTPUT);
+    pinMode(this->pinoEN, OUTPUT);
     pinMode(this->pinEncA, INPUT);
     pinMode(this->pinEncB, INPUT);
 
@@ -26,18 +30,21 @@ MotorDC::MotorDC(int pinoLpwm, int pinoRpwm, int pinEncA, int pinEncB){
 }
 
 void MotorDC::moveForward(int velocidade){
-    analogWrite(this->pinoLpwm, velocidade);
-    analogWrite(this->pinoRpwm, 0);
+    digitalWrite(this->pinoLpwm, HIGH);
+    digitalWrite(this->pinoRpwm, LOW);
+    analogWrite(this->pinoEN, velocidade);
 }
 
 void MotorDC::stop(){
-    digitalWrite(this->pinoRpwm, 0);
-    digitalWrite(this->pinoLpwm, 0);
+    analogWrite(this->pinoRpwm, HIGH);
+    analogWrite(this->pinoLpwm, HIGH);
+    // digitalWrite(this->pinoEN,0);
 }
 
 void MotorDC::moveBackward(int velocidade){
-    analogWrite(this->pinoLpwm, 0);
-    analogWrite(this->pinoRpwm, velocidade);
+    digitalWrite(this->pinoLpwm, LOW);
+    digitalWrite(this->pinoRpwm, HIGH);
+    analogWrite(this->pinoEN, velocidade);
 }
 
 
