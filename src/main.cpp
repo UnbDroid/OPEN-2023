@@ -9,8 +9,8 @@
 #define pe2 10
 MotorDC leftMotor(M_LEFT_RPWM,M_LEFT_LPWM ,ENC_A_RIGHT,ENC_B_RIGHT);
 MotorDC rightMotor(A12,A11,ENC_A_RIGHT,ENC_B_RIGHT);
-LightSensor sensorDireita(A12);
-LightSensor sensorEsquerda(A11);
+LightSensor sensorEsquerda(A12);
+LightSensor sensorDireita(A11);
 //MotorDC teste(11,12, ENC_A_LEFT, ENC_B_LEFT);
 
 //in3
