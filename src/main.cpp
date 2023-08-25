@@ -1,17 +1,16 @@
-#include<Arduino.h>
-#include"LightSensor.h"
-#include<Pins.h>
-#include<MotorDC.h>
-#include<Move.h>
-#define pd1 A11
-#define pd2 A12
-#define pe1 9
-#define pe2 10
-MotorDC leftMotor(M_LEFT_RPWM,M_LEFT_LPWM ,18,19);
-MotorDC rightMotor(A5,A6,3,2);
-LightSensor sensorEsquerda(A12);
-LightSensor sensorDireita(A11);
-//MotorDC teste(11,12, ENC_A_LEFT, ENC_B_LEFT);
+#include <Arduino.h>
+#include <Pins.h>
+#include <MotorDC.h>
+#include <Move.h>
+#include <ColorSensor.h>
+#include<LightSensor.h>
+#include<Sol.h>
+
+MotorDC leftMotor(M_LEFT_LPWM, M_LEFT_RPWM, EN_LEFT_MOTOR, ENC_A_LEFT,ENC_B_LEFT);
+MotorDC rightMotor(M_RIGHT_LPWM, M_RIGHT_RPWM, EN_RIGHT_MOTOR,ENC_A_RIGHT,ENC_B_RIGHT);
+ColorSensor CentralColorSensor(S0_COLORSENSOR, S1_COLORSENSOR, S2_COLORSENSOR, S3_COLORSENSOR, OUT_COLORSENSOR);
+LightSensor sensorDireita(A0_DIREITA_FRENTE);
+LightSensor sensorEsquerda(A0_ESQUERDA_FRENTE);
 
 //in3
 void TakeMemoryLeftMotor(){ // fica na main
@@ -21,13 +20,16 @@ void TakeMemoryLeftMotor(){ // fica na main
 void TakeMemoryRightMotor(){ // fica na main
   rightMotor.readEncoder();
 }
-void setup(){
-  Serial.begin(9600);
+
+void setup()
+{
+  Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
-  attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING);
+  attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
   
-}
+} 
 
 void loop(){
-  
+
 }
+

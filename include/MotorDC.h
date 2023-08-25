@@ -12,24 +12,24 @@ TEMOS DIFERENTES TIPOS DE VISUALIZAÇÕES DAS COISAS, COMO PUBLIC, PRIVATE, PROT
 #define MOTORDC_H
     class MotorDC{
         public: 
-            MotorDC(int RPWM,int LPWM);
-            MotorDC(int RPWM,int LPWM, int pinEncA,int pinEncB);
+            MotorDC(int pinoLpwm, int pinoRpwm, int pinoEN, int pinEncA, int pinEncB);
+            // MotorDC(int pinoA, int pinoB, int pinoPwm);
             // ~MotorDC();
             void moveForward(int velocity);
             void moveBackward(int velocity);
             void readEncoder();
             void stop();
             int getEncoder();
+            int setEncoder(int value);
 
         private:
             int velocity;
-            int pinoA;
-            int pinoB;
-            int pinoPwm; //de 0 ate 250
-            int encA;
-            int encB;
-            int posEncoder = 0; // no poo, como que ficam esas variáveis
+            int pinoRpwm;
+            int pinoLpwm;
+            int pinoEN;
+            int posEncoder = 0; 
             int pinEncA;
             int pinEncB;
+            int value;
     };
 #endif

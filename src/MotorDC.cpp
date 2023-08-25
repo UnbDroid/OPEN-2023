@@ -10,41 +10,41 @@ PARA FAZER O CONTROLE, CASO NÃO SAIBAM O QUE É, POSSO TENTAR EXPLICAR COMO FUN
 
 */
 
-MotorDC::MotorDC(int RPWM,int LPWM, int pinEncA,int pinEncB){
-    this->pinoA=RPWM;
-    this->pinoB= LPWM;
-    this->encA=pinEncA;
-    this->encB=pinEncB;
-    pinMode(this->pinoA, OUTPUT);
-    pinMode(this->pinoB, OUTPUT);
+MotorDC::MotorDC(int pinoLpwm, int pinoRpwm, int pinoEN, int pinEncA, int pinEncB){
+    this->pinoLpwm = pinoLpwm;
+    this->pinoRpwm = pinoRpwm;
+    this->pinoEN = pinoEN;
+    // this-> pinEncA = pinEncA; // não sei se devia add isso
+    // this-> pinEncB = pinEncB; // não sei se devia add isso
+    
+    pinMode(this->pinoLpwm, OUTPUT);
+    pinMode(this->pinoRpwm, OUTPUT);
+    pinMode(this->pinoEN, OUTPUT);
     pinMode(this->pinEncA, INPUT);
     pinMode(this->pinEncB, INPUT);
 }
-MotorDC::MotorDC(int RPWM,int LPWM){
-    this->pinoA=RPWM;
-    this->pinoB= LPWM;
-    pinMode(this->pinoA, OUTPUT);
-    pinMode(this->pinoB, OUTPUT);
-}
 void MotorDC::moveForward(int velocidade){
-    analogWrite(this->pinoA, 0);
-    analogWrite(this->pinoB, velocidade);
+    digitalWrite(this->pinoLpwm, HIGH);
+    digitalWrite(this->pinoRpwm, LOW);
+    analogWrite(this->pinoEN, velocidade);
 }
 
 void MotorDC::stop(){
-    digitalWrite(this->pinoA, LOW);
-    digitalWrite(this->pinoB, LOW);
+    analogWrite(this->pinoRpwm, HIGH);
+    analogWrite(this->pinoLpwm, HIGH);
+    // digitalWrite(this->pinoEN,0);
 }
 
 void MotorDC::moveBackward(int velocidade){
-    digitalWrite(this->pinoA, LOW);
-    digitalWrite(this->pinoB, HIGH);
-    analogWrite(this->pinoPwm, velocidade);
+    digitalWrite(this->pinoLpwm, LOW);
+    digitalWrite(this->pinoRpwm, HIGH);
+    analogWrite(this->pinoEN, velocidade);
 }
 
 
 void MotorDC::readEncoder(){
-  int b = digitalRead(encA);
+  int b = digitalRead(pinEncA);
+  // Serial.println(b);
 
   if (b>0){
     posEncoder++;
@@ -57,6 +57,6 @@ int MotorDC::getEncoder(){
     return posEncoder;
 }
 
-// int MotorDC::getEncoderRight(){
-//     return pos_encoder_left;
-// }
+int MotorDC::setEncoder(int value){
+    posEncoder = value;
+}

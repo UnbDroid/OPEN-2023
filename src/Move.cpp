@@ -5,14 +5,14 @@
 #include<LightSensor.h>
 #include <Pins.h>
 int count =0;
-void move(MOVE::Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
+void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
     switch (direction)
     {
-    case MOVE::FORWARD:
+    case FORWARD:
         motorLeft->moveForward(velocity);
         motorRight->moveForward(velocity);    
         break;
-    case MOVE::BACKWARD:
+    case BACKWARD:
         motorLeft->moveBackward(velocity);
         motorRight->moveBackward(velocity);
         break;    
@@ -24,10 +24,47 @@ void move(MOVE::Directions direction, int velocity ,MotorDC* motorLeft, MotorDC*
 void initialPosition(MPU9250 * mpu){
     int a;
 }
-void rotates90(MOVE::RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
-    int a;
+
+void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
+    
+    motorLeft->setEncoder(0);
+    motorRight->setEncoder(0);
+
+    // int encoderLeftValue = abs(motorLeft->getEncoder());
+    // int encoderRightValue = abs(motorRight->getEncoder());
+
+    switch(rotateDirection)
+    {
+    case LEFT:
+        motorLeft->moveBackward(velocity);
+        motorRight->moveForward(velocity);
+        while (abs(motorLeft->getEncoder()) < 910 && abs(motorRight->getEncoder()) < 910){
+            motorLeft->moveBackward(velocity);
+            motorRight->moveForward(velocity);
+        }
+        motorLeft->stop();
+        motorRight->stop();
+        break;
+
+    case RIGHT:
+        motorLeft->moveForward(velocity);
+        motorRight->moveBackward(velocity);
+
+        while (abs(motorLeft->getEncoder()) < 900 && abs(motorRight->getEncoder()) < 900){
+            motorLeft->moveForward(velocity);
+            motorRight->moveBackward(velocity);
+            
+        }
+        motorLeft->stop();
+        motorRight->stop();
+        break;  
+
+    default:
+        break;
+    }
 }
-void rotates180(MOVE::RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
+
+void rotates180(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
     int a;
 }
 void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity){
@@ -36,50 +73,39 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
 void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     quantityToMove++;
     while(count<quantityToMove){
-      lightSensorLeft->read();
-      lightSensorRight->read();
+    movePID(FORWARD,130,leftMotor,rightMotor);
+    lightSensorLeft->read();
+    lightSensorRight->read();
         if(lightSensorRight->getCrossed()){
             count++;
             lightSensorLeft->setCrossed(false);
             lightSensorRight->setCrossed(false);
         }
     }
+    stop(leftMotor,rightMotor);
 }
 
 
-// void moveForwardPid(MotorDC* motorLeft, MotorDC* motorRight, int velocity){
-//     int posEncoderLeft = motorLeft->getEncoder();
-//     int posEncoderRight = motorRight->getEncoder();
 
-//     int erro = posEncoderLeft - posEncoderRight;
-//     int incremento = erro*KP;
-//     int parameterVelocityLeft = velocity - incremento;
-//     int parameterVelocityRight = velocity + incremento;
-
-//     motorLeft->moveFoward(parameterVelocityLeft);
-//     motorLeft->moveFoward(parameterVelocityRight);
-// }
-
-
-void movePID(MOVE::Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight){
+void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight){
     int posEncoderLeft = motorLeft->getEncoder();
     int posEncoderRight = motorRight->getEncoder();
 
-    int erro = posEncoderLeft - posEncoderRight;
+    int erro = posEncoderRight - posEncoderLeft;
     int incremento = erro*KP;
-    int parameterVelocityLeft = velocity - incremento;
-    int parameterVelocityRight = velocity + incremento;
+    int parameterVelocityLeft = velocity + incremento;
+    int parameterVelocityRight = velocity - incremento;
 
 
     switch (direction)
     {
-    case MOVE::FORWARD:
+    case FORWARD:
         
         motorLeft->moveForward(parameterVelocityLeft);
         motorRight->moveForward(parameterVelocityRight);    
         break;
 
-    case MOVE::BACKWARD:
+    case BACKWARD:
         motorLeft->moveBackward(parameterVelocityLeft);
         motorRight->moveBackward(parameterVelocityRight);
         break;    
@@ -88,25 +114,15 @@ void movePID(MOVE::Directions direction, int velocity ,MotorDC* motorLeft, Motor
         break;
     }
 }
-void move2(int quantityToMove,LightSensor * lightSensorLeft, LightSensor *lightSensorRight){
-    quantityToMove++;
-    while(count<quantityToMove){
-        analogWrite(A12,0);
-        analogWrite(A11, 255);
-        analogWrite(A9, 255);
-        analogWrite(A10, 0);
-      
-      lightSensorLeft->read();
-      lightSensorRight->read();
-        if(lightSensorRight->getCrossed()){
-            Serial.println("atravessei");
-            count++;
-            lightSensorLeft->setCrossed(false);
-            lightSensorRight->setCrossed(false);
-        }
-    }
-    analogWrite(A12,0);
-    analogWrite(A11, 0);
-    analogWrite(A9, 0);
-    analogWrite(A10, 0);
+
+
+void stop(MotorDC* motorLeft, MotorDC* motorRight){
+    motorLeft->stop();
+    motorRight->stop();
+}
+
+void resetEncoders(MotorDC* motorLeft, MotorDC* motorRight){
+    motorLeft->setEncoder(0);
+    motorRight->setEncoder(0);
+
 }
