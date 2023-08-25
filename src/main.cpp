@@ -7,8 +7,8 @@
 #define pd2 A12
 #define pe1 9
 #define pe2 10
-MotorDC leftMotor(M_LEFT_RPWM,M_LEFT_LPWM ,ENC_A_RIGHT,ENC_B_RIGHT);
-MotorDC rightMotor(A12,A11,ENC_A_RIGHT,ENC_B_RIGHT);
+MotorDC leftMotor(M_LEFT_RPWM,M_LEFT_LPWM ,18,19);
+MotorDC rightMotor(A5,A6,3,2);
 LightSensor sensorEsquerda(A12);
 LightSensor sensorDireita(A11);
 //MotorDC teste(11,12, ENC_A_LEFT, ENC_B_LEFT);
@@ -25,23 +25,9 @@ void setup(){
   Serial.begin(9600);
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING);
-  // pinMode(pd1,OUTPUT);
-  // pinMode(pd2,OUTPUT);
-  // pinMode(pe1,OUTPUT);
-  // pinMode(pe2,OUTPUT);
+  
 }
 
 void loop(){
-      //move(MOVE::FORWARD)
-      sensorDireita.read();
-      // if(sensorDireita.getCrossed()){
-      //   Serial.println("aaaaaaaaaaaaa");
-      //   sensorDireita.setCrossed(false);
-      // }
-      moveForSquare(1,&sensorDireita,&sensorEsquerda,&leftMotor, &rightMotor);
-        //Serial.println(rightMotor.getEncoder());
- 
-        //rightMotor.moveForward(200);
-        
-      //move2(1,&sensorDireita,&sensorEsquerda);
+  
 }

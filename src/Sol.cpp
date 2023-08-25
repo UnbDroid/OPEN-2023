@@ -94,11 +94,11 @@ void moveTo(int * xAtual,int *yAtual,int *menorYmenorX,int *direcaoAtual, LightS
 }
 void maquinaDeEstados(int* y,int* x,int direcaoAtual,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
         
-//         int * menorYMenorX =  shortestArea(*y,*x);
-//         *menorYMenorX=3;
-//         *(menorYMenorX+1)=6;   
+        int * menorYMenorX =  shortestArea(*y,*x);
+        *menorYMenorX=3;
+        *(menorYMenorX+1)=6;   
         
-//     moveTo(x,y,menorYMenorX,&direcaoAtual,lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+    moveTo(x,y,menorYMenorX,&direcaoAtual,lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
        
     
-// }
+}
