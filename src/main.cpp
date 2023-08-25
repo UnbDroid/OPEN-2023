@@ -2,9 +2,12 @@
 #include <Pins.h>
 #include <MotorDC.h>
 #include <Move.h>
+#include <ColorSensor.h>
 
 MotorDC LeftMotor(M_LEFT_LPWM, M_LEFT_RPWM, EN_LEFT_MOTOR, ENC_A_LEFT,ENC_B_LEFT);
 MotorDC RightMotor(M_RIGHT_LPWM, M_RIGHT_RPWM, EN_RIGHT_MOTOR,ENC_A_RIGHT,ENC_B_RIGHT);
+ColorSensor CentralColorSensor(S0_COLORSENSOR, S1_COLORSENSOR, S2_COLORSENSOR, S3_COLORSENSOR, OUT_COLORSENSOR);
+
 
 void TakeMemoryLeftMotor(){ // fica na main
   LeftMotor.readEncoder();
@@ -17,13 +20,15 @@ void TakeMemoryRightMotor(){ // fica na main
 void setup()
 {
   Serial.begin(9600); 
-
+  Serial.println("oi");
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
   
   pinMode(A0_DIREITA_FRENTE, INPUT);
   pinMode(A0_ESQUERDA_FRENTE, INPUT);
   
+  // CentralColorSensor.calibra_sensor_inferior(0);  // Essa função serve para calibrar o sensor de cor inferior, se o sensor já estiver calibrado, comentar essa função.
+  // CentralColorSensor.read_limit_values(0); // Essa função serve para ler os últimos valores calibrados pelo sensor de cor
   // pinMode(EN_LEFT_MOTOR, OUTPUT);
   // pinMode(M_LEFT_RPWM,OUTPUT);
   // pinMode(M_LEFT_LPWM,OUTPUT);
@@ -60,7 +65,8 @@ void setup()
   //   movePID(FORWARD,70,&LeftMotor,&RightMotor); 
   // }
   // stop(&LeftMotor,&RightMotor);
-  
+  // movePID(FORWARD,80,&LeftMotor,&RightMotor);
+  // delay(4000);
   // int count = 200;
   // for (int i = 130; i < count; i++)
   // {
@@ -75,11 +81,17 @@ void setup()
 } 
 
 void loop(){
-  rotates90(RIGHT, 130, &LeftMotor, &RightMotor);
-  rotates90(RIGHT, 130, &LeftMotor, &RightMotor);
-  stop(&LeftMotor,&RightMotor);
-  delay(1000);
-  
+  movePID(FORWARD,40,&LeftMotor,&RightMotor);
+  if (analogRead(A0_DIREITA_FRENTE) > 60 || analogRead(A0_ESQUERDA_FRENTE) > 60){
+    stop(&LeftMotor, &RightMotor);
+    LeftMotor.moveForward(1000);
+    delay(3000);
+    stop(&LeftMotor, &RightMotor);
+  }
+  // rotates90(RIGHT, 130, &LeftMotor, &RightMotor);
+  // rotates90(RIGHT, 130, &LeftMotor, &RightMotor);
+  // stop(&LeftMotor,&RightMotor);
+  // delay(1000);
   // Serial.print(analogRead(A0_DIREITA_FRENTE));
   // Serial.print(" ");
   // Serial.print(analogRead(A0_ESQUERDA_FRENTE));
@@ -89,6 +101,7 @@ void loop(){
   // Serial.print(" ");
   // Serial.print(RightMotor.getEncoder());
   // Serial.println();
-
+  // CentralColorSensor.read_values();
+  // CentralColorSensor.print_color_components_RGB();
 
 }

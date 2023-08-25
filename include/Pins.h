@@ -36,9 +36,13 @@
 #define A0_ESQUERDA_FRENTE  A11
 #define A0_ESQUERDA_MEIO 9
 #define A0_DIREITA_MEIO 10
-/*  Sensores de Cor
-
-*/
+/*  Sensores de Cor*/
+#define S0_COLORSENSOR 33
+#define S1_COLORSENSOR 31 
+#define S2_COLORSENSOR 41
+#define S3_COLORSENSOR 39
+#define OUT_COLORSENSOR 37
+/**/
 
 #define KP 0.1
 
