@@ -9,8 +9,8 @@
 #define pe2 10
 MotorDC leftMotor(M_LEFT_RPWM,M_LEFT_LPWM ,ENC_A_RIGHT,ENC_B_RIGHT);
 MotorDC rightMotor(A12,A11,ENC_A_RIGHT,ENC_B_RIGHT);
-LightSensor sensorDireita(A13);
-LightSensor sensorEsquerda(A14);
+LightSensor sensorDireita(A12);
+LightSensor sensorEsquerda(A11);
 //MotorDC teste(11,12, ENC_A_LEFT, ENC_B_LEFT);
 
 //in3
@@ -33,10 +33,15 @@ void setup(){
 
 void loop(){
       //move(MOVE::FORWARD)
- //     moveForSquare(1,&sensorDireita,&sensorEsquerda,&LeftMotor, &RightMotor);
+      sensorDireita.read();
+      // if(sensorDireita.getCrossed()){
+      //   Serial.println("aaaaaaaaaaaaa");
+      //   sensorDireita.setCrossed(false);
+      // }
+      moveForSquare(1,&sensorDireita,&sensorEsquerda,&leftMotor, &rightMotor);
         //Serial.println(rightMotor.getEncoder());
  
         //rightMotor.moveForward(200);
-        Serial.println(rightMotor.getEncoder());
+        
       //move2(1,&sensorDireita,&sensorEsquerda);
 }

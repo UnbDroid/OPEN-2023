@@ -9,7 +9,6 @@ void move(MOVE::Directions direction, int velocity ,MotorDC* motorLeft, MotorDC*
     switch (direction)
     {
     case MOVE::FORWARD:
-        
         motorLeft->moveForward(velocity);
         motorRight->moveForward(velocity);    
         break;
@@ -34,12 +33,11 @@ void rotates180(MOVE::RotateDirections rotateDirection, int velocity ,MotorDC * 
 void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity){
     int a;
 }
-void    moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
+void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     quantityToMove++;
     while(count<quantityToMove){
       lightSensorLeft->read();
       lightSensorRight->read();
-      movePID(MOVE::FORWARD, 255 ,leftMotor, rightMotor);
         if(lightSensorRight->getCrossed()){
             count++;
             lightSensorLeft->setCrossed(false);
