@@ -9,6 +9,7 @@ class Mag:public MPU9250{
         void setCorrection(int ShelfsDegree);
         char getDirection();
         void printPureMagToCalibrate();
+        void printarValoresEmGraus();
         float getDegree();
     private:
         float degree;

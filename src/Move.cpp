@@ -4,7 +4,8 @@
 #include<Move.h>
 #include<LightSensor.h>
 #include <Pins.h>
-int count =0;
+#include<Sol.h>
+
 void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
     switch (direction)
     {
@@ -70,19 +71,25 @@ void rotates180(RotateDirections rotateDirection, int velocity ,MotorDC * motorL
 void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity){
     int a;
 }
+
 void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     quantityToMove++;
-    while(count<quantityToMove){
-    movePID(FORWARD,130,leftMotor,rightMotor);
-    lightSensorLeft->read();
-    lightSensorRight->read();
-        if(lightSensorRight->getCrossed()){
-            count++;
-            lightSensorLeft->setCrossed(false);
-            lightSensorRight->setCrossed(false);
+    int count =0;
+    if(count<quantityToMove){
+        while(count<quantityToMove){
+        leftMotor->moveForward(60);
+        rightMotor->moveForward(40);
+        lightSensorLeft->read();
+        lightSensorRight->read();
+            if(lightSensorRight->getCrossed()){
+                Serial.println("atravesseiiii");
+                count++;
+                lightSensorLeft->setCrossed(false);
+                lightSensorRight->setCrossed(false);
+        }
         }
     }
-    stop(leftMotor,rightMotor);
+    return ;
 }
 
 
@@ -119,6 +126,7 @@ void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* mo
 void stop(MotorDC* motorLeft, MotorDC* motorRight){
     motorLeft->stop();
     motorRight->stop();
+    return ;
 }
 
 void resetEncoders(MotorDC* motorLeft, MotorDC* motorRight){

@@ -20,16 +20,14 @@ void TakeMemoryLeftMotor(){ // fica na main
 void TakeMemoryRightMotor(){ // fica na main
   rightMotor.readEncoder();
 }
-
 void setup()
 {
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-  
-} 
-
+}
 void loop(){
 
+  
 }
 

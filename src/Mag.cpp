@@ -51,3 +51,4 @@ float Mag::getDegree(){
         }
     }
 };
+
