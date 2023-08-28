@@ -78,7 +78,7 @@ void changingAndCountingPosition(int * current ,int *destination,LightSensor * l
 }
 void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirection, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     //if ele não precisa atravessar:
-    if((*currentY && *destinationYX) >=5 || (*currentY && *destinationYX)<=1){
+    if((*currentY && *destinationYX) >=5 || (*currentY && *destinationYX)<=2){
         SOL::Direcao destinationDirection= futureDirection('y',*currentY,*destinationYX);
         while(!correctedYFlag &&*currentY!=*destinationYX ){
             while(*currentDirection!=destinationDirection){
