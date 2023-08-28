@@ -12,7 +12,7 @@ namespace SOL{
 }
 void moveTo(int * xAtual,int *yAtual,int *menorYmenorX,int *direcaoAtual, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor);
 int ManhattamDistance(int y1,int x1,int y2,int x2);
-int * shortestArea(int y,int x);
+int * shortestArea(int notCross,int y,int x);
 SOL::Direcao direction(char eixo,int yInicial, int yFinal, SOL::Direcao direcao);
 void maquinaDeEstados(int* y,int* x,int *direcaoAtual,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor);
 void corrigirDirecao(int * direction, MotorDC * leftMotor,MotorDC* rightMotor);

@@ -24,5 +24,5 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
 
 void moveForSquare(int quantityToMove,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight);
 void move2(int quantityToMove,LightSensor * lightSensorLeft, LightSensor *lightSensorRight);
-
+void correctingDirection(int * direction, MotorDC * leftMotor,MotorDC* rightMotor);
 #endif

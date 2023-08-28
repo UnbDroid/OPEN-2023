@@ -1,21 +1,30 @@
 #include<Sol.h>
+static int correctedYFlag = 0;
+static int correctedXFlag = 0;
+
 
 int ManhattamDistance(int y1,int x1,int y2,int x2){
     return abs(x1-x2)+abs(y1-y2);
 }
-bool atravessei(){
-    return true;
-}
-int * shortestArea(int y,int x){
+int * shortestArea(int notCross,int y,int x){
     int lowest =90;
     int areasBlocks[8][2]={ {2,2},{2,3},     {2,5},{2,6},
 
 
                             {5,2},{5,3},     {5,5},{5,6}
     };
+    int crossBlocks[][2]={{2,1},    {2,4},  {2,7},
     
+    
+                           {5,1},   {5,4},  {5,7} 
+    };
     int *coordinatesPtr;
-    coordinatesPtr = *areasBlocks;
+    if(notCross){
+        coordinatesPtr = *areasBlocks;
+    }
+    else{
+        coordinatesPtr = *crossBlocks;
+    }
     int tam = 8;
     static int closest[2];
     while(tam){
@@ -33,7 +42,7 @@ int * shortestArea(int y,int x){
 }
 
 
-SOL::Direcao direction(char eixo,int inicial, int final){
+SOL::Direcao futureDirection(char eixo,int inicial, int final){
        
         if(eixo =='y'){
             if(final<=inicial){
@@ -49,111 +58,81 @@ SOL::Direcao direction(char eixo,int inicial, int final){
         
 }
 
-void corrigirDirecao2(int * direction, MotorDC * leftMotor,MotorDC* rightMotor){
-    leftMotor->moveForward(60);
-    rightMotor->moveForward(40);
-    static int flag = 1;
-    if(*direction>=SOL::Oeste){
-        rotates90(RIGHT,50,leftMotor,rightMotor);
-        //stop(leftMotor,rightMotor);
-        *direction = SOL::Norte;
-    }
-    else{
-        rotates90(RIGHT,50,leftMotor,rightMotor);
-        //stop(leftMotor,rightMotor);
-        *direction=*direction+1;
-    }
-    Serial.print("Girei ");
-    Serial.println(flag);
-    flag++;
+void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
+    if(*current<*destination){
+        while(*current<*destination){
+                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+                *current = *current+1;
+        }
+            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+            stop(leftMotor,rightMotor);
+        }
+    else if(*current>*destination){
+        while(*current>*destination){
+                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+                *current = *current-1;
+        }
+            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+            stop(leftMotor,rightMotor);
+        }
 }
-
-void corrigirDirecao(int * direction, MotorDC * leftMotor,MotorDC* rightMotor){
-    // leftMotor->moveForward(60);
-    // rightMotor->moveForward(40);
-    static int flag = 1;
-    if(*direction>=SOL::Oeste){
-        rotates90(RIGHT,80,leftMotor,rightMotor);
-        stop(leftMotor,rightMotor);
-        *direction = SOL::Norte;
-    }
-    else{
-        rotates90(RIGHT,80,leftMotor,rightMotor);
-        stop(leftMotor,rightMotor);
-        *direction=*direction+1;
-    }
-    Serial.print("Girei ");
-    Serial.println(flag);
-    flag++;
-}
-    
-void moveTo(int * xAtual,int *yAtual,int *menorYmenorX,int *direcaoAtual, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
-    int dist = abs(*yAtual-*menorYmenorX);
+void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirection, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     //if ele não precisa atravessar:
-    static int  flagCorrigiuY = 0;
-    static int flagCorrigiuX = 0;
-    SOL::Direcao direcaoDestino= direction('y',*yAtual,*menorYmenorX);
-    int a = direcaoDestino;
-    while(!flagCorrigiuY &&*yAtual!=*menorYmenorX ){
-        while(*direcaoAtual!=a){
-            corrigirDirecao(direcaoAtual,leftMotor,rightMotor);
-        }
-        stop(leftMotor,rightMotor);    
-        if(*yAtual<*menorYmenorX){
-            while(*yAtual<*menorYmenorX){
-                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-                *yAtual = *yAtual+1;
+    if((*currentY && *destinationYX) >=5 || (*currentY && *destinationYX)<=1){
+        SOL::Direcao destinationDirection= futureDirection('y',*currentY,*destinationYX);
+        while(!correctedYFlag &&*currentY!=*destinationYX ){
+            while(*currentDirection!=destinationDirection){
+                correctingDirection(currentDirection,leftMotor,rightMotor);
             }
-            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-            stop(leftMotor,rightMotor);
+            stop(leftMotor,rightMotor);    
+            changingAndCountingPosition(currentY,destinationYX,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+            correctedYFlag=1;
+            break;
         }
-        else if(*yAtual>*menorYmenorX){
-            while(*yAtual>*menorYmenorX){
-                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-                *yAtual = *yAtual-1;
+        while(!correctedXFlag && *currentX<*(destinationYX+1)){
+            destinationDirection= futureDirection('x',*currentX,*(destinationYX+1));
+            while(*currentDirection !=destinationDirection){
+                correctingDirection(currentDirection,leftMotor,rightMotor);
             }
-            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
             stop(leftMotor,rightMotor);
+            changingAndCountingPosition(currentX,destinationYX+1,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+            break;
         }
-        flagCorrigiuY=1;
-        break;
+    }
+    else{
+        int * lowestCrossBlock = shortestArea(0,*currentX,*currentY);
+        SOL::Direcao destinationDirection= futureDirection('y',*currentY,*lowestCrossBlock);
+        while(!correctedYFlag &&*currentY!=*lowestCrossBlock ){
+            while(*currentDirection!=destinationDirection){
+                correctingDirection(currentDirection,leftMotor,rightMotor);
+            }
+            stop(leftMotor,rightMotor);    
+            changingAndCountingPosition(currentY,lowestCrossBlock,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+            correctedYFlag=1;
+            break;
+        }
+        while(!correctedXFlag && *currentX<*(lowestCrossBlock+1)){
+            destinationDirection= futureDirection('x',*currentX,*(lowestCrossBlock+1));
+            while(*currentDirection !=destinationDirection){
+                correctingDirection(currentDirection,leftMotor,rightMotor);
+            }
+            stop(leftMotor,rightMotor);
+            changingAndCountingPosition(currentX,lowestCrossBlock+1,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+            break;
+        }
+        
     }
     
-    while(!flagCorrigiuX != *xAtual<*(menorYmenorX+1)){
-        direcaoDestino= direction('x',*xAtual,*(menorYmenorX+1));
-        while(*direcaoAtual !=direcaoDestino){
-            corrigirDirecao(direcaoAtual,leftMotor,rightMotor);
-        }
-        stop(leftMotor,rightMotor);
-        if(*xAtual<*(menorYmenorX+1)){
-            while(*xAtual<*(menorYmenorX+1)){
-                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-                *xAtual = *xAtual+1;
-            }
-            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-            stop(leftMotor,rightMotor);
-        }
-        else if(*xAtual>*(menorYmenorX+1)){
-            while(*xAtual>*(menorYmenorX+1)){
-                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-                *xAtual = *xAtual-1;
-            }
-            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-            stop(leftMotor,rightMotor);
-        }
-        stop(leftMotor,rightMotor);
-        flagCorrigiuX=1;
-        break;
-    }
+    
     
 }
 
-void maquinaDeEstados(int* y,int* x,int *direcaoAtual,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
+void maquinaDeEstados(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
+       
+    int * destinationYX =  shortestArea(1,*y,*x);
+    *destinationYX=6;
+    *(destinationYX+1)=5;   
         
-    int * menorYMenorX =  shortestArea(*y,*x);
-    *menorYMenorX=6;
-    *(menorYMenorX+1)=5;   
-        
-    moveTo(x,y,menorYMenorX,direcaoAtual,lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+    moveTo(x,y,destinationYX,currentDirection,lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
     
 }
