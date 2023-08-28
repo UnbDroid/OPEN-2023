@@ -25,11 +25,12 @@ void setup()
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
+  // rotates90(RIGHT,160,&leftMotor,&rightMotor);
 }
 int a = Directions::BACKWARD;
 int dir = 2;
-int y = 4;
-int x =6;
+int y =6;
+int x =5;
 int direcaoAtual = SOL::Oeste;
 void loop(){
   maquinaDeEstados(&y,&x,&direcaoAtual,&sensorEsquerda,&sensorDireita,&leftMotor,&rightMotor);

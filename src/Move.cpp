@@ -42,6 +42,7 @@ void correctingDirection(int * direction, MotorDC * leftMotor,MotorDC* rightMoto
     Serial.print("Girei ");
     Serial.println(flag);
     flag++;
+    return ;
 }
 
 void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
