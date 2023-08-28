@@ -83,10 +83,9 @@ void setup()
 
 int a = Directions::BACKWARD;
 int dir = 2;
-int y = 6;
-int x =7;
+int y = 4;
+int x =6;
 int direcaoAtual = SOL::Oeste;
-int direcaoDestino = SOL::Sul;
 
 void loop(){
   // static int flag =0;  

@@ -26,8 +26,13 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
 }
+int a = Directions::BACKWARD;
+int dir = 2;
+int y = 4;
+int x =6;
+int direcaoAtual = SOL::Oeste;
 void loop(){
-
+  maquinaDeEstados(&y,&x,&direcaoAtual,&sensorEsquerda,&sensorDireita,&leftMotor,&rightMotor);
   
 }
 
