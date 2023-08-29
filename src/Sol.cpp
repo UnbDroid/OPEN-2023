@@ -63,6 +63,8 @@ SOL::Direcao futureDirection(char eixo,int inicial, int final){
 void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     if(*current<*destination){
         while(*current<*destination){
+            Serial.print(" Valor Aí :");
+            Serial.println(*current);
                 moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
                 *current = *current+1;
         }
@@ -81,10 +83,8 @@ void changingAndCountingPosition(int * current ,int *destination,LightSensor * l
 }
 void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     SOL::Direcao destinationDirection= futureDirection('y',*currentY,*destinationYX);
-        if(!correctedYFlag){
-            
-        }
         while(!correctedYFlag &&(*currentY!=*destinationYX)){
+            
             while(*currentDirection!=destinationDirection){
                 correctingDirection(currentDirection,leftMotor,rightMotor);
             }
@@ -97,6 +97,7 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
         while(!correctedXFlag && (*currentX!=*(destinationYX+1))){
             destinationDirection= futureDirection('x',*currentX,*(destinationYX+1));
             while(*currentDirection !=destinationDirection){
+                Serial.print(" x: ");
                 Serial.println(*currentX);
                 correctingDirection(currentDirection,leftMotor,rightMotor);
             }
@@ -104,6 +105,8 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
             changingAndCountingPosition(currentX,destinationYX+1,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
             break;
         }
+        correctedXFlag=0;
+        correctedYFlag=0;
         return ;
 }
 
@@ -114,35 +117,23 @@ void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirectio
         moveYandMoveX(currentX,currentY,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
     }
     else{
-        
+        // Serial.println("to aqui");
         int * lowestCrossBlock = shortestArea(true,*currentY,*currentX);
-        ;
-        // Serial.print(*lowestCrossBlock);
-        // Serial.print(" ");
-        // Serial.println(*(lowestCrossBlock+1));
+        Serial.print(*lowestCrossBlock);
+        Serial.print(*(lowestCrossBlock+1));
         moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+        if(*lowestCrossBlock==5){
+            *lowestCrossBlock =2;
+            moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+        }
+        else{
+            *lowestCrossBlock =5;
+            moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+        }
+        moveYandMoveX(currentX,currentY,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+    }     
+}
 
-    }
-        
-        // SOL::Direcao destinationDirection= futureDirection('y',*currentY,*lowestCrossBlock);
-        // while(!correctedYFlag &&*currentY!=*lowestCrossBlock ){
-        //     while(*currentDirection!=destinationDirection){
-        //         correctingDirection(currentDirection,leftMotor,rightMotor);
-        //     }
-        //     stop(leftMotor,rightMotor);    
-        //     changingAndCountingPosition(currentY,lowestCrossBlock,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-        //     correctedYFlag=1;
-        //     break;
-        // }
-        // while(!correctedXFlag && *currentX<*(lowestCrossBlock+1)){
-        //     destinationDirection= futureDirection('x',*currentX,*(lowestCrossBlock+1));
-        //     while(*currentDirection !=destinationDirection){
-        //         correctingDirection(currentDirection,leftMotor,rightMotor);
-        //     }
-        //     stop(leftMotor,rightMotor);
-        //     changingAndCountingPosition(currentX,lowestCrossBlock+1,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-        //     break;        
-    }
 
     
     
@@ -151,7 +142,7 @@ void maquinaDeEstados(int* y,int* x,int *currentDirection,LightSensor * lightSen
        
     int * destinationYX =  shortestArea(1,*y,*x);
     *destinationYX=2;
-    *(destinationYX+1)=4;  
+    *(destinationYX+1)=5;  
     moveTo(x,y,destinationYX,currentDirection,lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
     
 }

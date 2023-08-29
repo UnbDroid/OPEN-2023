@@ -33,7 +33,15 @@ int y =6;
 int x =5;
 int direcaoAtual = SOL::Oeste;
 void loop(){
-  maquinaDeEstados(&y,&x,&direcaoAtual,&sensorEsquerda,&sensorDireita,&leftMotor,&rightMotor);
   
+  maquinaDeEstados(&y,&x,&direcaoAtual,&sensorEsquerda,&sensorDireita,&leftMotor,&rightMotor);
+  // if(sensorDireita.getCrossed()){
+  //   Serial.println("direita atravessou");
+  //   sensorDireita.setCrossed(false);
+  // }
+  // else if(sensorEsquerda.getCrossed()){
+  //   Serial.println("esquerda atravessou");
+  //   sensorEsquerda.setCrossed(false);
+  // }
 }
 
