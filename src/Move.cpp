@@ -87,9 +87,46 @@ void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLe
 void rotates180(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
     int a;
 }
-void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity){
-    int a;
+void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLeft, MotorDC * motorRight, int velocity){
+    int leftWhite = 100;
+    int rightWhite = 150;
+
+    if (lightSensorLeft->read()>leftWhite || lightSensorRight->read()>rightWhite)
+    {
+    stop(motorLeft, motorRight);
+    Serial.println("estou me alinhando");
+    
+    if (lightSensorLeft->read()<leftWhite) //vê branco
+    {
+        Serial.println("esquerdo ve branco");
+        while (lightSensorLeft->read()<leftWhite){ // ve branco
+            motorLeft->moveForward(velocity+10);
+            if(lightSensorRight->read()<rightWhite){
+                while (lightSensorRight->read()<rightWhite)
+                {
+                    motorRight->moveBackward(velocity);
+                }    
+            }
+        }
+    }
+    else if (lightSensorRight->read() < rightWhite) //ve branco
+    {
+        Serial.println("direito ve branco");
+        while (lightSensorRight->read()<rightWhite) {// ve branco
+            motorRight->moveForward(velocity);
+            if(lightSensorLeft->read()<leftWhite){
+                while (lightSensorLeft->read()<leftWhite)
+                {
+                    motorLeft->moveBackward(velocity+10);
+                }    
+        }
+        
+        }
+    }  
+    stop(motorLeft, motorRight);
+    }
 }
+
 
 void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     quantityToMove++;

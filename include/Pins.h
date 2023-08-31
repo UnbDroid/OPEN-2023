@@ -18,15 +18,15 @@
 #define M_LEFT_RPWM A8 //ANTIGO IN1
 #define M_LEFT_LPWM A7
 
-#define ENC_A_LEFT 18
-#define ENC_B_LEFT 19
+#define ENC_A_LEFT 20 //18
+#define ENC_B_LEFT 21 //19
 #define EN_LEFT_MOTOR 13
 
 #define M_RIGHT_RPWM A6//ANTIGO IN3
 #define M_RIGHT_LPWM A5//ANTIGO IN4
 
-#define ENC_A_RIGHT 3
-#define ENC_B_RIGHT 2
+#define ENC_A_RIGHT 18//3
+#define ENC_B_RIGHT 19 //2
 #define EN_RIGHT_MOTOR 11
 
 
@@ -47,6 +47,6 @@
 #define OUT_COLORSENSOR 37
 /**/
 
-#define KP 0.1
+#define KP 0.2
 
 #endif
