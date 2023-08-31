@@ -42,44 +42,66 @@ void setup()
   // Serial.print(" ");
   // Serial.print(rightIR.read());
   // Serial.println();
-  // // align(&leftIR,&rightIR,&leftMotor,&rightMotor,40);
-  // rotates90(RIGHT,130,&leftMotor,&rightMotor);
+  // align(&leftIR,&rightIR,&leftMotor,&rightMotor,40);
+  // rotates(AROUND,&leftMotor,&rightMotor);
   // stop(&leftMotor,&rightMotor);
+    // align(&leftIR,&rightIR,&leftMotor,&rightMotor,40);
 
   
   // Serial.print(leftIR.read());
   // Serial.print(" ");
   // Serial.print(rightIR.read());
   // Serial.println();
-  // align(&leftIR,&rightIR,&leftMotor,&rightMotor,40);
 
     // movePID(FORWARD,40,&leftMotor,&rightMotor);
     // delay(4000);
     // stop(&leftMotor,&rightMotor);
+    // Serial.println("rodando");
 }
 
 
 void loop(){
   
-  // // delay(1000);
-  int branco_esq = 100;
-  int branco_dir = 150;
+  // delay(1000);
+  int branco_esq = 200 ;
+  int branco_dir = 200;
 
-  movePID(FORWARD,60,&leftMotor,&rightMotor);
+  movePID(FORWARD,70,&leftMotor,&rightMotor);
    if ((leftIR.read() > branco_esq && rightIR.read() < branco_dir) || (leftIR.read() < branco_esq && rightIR.read() > branco_dir))
   {
-    Serial.println("vendo trocado");
-      Serial.print(leftIR.read());
-      Serial.print(" ");
-      Serial.print(rightIR.read());
-      Serial.println();
-
     stop(&leftMotor,&rightMotor);
-    align(&leftIR,&rightIR,&leftMotor,&rightMotor,40);
-    movePID(FORWARD,40,&leftMotor,&rightMotor);
-    Serial.println("vou andar agr?");
+    Serial.println("vendo trocado");
+    Serial.print(leftIR.read());
+    Serial.print(" ");
+    Serial.print(rightIR.read());
+    Serial.println();
+
+    movePID(BACKWARD,45,&leftMotor,&rightMotor);
     delay(500);
+    stop(&leftMotor,&rightMotor);
+    delay(1000);
+    
+    align(&leftIR,&rightIR,&leftMotor,&rightMotor,45);
+    movePID(FORWARD,50,&leftMotor,&rightMotor);
+    delay(1500);
+    // while (leftIR.read() > branco_esq || rightIR.read() > branco_dir)
+    // {
+    //   movePID(FORWARD,50,&leftMotor,&rightMotor);
+    //   Serial.println("andei ");
+    //   Serial.print(leftIR.read());
+    //   Serial.print(" ");
+    //   Serial.print(rightIR.read());
+    //   Serial.println();
+    // }
+    
+    // movePID(FORWARD,45,&leftMotor,&rightMotor);
+    // Serial.println("vou andar agr?");
+    // leftMotor.moveForward(50);
+    // rightMotor.moveForward(50);
+    // delay(1000);
+    // Serial.println("andei");
   }
+}
 
 
 
@@ -116,34 +138,4 @@ void loop(){
   // } else {
   //   rightMotor.moveForward(erro);
   // }
-  
-  
 
-}
-
-
-
-// PRETO = 5#8
-
-// threshold = 35 #50
-// PROPORTIONAL_GAIN = 1.5
-
-// #leitura_sensor = luzEsquerda.reflection()
-// #print(leitura_sensor)
-// leitura_sensor = getValorCorEsquerda()
-
-// deviation =  threshold - leitura_sensor[0]
-// turn_rate = PROPORTIONAL_GAIN * deviation
-// rodas.drive(DRIVE_SPEED, turn_rate)
-
-
-
-
-// Se ver preto com o esquerdo ou com o direito
-//  parar
-// se ver branco com esquerdo
-//  anda com o esquerdo pra frente até ver preto 
-// se ver branco com direito
-//  anda com o direito pra frente até ver preto
-// 
-// 

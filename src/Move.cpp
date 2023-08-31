@@ -30,12 +30,12 @@ void correctingDirection(int * direction, MotorDC * leftMotor,MotorDC* rightMoto
     // rightMotor->moveForward(40);
     static int flag = 1;
     if(*direction>=SOL::Oeste){
-        rotates90(RIGHT,80,leftMotor,rightMotor);
+        rotates(RIGHT,leftMotor,rightMotor);
         stop(leftMotor,rightMotor);
         *direction = SOL::Norte;
     }
     else{
-        rotates90(RIGHT,80,leftMotor,rightMotor);
+        rotates(RIGHT,leftMotor,rightMotor);
         stop(leftMotor,rightMotor);
         *direction=*direction+1;
     }
@@ -45,7 +45,8 @@ void correctingDirection(int * direction, MotorDC * leftMotor,MotorDC* rightMoto
     return ;
 }
 
-void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
+void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * motorRight){
+    int velocity = 130;
     
     motorLeft->setEncoder(0);
     motorRight->setEncoder(0);
@@ -77,53 +78,67 @@ void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLe
         }
         motorLeft->stop();
         motorRight->stop();
-        break;  
+        break; 
+
+    case AROUND:
+        motorLeft->moveForward(velocity);
+        motorRight->moveBackward(velocity);
+
+        while (abs(motorLeft->getEncoder()) < 1900 && abs(motorRight->getEncoder()) < 1900){
+            motorLeft->moveForward(velocity);
+            motorRight->moveBackward(velocity);
+            
+        }
+        motorLeft->stop();
+        motorRight->stop();
+        break; 
+     
 
     default:
         break;
     }
+
+
 }
 
-void rotates180(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
-    int a;
-}
 void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLeft, MotorDC * motorRight, int velocity){
-    int leftWhite = 100;
-    int rightWhite = 150;
+    int leftWhite = 150;
+    int rightWhite = 200;
 
-    if (lightSensorLeft->read()>leftWhite || lightSensorRight->read()>rightWhite)
-    {
-    stop(motorLeft, motorRight);
-    Serial.println("estou me alinhando");
-    
-    if (lightSensorLeft->read()<leftWhite) //vê branco
-    {
-        Serial.println("esquerdo ve branco");
-        while (lightSensorLeft->read()<leftWhite){ // ve branco
-            motorLeft->moveForward(velocity+10);
-            if(lightSensorRight->read()<rightWhite){
-                while (lightSensorRight->read()<rightWhite)
-                {
-                    motorRight->moveBackward(velocity);
-                }    
+    if (lightSensorLeft->read()>leftWhite || lightSensorRight->read()>rightWhite){
+        Serial.println("estou me alinhando");
+        stop(motorLeft,motorRight);
+        delay(5000);
+        // movePID(BACKWARD,30,)
+        
+        if (lightSensorLeft->read()<leftWhite) //vê branco
+        {
+            Serial.println("esquerdo ve branco");
+            while (lightSensorLeft->read()<leftWhite){ // ve branco
+                motorLeft->moveForward(velocity+10);
+                if(lightSensorRight->read()<rightWhite){
+                    while (lightSensorRight->read()<rightWhite)
+                    {
+                        motorRight->moveBackward(velocity);
+                    }    
+                }
             }
         }
-    }
-    else if (lightSensorRight->read() < rightWhite) //ve branco
-    {
-        Serial.println("direito ve branco");
-        while (lightSensorRight->read()<rightWhite) {// ve branco
-            motorRight->moveForward(velocity);
-            if(lightSensorLeft->read()<leftWhite){
-                while (lightSensorLeft->read()<leftWhite)
-                {
-                    motorLeft->moveBackward(velocity+10);
+        else if (lightSensorRight->read() < rightWhite) //ve branco
+        {
+            Serial.println("direito ve branco");
+            while (lightSensorRight->read()<rightWhite) {// ve branco
+                motorRight->moveForward(velocity);
+                if(lightSensorLeft->read()<leftWhite){
+                    while (lightSensorLeft->read()<leftWhite)
+                    {
+                        motorLeft->moveBackward(velocity+10);
+                    }    
                 }    
-        }
-        
-        }
-    }  
+            }
+        }  
     stop(motorLeft, motorRight);
+    delay(500);
     }
 }
 

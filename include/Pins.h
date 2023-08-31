@@ -47,6 +47,6 @@
 #define OUT_COLORSENSOR 37
 /**/
 
-#define KP 0.2
+#define KP 0.1
 
 #endif
