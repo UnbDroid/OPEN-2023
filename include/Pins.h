@@ -47,6 +47,12 @@
 #define OUT_COLORSENSOR 37
 /**/
 
-#define KP 0.1
+#define KP 10
+#define KI 1
+#define KD 1
+
+// extern int leftWhite = 100;
+// extern int rightWhite = 200;
+
 
 #endif

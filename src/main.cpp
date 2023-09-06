@@ -12,7 +12,8 @@ ColorSensor CentralColorSensor(S0_COLORSENSOR, S1_COLORSENSOR, S2_COLORSENSOR, S
 LightSensor rightIR(A0_DIREITA_FRENTE);
 LightSensor leftIR(A0_ESQUERDA_FRENTE);
 
-//in3
+
+
 void TakeMemoryLeftMotor(){ // fica na main
   leftMotor.readEncoder();
 }
@@ -25,117 +26,163 @@ void setup()
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-  // rotates90(RIGHT,130,&leftMotor,&rightMotor);
-  // stop(&leftMotor,&rightMotor);
-  // delay(1000);
-  // rotates90(LEFT,130,&leftMotor,&rightMotor);
-  // stop(&leftMotor,&rightMotor);
-  // delay(1000);
-  
-  // while (leftIR.read()<200 && rightIR.read()<200){
-  // leftMotor.moveForward(40);
-  // rightMotor.moveForward(40);
-  // }
-  // stop(&leftMotor,&rightMotor);
-  // delay(1000);
-  // Serial.print(leftIR.read());
-  // Serial.print(" ");
-  // Serial.print(rightIR.read());
-  // Serial.println();
-  // align(&leftIR,&rightIR,&leftMotor,&rightMotor,40);
-  // rotates(AROUND,&leftMotor,&rightMotor);
-  // stop(&leftMotor,&rightMotor);
-    // align(&leftIR,&rightIR,&leftMotor,&rightMotor,40);
 
-  
+  // rotates(RIGHT,&leftMotor,&rightMotor);
+  // stop(&leftMotor,&rightMotor);
+  // delay(2000);
+
   // Serial.print(leftIR.read());
   // Serial.print(" ");
   // Serial.print(rightIR.read());
   // Serial.println();
 
-    // movePID(FORWARD,40,&leftMotor,&rightMotor);
-    // delay(4000);
-    // stop(&leftMotor,&rightMotor);
-    // Serial.println("rodando");
+  // 
+  
 }
 
 
 void loop(){
+    movePID(FORWARD,75,&leftMotor,&rightMotor);
+
+// int leftWhite = 200;
+// int rightWhite = 200;
+// int count = 0;
+
+//   Serial.println("Teste 1:");
+//   while(leftIR.read() < leftWhite || rightIR.read() < rightWhite){
+//     movePID(FORWARD,75,&leftMotor,&rightMotor);
+//   }
+//   leftMotor.moveBackward(75);
+//   rightMotor.moveBackward(75);
+//   delay(500);
+//   stop(&rightMotor,&leftMotor);
+
+//   Serial.println("parei Teste 1");
+//   delay(8000);
+
+//   Serial.println("Teste 3:");
+//   while(leftIR.read() < leftWhite || rightIR.read() < rightWhite){
+//     movePID(FORWARD,75,&leftMotor,&rightMotor);
+//   }
+//   // resetEncoders()
+//   for (int i = 75; i > count; i--)
+//   {
+//     movePID(BACKWARD,i,&leftMotor,&rightMotor);
+//   }
+//   stop(&rightMotor,&leftMotor);
+//   Serial.println("parei Teste 3");
+//   delay(5000);
+
   
-  // delay(1000);
-  int branco_esq = 200 ;
-  int branco_dir = 200;
 
-  movePID(FORWARD,70,&leftMotor,&rightMotor);
-   if ((leftIR.read() > branco_esq && rightIR.read() < branco_dir) || (leftIR.read() < branco_esq && rightIR.read() > branco_dir))
-  {
-    stop(&leftMotor,&rightMotor);
-    Serial.println("vendo trocado");
-    Serial.print(leftIR.read());
-    Serial.print(" ");
-    Serial.print(rightIR.read());
-    Serial.println();
+// // bool leftSeesBlack[2] = {false,false};
+// // bool rightSeesBlack[2] = {false,false};
+// // float valores[4];
 
-    movePID(BACKWARD,45,&leftMotor,&rightMotor);
-    delay(500);
-    stop(&leftMotor,&rightMotor);
-    delay(1000);
+// movePID(FORWARD,100,&leftMotor,&rightMotor);
+
+// int readLeft = leftIR.read();
+// int readRight = rightIR.read();
+// // valores[0] = readLeft;
+// // valores[2] = readRight;
+
+// //identificar se tem algum no preto
+// if ((readLeft > leftWhite && readRight < rightWhite) || (readLeft < leftWhite && readRight > rightWhite))
+// {
+//   // if(readRight > rightWhite){
+//   //   rightSeesBlack[0] = true;
+//   //  }
+//   // if (readLeft > leftWhite){
+//   //   leftSeesBlack[0] = true;
+//   // }
+
+//   stop(&leftMotor,&rightMotor);
+//   delay(1000);
+  
+//   int a = 0;
+//    while (a < 80)
+//   {
+//     movePID(BACKWARD,50,&leftMotor,&rightMotor); 
+//     a++; 
+//   }
+  
+  
+//   // readLeft = leftIR.read();
+//   // readRight = rightIR.read();
+//   // valores[1] = readLeft;
+//   // valores[3] = readRight;
+
+//   // if(readRight > rightWhite){
+//   //   rightSeesBlack[1] = true;
+//   //  }
+//   // if (readLeft > leftWhite){
+//   //   leftSeesBlack[1] = true;
+//   // }
+
+
+//   // Serial.print(leftSeesBlack[0]);
+//   // Serial.print(leftSeesBlack[1]);
+//   // Serial.print(" ");
+//   // Serial.print(rightSeesBlack[0]);
+//   // Serial.print(rightSeesBlack[1]);
+//   // Serial.print(" ");
+//   // Serial.print(valores[0]);
+//   // Serial.print(" ");
+//   // Serial.print(valores[1]);
+//   // Serial.print(" ");
+//   // Serial.print(valores[2]);
+//   // Serial.print(" ");
+//   // Serial.print(valores[3]);
+//   // Serial.println();
+
+//   // int caso;
+//   // if(leftSeesBlack[1]){
+//   //   if(rightSeesBlack[1]){ 
+//   //     caso = 3;
+//   //   } else if (rightSeesBlack[0]){
+//   //     caso = 5;
+//   //   } else{
+//   //     caso = 1;
+//   //   }
+//   // } else{
+//   //   if(leftSeesBlack[0]){
+//   //     if(rightSeesBlack[1]) {
+//   //       caso = 4;
+//   //     }else{
+//   //       caso = 6;
+//   //     }
+//   //   } else if(rightSeesBlack[1]){
+//   //       caso = 2;
+//   //   } else{
+//   //     caso = 7;
+//   //   }
+//   // }
+//   // Serial.print("caso: ");
+//   // Serial.println(caso);
     
-    align(&leftIR,&rightIR,&leftMotor,&rightMotor,45);
-    movePID(FORWARD,50,&leftMotor,&rightMotor);
-    delay(1500);
-    // while (leftIR.read() > branco_esq || rightIR.read() > branco_dir)
-    // {
-    //   movePID(FORWARD,50,&leftMotor,&rightMotor);
-    //   Serial.println("andei ");
-    //   Serial.print(leftIR.read());
-    //   Serial.print(" ");
-    //   Serial.print(rightIR.read());
-    //   Serial.println();
-    // }
-    
-    // movePID(FORWARD,45,&leftMotor,&rightMotor);
-    // Serial.println("vou andar agr?");
-    // leftMotor.moveForward(50);
-    // rightMotor.moveForward(50);
-    // delay(1000);
-    // Serial.println("andei");
-  }
+  
+//   align(&leftIR,&rightIR,&leftMotor,&rightMotor,55);
+  
+//   Serial.println("vou andar retooo");
+//   int count = 0;
+//   while (count < 1000)
+//   {
+//     movePID(FORWARD,50,&leftMotor,&rightMotor); 
+//     count++; 
+//   }
+//   Serial.println("andei reto");
+
+//   }
+//   Serial.print(leftIR.read());
+//   Serial.print(" ");
+//   Serial.print(rightIR.read());
+//   Serial.println();
 }
 
 
 
-
-
-  // } else if(leftIR.read() < branco && rightIR.read() > branco) {
-
-  //   Serial.println("DIR no preto");
-  //   Serial.print(leftIR.read());
-  //   Serial.print(" ");
-  //   Serial.print(rightIR.read());
-  //   Serial.println();
-
-  //   stop(&leftMotor,&rightMotor);
-  //   align(&leftIR,&rightIR,&leftMotor,&rightMotor,40);
-
-
-  // }
+// //desenvolver alguma lógica com relação à quem chega aqui
+//   resetEncoders(&leftMotor,&rightMotor);
   
-  // Serial.print(leftIR.read());
-  // Serial.print(" ");
-  // Serial.print(rightIR.read());
-  // Serial.println();
-
-
-  // int goal = 300;
-  // int leitura_dir = rightIR.read();
-  // int delta = goal-leitura_dir;
-  // int erro = delta*0.1;
-  // Serial.println(leitura_dir);
-  
-  // if(delta>0){
-  //   leftMotor.moveForward(erro);
-  // } else {
-  //   rightMotor.moveForward(erro);
-  // }
-
+  // pos_atual_dir = fabs(rightMotor.getEncoder() - pos_atual_dir);
+  // pos_atual_esq = fabs(leftMotor.getEncoder()- pos_atual_esq);
