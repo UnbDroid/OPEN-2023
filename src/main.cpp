@@ -6,42 +6,45 @@
 #include<LightSensor.h>
 #include<Sol.h>
 
-MotorDC leftMotor(M_LEFT_LPWM, M_LEFT_RPWM, EN_LEFT_MOTOR, ENC_A_LEFT,ENC_B_LEFT);
-MotorDC rightMotor(M_RIGHT_LPWM, M_RIGHT_RPWM, EN_RIGHT_MOTOR,ENC_A_RIGHT,ENC_B_RIGHT);
-ColorSensor CentralColorSensor(S0_COLORSENSOR, S1_COLORSENSOR, S2_COLORSENSOR, S3_COLORSENSOR, OUT_COLORSENSOR);
-LightSensor sensorDireita(A0_DIREITA_FRENTE);
-LightSensor sensorEsquerda(A0_ESQUERDA_FRENTE);
+#define DIR 53//49
+#define PUL 51//47
 
-//in3
-void TakeMemoryLeftMotor(){ // fica na main
-  leftMotor.readEncoder();
-}
+void setup() {
+  // set the speed at 60 rpm:
+  //myStepper.setSpeed(60);
+  pinMode(DIR, OUTPUT);
+  pinMode(PUL, OUTPUT);
 
-void TakeMemoryRightMotor(){ // fica na main
-  rightMotor.readEncoder();
-}
-void setup()
-{
-  Serial.begin(9600); 
-  attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
-  attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-  // rotates90(RIGHT,160,&leftMotor,&rightMotor);
-}
-int a = Directions::BACKWARD;
-int dir = 2;
-int y =6;
-int x =5;
-int direcaoAtual = SOL::Oeste;
-void loop(){
-  
-  maquinaDeEstados(&y,&x,&direcaoAtual,&sensorEsquerda,&sensorDireita,&leftMotor,&rightMotor);
-  // if(sensorDireita.getCrossed()){
-  //   Serial.println("direita atravessou");
-  //   sensorDireita.setCrossed(false);
-  // }
-  // else if(sensorEsquerda.getCrossed()){
-  //   Serial.println("esquerda atravessou");
-  //   sensorEsquerda.setCrossed(false);
-  // }
+  // initialize the serial port:
+  Serial.begin(9600);
+  digitalWrite(DIR, LOW);
 }
 
+#define PPS 400 //velocidade: passo por segundo
+#define DELAY_PPS (500/PPS) //1 segundo dividido pela velocidade
+
+
+int posicao = 500; // fazer o teste de quanto isso equivale em mm
+
+void loop() {
+  // digitalWrite(DIR, !digitalRead(DIR));
+  for (int i = 0; i<posicao; i++)
+  {
+    digitalWrite(PUL, HIGH);
+    delay(DELAY_PPS);
+    digitalWrite(PUL, LOW);
+    delay(DELAY_PPS);
+  }
+  delay(1000);
+  /*
+  // step one revolution  in one direction:
+  Serial.println("clockwise");
+  myStepper.step(stepsPerRevolution);
+  delay(500);
+
+  // step one revolution in the other direction:
+  Serial.println("counterclockwise");
+  myStepper.step(-stepsPerRevolution);
+  delay(500);
+  */
+}
