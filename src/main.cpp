@@ -35,6 +35,8 @@ int direcaoAtual = SOL::Norte;
 void loop(){
 
   maquinaDeEstados(&y,&x,&direcaoAtual,&sensorEsquerda,&sensorDireita,&leftMotor,&rightMotor);
+  // Serial.println(leftMotor.getEncoder());
+  // leftMotor.moveBackward(160);
   // sensorDireita.read();
   // sensorEsquerda.read();
   // if(sensorDireita.getCrossed()){
