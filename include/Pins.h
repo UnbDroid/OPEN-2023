@@ -47,6 +47,21 @@
 #define OUT_COLORSENSOR 37
 /**/
 
+
+/* Motores de Passo
+
+Empilhadeira*/
+
+#define DIR_EMPILHADEIRA 51
+#define PUL_EMPILHADEIRA 53
+
+/*Garra*/
+
+#define DIR_GARRA 49
+#define PUL_GARRA 47
+
+
+
 #define KP 0.1
 
 #endif
