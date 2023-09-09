@@ -70,7 +70,7 @@ void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLe
         motorLeft->moveForward(velocity);
         motorRight->moveBackward(velocity);
 
-        while (abs(motorLeft->getEncoder()) < 900 && abs(motorRight->getEncoder()) < 900){
+        while (abs(motorLeft->getEncoder()) < 1100 && abs(motorRight->getEncoder()) < 1100){
             motorLeft->moveForward(velocity);
             motorRight->moveBackward(velocity);
             
@@ -96,8 +96,8 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
     int count =0;
     if(count<quantityToMove){
         while(count<quantityToMove){
-        leftMotor->moveForward(60);
-        rightMotor->moveForward(40);
+        leftMotor->moveForward(100);
+        rightMotor->moveForward(80);
         lightSensorLeft->read();
         lightSensorRight->read();
             if(lightSensorRight->getCrossed()){

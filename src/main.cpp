@@ -30,11 +30,13 @@ void setup()
 int a = Directions::BACKWARD;
 int dir = 2;
 int y =6;
-int x =5;
-int direcaoAtual = SOL::Oeste;
+int x =7;
+int direcaoAtual = SOL::Norte;
 void loop(){
-  
+
   maquinaDeEstados(&y,&x,&direcaoAtual,&sensorEsquerda,&sensorDireita,&leftMotor,&rightMotor);
+  // sensorDireita.read();
+  // sensorEsquerda.read();
   // if(sensorDireita.getCrossed()){
   //   Serial.println("direita atravessou");
   //   sensorDireita.setCrossed(false);

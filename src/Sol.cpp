@@ -79,27 +79,38 @@ void changingAndCountingPosition(int * current ,int *destination,LightSensor * l
             moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
             stop(leftMotor,rightMotor);
         }
+    Serial.println(*current);
     return ;
 }
 void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     SOL::Direcao destinationDirection= futureDirection('y',*currentY,*destinationYX);
+    
         while(!correctedYFlag &&(*currentY!=*destinationYX)){
-            
             while(*currentDirection!=destinationDirection){
                 correctingDirection(currentDirection,leftMotor,rightMotor);
+                delay(1000);
             }
             stop(leftMotor,rightMotor);
-
             changingAndCountingPosition(currentY,destinationYX,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
             correctedYFlag=1;
             break;
         }
         while(!correctedXFlag && (*currentX!=*(destinationYX+1))){
             destinationDirection= futureDirection('x',*currentX,*(destinationYX+1));
+            // leftMotor->setEncoder(0);
+            // while(leftMotor->getEncoder()<=450){
+            //     leftMotor->setEncoder(0);
+            //     leftMotor->moveBackward(100);
+            //     rightMotor->moveBackward(80);
+            //     }    
+            // stop(leftMotor,rightMotor);
+            // delay(3000);
+            // leftMotor->setEncoder(0);
             while(*currentDirection !=destinationDirection){
                 Serial.print(" x: ");
                 Serial.println(*currentX);
                 correctingDirection(currentDirection,leftMotor,rightMotor);
+                delay(1000);
             }
             stop(leftMotor,rightMotor);
             changingAndCountingPosition(currentX,destinationYX+1,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
@@ -112,26 +123,37 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
 
 void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirection, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     //if ele não precisa atravessar:
-
-    if((*currentY >=5 && *destinationYX>=5)  || (*currentY <=2 && *destinationYX<=2)){
+    while(*currentX!=*(destinationYX+1) && *currentY !=*destinationYX){
+        if((*currentY >=5 && *destinationYX>=5)  || (*currentY <=2  && *destinationYX<=2)){
         moveYandMoveX(currentX,currentY,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-    }
-    else{
-        // Serial.println("to aqui");
-        int * lowestCrossBlock = shortestArea(true,*currentY,*currentX);
-        Serial.print(*lowestCrossBlock);
-        Serial.print(*(lowestCrossBlock+1));
-        moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-        if(*lowestCrossBlock==5){
-            *lowestCrossBlock =2;
-            moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
         }
         else{
-            *lowestCrossBlock =5;
+            Serial.println("to aqui");
+            int * lowestCrossBlock = shortestArea(true,*currentY,*currentX);
+            Serial.print(*lowestCrossBlock);
+            Serial.print(*(lowestCrossBlock+1));
             moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+            rightMotor->moveBackward(100);
+            leftMotor->moveBackward(80);
+            delay(500);
+            stop(leftMotor,rightMotor);
+            delay(1000);
+            if(*lowestCrossBlock==5){
+                *lowestCrossBlock =2;
+                moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);    
+            }
+            else{
+                *lowestCrossBlock =5;
+                moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+            }
+            stop(leftMotor,rightMotor);
+            rightMotor->moveBackward(100);
+            leftMotor->moveBackward(80);
+            delay(500);
+            stop(leftMotor,rightMotor);
         }
-        moveYandMoveX(currentX,currentY,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-    }     
+    }
+         
 }
 
 
@@ -141,8 +163,14 @@ void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirectio
 void maquinaDeEstados(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
        
     int * destinationYX =  shortestArea(1,*y,*x);
-    *destinationYX=2;
-    *(destinationYX+1)=5;  
+    *destinationYX=1;
+    *(destinationYX+1)=6;  
     moveTo(x,y,destinationYX,currentDirection,lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+    
+    // Serial.println("terminei");
+    // *destinationYX=5;
+    // *(destinationYX+1)=7;
+    // moveTo(x,y,destinationYX,currentDirection,lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+    // stop(leftMotor,rightMotor);
     
 }
