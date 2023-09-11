@@ -36,13 +36,61 @@ void setup()
   // Serial.print(rightIR.read());
   // Serial.println();
 
+  // while (leftMotor.getEncoder() < 4096)
+  // {
+  //   leftMotor.moveForward(40);
+  // }
+  
+
+  // while (leftMotor.getEncoder() < 2048)
+  // {
+  //   leftMotor.moveForward(75);
+  //   Serial.println(leftMotor.getEncoder());
+  // }
+
+  // stop(&leftMotor,&rightMotor);
+
+
+  // stop(&leftMotor,&rightMotor);
+//   resetEncoders(&leftMotor,&rightMotor);
+//   while(micros()<5000000){
+//     leftMotor.moveForward(255);
+//     rightMotor.moveForward(255);
+//   }
+// stop(&leftMotor,&rightMotor);
+// Serial.println(leftMotor.getEncoder());
+// Serial.println(rightMotor.getEncoder());
+// Serial.println("-");
+  
+
+//   while(micros()<250000){
+//     leftMotor.moveForward(255);
+//     rightMotor.moveForward(255);
+//   }
+// stop(&leftMotor,&rightMotor);
+// Serial.println(leftMotor.getEncoder());
+// Serial.println(rightMotor.getEncoder());
   // 
+  align(&leftIR,&rightIR,&leftMotor,&rightMotor,60);
   
 }
 
 
 void loop(){
-    movePID(FORWARD,75,&leftMotor,&rightMotor);
+  // movePID(FORWARD,100,&leftMotor,&rightMotor);
+  // if(leftIR.read()<150 || rightIR.read()<150){
+  //   stop(&leftMotor,&rightMotor);
+  //   // 
+  // }
+  // Serial.println(micros());
+
+  
+  // leftMotor.moveForward(60);
+  // rightMotor.moveForward(60);
+  // Serial.print("sai de andar reto");
+
+  // leftMotor.moveForward(100);
+  // rightMotor.moveForward(100);
 
 // int leftWhite = 200;
 // int rightWhite = 200;
@@ -64,14 +112,16 @@ void loop(){
 //   while(leftIR.read() < leftWhite || rightIR.read() < rightWhite){
 //     movePID(FORWARD,75,&leftMotor,&rightMotor);
 //   }
-//   // resetEncoders()
-//   for (int i = 75; i > count; i--)
-//   {
-//     movePID(BACKWARD,i,&leftMotor,&rightMotor);
-//   }
-//   stop(&rightMotor,&leftMotor);
-//   Serial.println("parei Teste 3");
-//   delay(5000);
+//     align(&leftIR,&rightIR,&leftMotor,&rightMotor,55);
+// }
+  // resetEncoders()
+  // for (int i = 75; i > count; i--)
+  // {
+  //   movePID(BACKWARD,i,&leftMotor,&rightMotor);
+  // }
+  // stop(&rightMotor,&leftMotor);
+  // Serial.println("parei Teste 3");
+  // delay(5000);
 
   
 
@@ -159,9 +209,6 @@ void loop(){
 //   // }
 //   // Serial.print("caso: ");
 //   // Serial.println(caso);
-    
-  
-//   align(&leftIR,&rightIR,&leftMotor,&rightMotor,55);
   
 //   Serial.println("vou andar retooo");
 //   int count = 0;

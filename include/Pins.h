@@ -47,9 +47,15 @@
 #define OUT_COLORSENSOR 37
 /**/
 
-#define KP 10
-#define KI 1
-#define KD 1
+#define KP 0.6
+#define KI 0.0001 //1
+#define KD 0 // 0.5
+
+//PID ideiaThamires
+#define KP_LEFT 1.15
+#define KP_RIGHT 0.84
+#define KI_LEFT 0 //0.0001
+#define KI_RIGHT 0//0.0001
 
 // extern int leftWhite = 100;
 // extern int rightWhite = 200;

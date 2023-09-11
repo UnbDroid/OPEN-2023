@@ -32,7 +32,7 @@ void MotorDC::moveForward(int velocidade){
 void MotorDC::stop(){
     analogWrite(this->pinoRpwm, HIGH);
     analogWrite(this->pinoLpwm, HIGH);
-    // digitalWrite(this->pinoEN,0);
+    digitalWrite(this->pinoEN,HIGH);
 }
 
 void MotorDC::moveBackward(int velocidade){
