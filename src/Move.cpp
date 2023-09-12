@@ -39,9 +39,6 @@ void correctingDirection(int * direction, MotorDC * leftMotor,MotorDC* rightMoto
         stop(leftMotor,rightMotor);
         *direction=*direction+1;
     }
-    Serial.print("Girei ");
-    Serial.println(flag);
-    flag++;
     return ;
 }
 

@@ -31,21 +31,10 @@ int a = Directions::BACKWARD;
 int dir = 2;
 int y =6;
 int x =7;
-int direcaoAtual = SOL::Norte;
+int direcaoAtual = SOL::Leste;
 void loop(){
-
+  
   maquinaDeEstados(&y,&x,&direcaoAtual,&sensorEsquerda,&sensorDireita,&leftMotor,&rightMotor);
-  // Serial.println(leftMotor.getEncoder());
-  // leftMotor.moveBackward(160);
-  // sensorDireita.read();
-  // sensorEsquerda.read();
-  // if(sensorDireita.getCrossed()){
-  //   Serial.println("direita atravessou");
-  //   sensorDireita.setCrossed(false);
-  // }
-  // else if(sensorEsquerda.getCrossed()){
-  //   Serial.println("esquerda atravessou");
-  //   sensorEsquerda.setCrossed(false);
-  // }
+
 }
 
