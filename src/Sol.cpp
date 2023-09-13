@@ -2,14 +2,16 @@
 static int correctedYFlag = 0;
 static int correctedXFlag = 0;
 static int blocosSemCubos[]={55,56,53};
-
+int smallPosition=0;
+int closestBlock[2];
+static int squareBlocks [][2]={ {22,1},{23,1},      {25,1},{26,1},
+                                {52,1},{53,1},      {55,1},{56,1}
+    };
 
 int ManhattamDistance(int y1,int x1,int y2,int x2){
     return abs(x1-x2)+abs(y1-y2);
 }
-int a(int a[][2]){
-    return 0;
-}
+
 int * shortestArea(bool cross,int y,int x){
     int lowest =90;
     int areasBlocks[8][2]={ {2,2},{2,3},     {2,5},{2,6},
@@ -88,6 +90,8 @@ void changingAndCountingPosition(int * current ,int *destination,LightSensor * l
     Serial.println(*current);
     return ;
 }
+
+
 void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     SOL::Direcao destinationDirection= futureDirection('y',*currentY,*destinationYX);
         leftMotor->setEncoder(0);
@@ -138,6 +142,22 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
         return ;
 }
 
+void bestBlock(int currentY,int currentX){
+    int lowest =90;
+    int indice=0;
+    for(int *block:squareBlocks){
+        int yBlock = (int)(*block/10);
+        int xBlock = (int)(*(block+1)%10);
+        int distance = ManhattamDistance(currentY,currentX,yBlock,xBlock);
+        if(distance<lowest&& *(block+1)>=1){
+            lowest=distance;
+            closestBlock[0]=yBlock;
+            closestBlock[1]=xBlock;
+            smallPosition=indice;
+        }
+        indice++;
+    }
+}
 void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirection, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
 
     
