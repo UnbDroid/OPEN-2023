@@ -11,7 +11,8 @@ MotorDC rightMotor(M_RIGHT_LPWM, M_RIGHT_RPWM, EN_RIGHT_MOTOR,ENC_A_RIGHT,ENC_B_
 ColorSensor CentralColorSensor(S0_COLORSENSOR, S1_COLORSENSOR, S2_COLORSENSOR, S3_COLORSENSOR, OUT_COLORSENSOR);
 LightSensor rightIR(A0_DIREITA_FRENTE);
 LightSensor leftIR(A0_ESQUERDA_FRENTE);
-
+LightSensor lateral_leftIR(A0_LATERAL_LEFT);
+LightSensor lateral_rightIR(A0_LATERAL_RIGHT);
 
 
 void TakeMemoryLeftMotor(){ // fica na main
@@ -42,7 +43,10 @@ void setup()
 
 
 void loop(){
-    movePID(FORWARD,75,&leftMotor,&rightMotor);
+    movePID(FORWARD,150,&leftMotor,&rightMotor);
+    Serial.println(lateral_rightIR.read());
+    // Serial.println(lateral_rightIR.read());
+
 
 // int leftWhite = 200;
 // int rightWhite = 200;
