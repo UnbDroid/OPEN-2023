@@ -1,14 +1,14 @@
 #include<Sol.h>
-static int correctedYFlag = 0;
-static int correctedXFlag = 0;
-static int blocosSemCubos[]={55,56,53};
+
+int blocosSemCubos[]={55,56,53};
+
 int smallPosition=0;
 int closestBlock[2];
-static int squareBlocks [][2]={ {22,1},{23,1},      {25,1},{26,1},
-                                {52,1},{53,1},      {55,1},{56,1}
+int squareBlocks [][2]={ {22,1},{23,1},      {25,0},{26,1},
+                                {52,2},{53,0},      {55,1},{56,1}
     };
 
-int ManhattamDistance(int y1,int x1,int y2,int x2){
+int manhattamDistance(int y1,int x1,int y2,int x2){
     return abs(x1-x2)+abs(y1-y2);
 }
 
@@ -31,14 +31,13 @@ int * shortestArea(bool cross,int y,int x){
         tam=6;
     }
     else{
-        Serial.println("eu entrei aqui cara");
         coordinatesPtr = *areasBlocks;
         tam=8;
     }
     
     static int closest[2];
     while(tam){
-        int distance = ManhattamDistance(y,x,*coordinatesPtr,*(coordinatesPtr+1));
+        int distance = manhattamDistance(y,x,*coordinatesPtr,*(coordinatesPtr+1));
         if(distance<lowest){
             lowest = distance; 
             
@@ -53,103 +52,36 @@ int * shortestArea(bool cross,int y,int x){
 }
 
 
-SOL::Direcao futureDirection(char eixo,int inicial, int final){
+SOL::Direcao futureDirection(char axis,int start, int final){
        
-        if(eixo =='y'){
-            if(final<=inicial){
+        if(axis =='y'){
+            if(final<=start){
             return  SOL::Norte;
             }
             return  SOL::Sul;
         }
-        if(final>inicial){
+        if(final>start){
             return  SOL::Leste;
         }
         //estou na direita e ele na esquerda 
-        return  SOL::Oeste;          
-        
-}
-void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
-    if(*current<*destination){
-        while(*current<*destination){
-            Serial.print(" Valor Aí :");
-            Serial.println(*current);
-                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-                *current = *current+1;
-        }
-            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-            stop(leftMotor,rightMotor);
-        }
-    else if(*current>*destination){
-        while(*current>*destination){
-                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-                *current = *current-1;
-        }
-            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-            stop(leftMotor,rightMotor);
-        }
-    Serial.println(*current);
-    return ;
+        return  SOL::Oeste;              
 }
 
-
-void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
-    SOL::Direcao destinationDirection= futureDirection('y',*currentY,*destinationYX);
-        leftMotor->setEncoder(0);
-        rightMotor->setEncoder(0);  
-        while(!correctedYFlag &&(*currentY!=*destinationYX)){
-
-            while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
-                leftMotor->moveBackward(100);
-                rightMotor->moveBackward(80);
-            }    
-            stop(leftMotor,rightMotor);
-            delay(1000);
-            leftMotor->setEncoder(0);
-            rightMotor->setEncoder(0);
-            while(*currentDirection!=destinationDirection){
-                correctingDirection(currentDirection,leftMotor,rightMotor);
-                delay(1000);
-            }
-            stop(leftMotor,rightMotor);
-            changingAndCountingPosition(currentY,destinationYX,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-            correctedYFlag=1;
-            break;
-        }
-        leftMotor->setEncoder(0);
-        rightMotor->setEncoder(0);
-        while(!correctedXFlag && (*currentX!=*(destinationYX+1))){
-            while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
-                leftMotor->moveBackward(100);
-                rightMotor->moveBackward(80);
-            }    
-            stop(leftMotor,rightMotor);
-            delay(1000);
-            leftMotor->setEncoder(0);
-            rightMotor->setEncoder(0);
-            destinationDirection= futureDirection('x',*currentX,*(destinationYX+1));
-            while(*currentDirection !=destinationDirection){
-                Serial.print(" x: ");
-                Serial.println(*currentX);
-                correctingDirection(currentDirection,leftMotor,rightMotor);
-                delay(1000);
-            }
-            stop(leftMotor,rightMotor);
-            changingAndCountingPosition(currentX,destinationYX+1,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-            break;
-        }
-        correctedXFlag=0;
-        correctedYFlag=0;
-        return ;
-}
-
-void bestBlock(int currentY,int currentX){
+int* bestBlock(int currentY,int currentX){
     int lowest =90;
     int indice=0;
+    smallPosition=0;
+    *closestBlock=0;
+    *(closestBlock+1)=0;
     for(int *block:squareBlocks){
         int yBlock = (int)(*block/10);
-        int xBlock = (int)(*(block+1)%10);
-        int distance = ManhattamDistance(currentY,currentX,yBlock,xBlock);
-        if(distance<lowest&& *(block+1)>=1){
+        int xBlock = (int)(*(block)%10);
+        int distance = manhattamDistance(currentY,currentX,yBlock,xBlock);  
+        //aqui entra a função da camera e retorna a quantidade de blocos
+        /*
+            int quantBlocos = 
+        */
+        if(distance<lowest && *(block+1)>=1){
             lowest=distance;
             closestBlock[0]=yBlock;
             closestBlock[1]=xBlock;
@@ -157,61 +89,12 @@ void bestBlock(int currentY,int currentX){
         }
         indice++;
     }
-}
-void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirection, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
-
     
-    int yDestino =*destinationYX;
-    int xDestino = *(destinationYX+1);
-    int arrayPosicaoAtual[]={yDestino,xDestino};
-    if(*currentX!=xDestino || *currentY !=yDestino){
-        while(*currentX!=xDestino || *currentY !=yDestino){
-            if((*currentY >=5 && yDestino>=5)  || (*currentY <=2  && xDestino<=2)){
-            moveYandMoveX(currentX,currentY,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-            }
-            else if(yDestino==3||yDestino==4){
-                int * lowestCrossBlock;
-                lowestCrossBlock = shortestArea(true,*currentY,*currentX);
-                delay(2000);
-                moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-                stop(leftMotor,rightMotor);
-                moveYandMoveX(currentX,currentY,arrayPosicaoAtual,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-            }
-            else{
-                int * lowestCrossBlock;
-                lowestCrossBlock = shortestArea(true,*currentY,*currentX);
-               
-                delay(2000);
-                moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-                if(*lowestCrossBlock==5){
-                    *lowestCrossBlock =2;
-                    moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);    
-                    
-                }
-                else{
-                    *lowestCrossBlock =5;
-                    
-                    moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-                    
-                }
-                stop(leftMotor,rightMotor);
-                moveYandMoveX(currentX,currentY,arrayPosicaoAtual,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-                
-            }
-        }
-    }
-         
+    squareBlocks[smallPosition][1]=(squareBlocks[smallPosition][1])-1;
+    return closestBlock;
 }
 
-
-static int posicaoComCubos[]={
-22,23,25,26,31,34,37,41,44,47,52,53,55,56
-};
-bool temCubo(){
-    return true;
-}    
-
-void  maquinaDeEstados(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
+void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     static int state=0;
     delay(2000);
     while (true)
@@ -230,9 +113,6 @@ void  maquinaDeEstados(int* y,int* x,int *currentDirection,LightSensor * lightSe
         Serial.print(" ");  
         Serial.println(*(destinationYX+1));
         moveTo(x,y,destinationYX,currentDirection,lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-        if(!temCubo){
-
-        }
 
     }
     else{

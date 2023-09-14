@@ -34,7 +34,7 @@ int x =7;
 int direcaoAtual = SOL::Leste;
 void loop(){
   
-  maquinaDeEstados(&y,&x,&direcaoAtual,&sensorEsquerda,&sensorDireita,&leftMotor,&rightMotor);
+  stateMachine(&y,&x,&direcaoAtual,&sensorEsquerda,&sensorDireita,&leftMotor,&rightMotor);
 
 }
 
