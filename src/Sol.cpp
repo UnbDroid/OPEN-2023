@@ -97,30 +97,22 @@ int* bestBlock(int currentY,int currentX){
 void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     static int state=0;
     delay(2000);
-    while (true)
-    {
-        if(state==0){
-        delay(1000);
-        Serial.print("ATUAL ");
-        Serial.print(*y);
-        Serial.print(" ");
-        Serial.println(*x);
-        Serial.print("bloco mais próximo ");
-        int * destinationYX =  shortestArea(0,*y,*x);
-
-        
-        Serial.print(*destinationYX);
-        Serial.print(" ");  
-        Serial.println(*(destinationYX+1));
-        moveTo(x,y,destinationYX,currentDirection,lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-
+    int destination[2];
+    int *destination = bestBlock(*y,*x);    
+    if(state==0){
+        while(*destination!=0){
+        *y = *destination;
+        *x=*(destination+1);
+        moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+        delay(3000);
+        state=1;
+        }
     }
     else{
         stop(leftMotor,rightMotor);
     }
-    }
-    
-    
-    
-    
 }
+    
+    
+    
+    

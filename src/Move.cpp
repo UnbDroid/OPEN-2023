@@ -229,5 +229,7 @@ void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirectio
             navegateInRegion(currentY,currentX,yDestino,xDestino,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,arrayPosicaoAtual);
         }
     }
+    stop(leftMotor,rightMotor);
+    return ;
          
 }
