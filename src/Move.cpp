@@ -4,9 +4,10 @@
 #include<Move.h>
 #include<LightSensor.h>
 #include <Pins.h>
-#include<Sol.h>
+//#include<Solution.h>
 static int correctedYFlag = 0;
 static int correctedXFlag = 0;
+
 void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
     switch (direction)
     {
@@ -102,7 +103,27 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
     return ;
 }
 
-
+void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
+    if(*current<*destination){
+        while(*current<*destination){
+                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+                *current = *current+1;
+                Serial.println(*current);
+        }
+            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+            stop(leftMotor,rightMotor);
+        }
+    else if(*current>*destination){
+        while(*current>*destination){
+                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+                Serial.println(*current);
+                *current = *current-1;
+        }
+            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
+            stop(leftMotor,rightMotor);
+        }
+    return ;
+}
 
 void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight){
     int posEncoderLeft = motorLeft->getEncoder();
@@ -168,22 +189,26 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
         correctedYFlag=1;
         break;
     }
+    Serial.println(*currentY);
     resetEncoders(leftMotor,rightMotor);
     while(!correctedXFlag && (*currentX!=*(destinationYX+1))){
         moveBackAndCorrectDirection(destinationDirection,currentDirection,leftMotor,rightMotor);
         changingAndCountingPosition(currentX,destinationYX+1,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
         break;
     }
+    Serial.println(*currentX);
     correctedXFlag=0;
     correctedYFlag=0;
     return ;
 }
 void navegateInRegion(int * currentY,int * currentX,int yDestino, int xDestino,int *destinationYX, int* currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor , int *arrayPosicaoAtual){
     if((*currentY >=5 && yDestino>=5)  || (*currentY <=2  && xDestino<=2)){
+            Serial.println("to aqui na navegate");
             moveYandMoveX(currentX,currentY,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
     }
     else{
         int * lowestCrossBlock;
+        Serial.println("entrei aqui sla pq");
         lowestCrossBlock = shortestArea(true,*currentY,*currentX);
         delay(2000);
         moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
@@ -199,25 +224,7 @@ void navegateInRegion(int * currentY,int * currentX,int yDestino, int xDestino,i
         
     }
 }
-void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
-    if(*current<*destination){
-        while(*current<*destination){
-                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-                *current = *current+1;
-        }
-            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-            stop(leftMotor,rightMotor);
-        }
-    else if(*current>*destination){
-        while(*current>*destination){
-                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-                *current = *current-1;
-        }
-            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
-            stop(leftMotor,rightMotor);
-        }
-    return ;
-}
+
 void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirection, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     
     int yDestino =*destinationYX;

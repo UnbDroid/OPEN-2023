@@ -1,11 +1,12 @@
-#include<Sol.h>
+#include<Solution.h>
+#include<Move.h>
 
 int blocosSemCubos[]={55,56,53};
 
 int smallPosition=0;
 int closestBlock[2];
 int squareBlocks [][2]={ {22,1},{23,1},      {25,0},{26,1},
-                                {52,2},{53,0},      {55,1},{56,1}
+                        {52,2},{53,0},      {55,1},{56,1}
     };
 
 int manhattamDistance(int y1,int x1,int y2,int x2){
@@ -93,20 +94,33 @@ int* bestBlock(int currentY,int currentX){
     squareBlocks[smallPosition][1]=(squareBlocks[smallPosition][1])-1;
     return closestBlock;
 }
-
+static int state=0;
 void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
-    static int state=0;
+    
     delay(2000);
     int destination[2];
-    int *destination = bestBlock(*y,*x);    
+    
+
     if(state==0){
-        while(*destination!=0){
-        *y = *destination;
-        *x=*(destination+1);
+        int *ddd = bestBlock(*y,*x);    
+        destination[0]=*ddd;
+        destination[1]=*(ddd+1);
+        Serial.print(*destination);
+        Serial.print("  ");
+        Serial.println(*(destination+1));
+
         moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+        /*
+        *y=destination[0];
+        *x = destination[1];
+        
+        destination[0]=1;
+        destination[1]=2;
+        moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+        */
+
         delay(3000);
         state=1;
-        }
     }
     else{
         stop(leftMotor,rightMotor);

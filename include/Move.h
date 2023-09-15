@@ -6,7 +6,7 @@
 #include"MPU9250.h"
 #include<LightSensor.h>
 #include<LightSensor.h>
-
+#include<Solution.h>
 
 enum Directions{FORWARD, BACKWARD};
 enum RotateDirections{LEFT, RIGHT};
@@ -27,7 +27,11 @@ void moveForSquare(int quantityToMove,LightSensor * lightSensorLeft, LightSensor
 void correctingDirection(int * direction, MotorDC * leftMotor,MotorDC* rightMotor);
 void navegateInRegion(int * currentY,int * currentX,int yDestino, int xDestino,int *destinationYX, int* currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor , int *arrayPosicaoAtual);
 void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor);
-void moveBackAndCorrectDirection(SOL::Direcao destinationDirection,int*currentDirection,MotorDC *leftMotor,MotorDC *rightMotor);
-void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor);
+extern int lllla_op;
+void moveBackAndCorrectDirection(SOL::Direcao destinationDirection);
+//int*currentDirection,MotorDC *leftMotor,MotorDC *rightMotor);
+void changingAndCountingosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor);
 void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirection, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor);
+
+
 #endif
