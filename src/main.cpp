@@ -5,6 +5,8 @@
 #include <ColorSensor.h>
 #include<LightSensor.h>
 #include<Sol.h>
+#include <PickCube.h>
+#include <Ultrassonic.h>
 
 MotorDC leftMotor(M_LEFT_LPWM, M_LEFT_RPWM, EN_LEFT_MOTOR, ENC_A_LEFT,ENC_B_LEFT);
 MotorDC rightMotor(M_RIGHT_LPWM, M_RIGHT_RPWM, EN_RIGHT_MOTOR,ENC_A_RIGHT,ENC_B_RIGHT);
@@ -13,7 +15,12 @@ LightSensor rightIR(A0_DIREITA_FRENTE);
 LightSensor leftIR(A0_ESQUERDA_FRENTE);
 LightSensor lateral_leftIR(A0_LATERAL_LEFT);
 LightSensor lateral_rightIR(A0_LATERAL_RIGHT);
+Ultrassonic ultrassonicSensor(echo_ultrassom, trig_ultrassom);
 
+
+int min_right_distance;
+int right_distance;
+int i;
 
 void TakeMemoryLeftMotor(){ // fica na main
   leftMotor.readEncoder();
@@ -28,6 +35,14 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
 
+  // for (i = 0; i < 30; i++){
+  //   min_right_distance += lateral_rightIR.read();
+  // }
+  // Serial.println(min_right_distance);
+  // // delay(10000);
+  // min_right_distance /= 30;
+
+  // rotates(LEFT, &leftMotor,&rightMotor);
   // rotates(RIGHT,&leftMotor,&rightMotor);
   // stop(&leftMotor,&rightMotor);
   // delay(2000);
@@ -43,10 +58,30 @@ void setup()
 
 
 void loop(){
-    movePID(FORWARD,150,&leftMotor,&rightMotor);
-    Serial.println(lateral_rightIR.read());
-    // Serial.println(lateral_rightIR.read());
-
+    pick_cube_from_right(&leftMotor,&rightMotor, &lateral_rightIR, &rightIR, &ultrassonicSensor);
+    // Serial.println(UltrassonicSensor.distance_cm());
+    // leftMotor.moveForward(75);
+    // rightMotor.moveForward(55);
+    // // movePID(FORWARD,30,&leftMotor,&rightMotor);
+    // right_distance = rightIR.read();
+    // Serial.println(right_distance);
+    // Serial.print(" é maior que");
+    // Serial.println(min_right_distance - 30);
+    // if (right_distance < min_right_distance - 30){
+    //   Serial.println("Simmm");
+    //   stop(&leftMotor,&rightMotor);
+    //   delay(2000);
+    //   leftMotor.moveForward(85);
+    //   rightMotor.moveForward(75);
+    //   delay(500);
+    //   stop(&leftMotor,&rightMotor);
+    //   delay(2000);
+    //   rotates(RIGHT, &leftMotor,&rightMotor);
+    //   delay(2000);
+    //   leftMotor.moveForward(75);
+    //   rightMotor.moveForward(55);
+    //   delay(2000);
+    //   }
 
 // int leftWhite = 200;
 // int rightWhite = 200;

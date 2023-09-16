@@ -33,7 +33,7 @@
 //
 
 /* Infravermelhos
-
+pbrav
 */
 #define A0_DIREITA_FRENTE   A12
 #define A0_ESQUERDA_FRENTE  A11
@@ -48,6 +48,14 @@
 #define S3_COLORSENSOR 39
 #define OUT_COLORSENSOR 37
 /**/
+
+
+/*Ultrassom*/
+#define echo_ultrassom 45
+#define trig_ultrassom 43
+
+
+/*-----------------*/
 
 #define KP 10
 #define KI 1
