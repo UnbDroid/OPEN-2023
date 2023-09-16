@@ -29,6 +29,7 @@
 #define ENC_B_RIGHT 19
 #define EN_RIGHT_MOTOR 11
 
+#define BUMPER_PIN 37
 
 //
 
