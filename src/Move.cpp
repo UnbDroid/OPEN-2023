@@ -6,6 +6,10 @@
 #include <Pins.h>
 #include<Sol.h>
 
+int previouError = 0;
+int previousTime = 0;
+int integralError = 0;
+
 void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
     switch (direction)
     {
@@ -30,12 +34,12 @@ void correctingDirection(int * direction, MotorDC * leftMotor,MotorDC* rightMoto
     // rightMotor->moveForward(40);
     static int flag = 1;
     if(*direction>=SOL::Oeste){
-        rotates90(RIGHT,80,leftMotor,rightMotor);
+        rotates(RIGHT,leftMotor,rightMotor);
         stop(leftMotor,rightMotor);
         *direction = SOL::Norte;
     }
     else{
-        rotates90(RIGHT,80,leftMotor,rightMotor);
+        rotates(RIGHT,leftMotor,rightMotor);
         stop(leftMotor,rightMotor);
         *direction=*direction+1;
     }
@@ -45,7 +49,8 @@ void correctingDirection(int * direction, MotorDC * leftMotor,MotorDC* rightMoto
     return ;
 }
 
-void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
+void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * motorRight){
+    int velocity = 130;
     
     motorLeft->setEncoder(0);
     motorRight->setEncoder(0);
@@ -77,19 +82,123 @@ void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLe
         }
         motorLeft->stop();
         motorRight->stop();
-        break;  
+        break; 
+
+    case AROUND:
+        motorLeft->moveForward(velocity);
+        motorRight->moveBackward(velocity);
+
+        while (abs(motorLeft->getEncoder()) < 2010 && abs(motorRight->getEncoder()) < 2010){
+            motorLeft->moveForward(velocity);
+            motorRight->moveBackward(velocity);
+            
+        }
+        motorLeft->stop();
+        motorRight->stop();
+        break; 
+     
 
     default:
         break;
     }
+
+
 }
 
-void rotates180(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight){
-    int a;
+void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLeft, MotorDC * motorRight, int velocity){
+    int leftWhite = 150;
+    int rightWhite = 150;
+    //dica do caio, ao inves de ser o while dentro de while, o motor que tiver no branco pode chegar pra tras algumas rotações do encoder.
+    // pra que não fique preso.
+
+    // if (type == 6){
+    //     if (lightSensorLeft->read()<leftWhite){
+    //         Serial.println("tras 6");
+    //         while(lightSensorLeft->read()<leftWhite){
+    //             motorLeft->moveBackward(velocity+10);
+                
+    //         }        
+    //     }
+    //     stop(motorLeft,motorRight);
+    //     delay(1000);
+    //     type = 1;
+    // } else if (type == 7){
+    //     if (lightSensorRight->read()<rightWhite){
+    //         while(lightSensorRight->read()<rightWhite){
+    //             motorRight->moveBackward(velocity);
+    //             // Serial.println("tras 7");
+    //         }
+    //     stop(motorLeft,motorRight);
+    //     delay(1000);
+    //     type = 2;
+    // }
+
+    // if(type == 1){
+    //     while(lightSensorRight->read()<rightWhite){
+    //         motorRight->moveForward(velocity);
+    //     }
+    // } else if (type == 2){
+    //     while(lightSensorLeft->read()<leftWhite){
+    //         motorLeft->moveForward(velocity+10);
+    //     }
+    // } else if(type == 3){
+    //     return ;
+    // } else if (type == 4){
+    //     while(lightSensorLeft->read()<leftWhite){
+    //         motorLeft->moveBackward(velocity+10);
+    //     }
+    // } else if(type == 5){
+    //     while(lightSensorRight->read()<rightWhite){
+    //         motorRight->moveBackward(velocity);
+    //     }
+
+    if (lightSensorLeft->read()>leftWhite || lightSensorRight->read()>rightWhite){
+        Serial.println("estou me alinhando");
+        stop(motorLeft,motorRight);
+        delay(5000);
+        // movePID(BACKWARD,30,)
+        
+        if (lightSensorLeft->read()<leftWhite) //vê branco
+        {
+            Serial.print("esquerdo ve branco ");
+            while (lightSensorLeft->read()<leftWhite) { // && lightSensorRight->read()>rightWhite){ // ve branco
+                Serial.println(lightSensorLeft->read());
+                motorLeft->moveForward(velocity+10);
+                // motorRight->moveBackward(velocity-5);
+                if(lightSensorRight->read()<rightWhite){
+                    while (lightSensorRight->read()<rightWhite)
+                    {
+                        motorRight->moveBackward(velocity);
+                    }    
+                }
+            }
+            // while(!(lightSensorLeft->read()<leftWhite && lightSensorRight->read()>rightWhite)){
+            //     movePID(FORWARD,45,motorLeft,motorRight);
+            // }
+            
+        }
+        else if (lightSensorRight->read() < rightWhite) //ve branco
+        {
+            Serial.println("direito ve branco");
+            while (lightSensorRight->read()<rightWhite) {// ve branco
+                motorRight->moveForward(velocity);
+                // motorLeft->moveBackward(velocity-20);
+                // if(lightSensorLeft->read()<leftWhite){
+                //     while (lightSensorLeft->read()<leftWhite)
+                //     {
+                //         motorLeft->moveBackward(velocity+10);
+                //     }    
+                // }    
+            }
+        }  
+    stop(motorLeft, motorRight);
+    delay(500);
+    } else{
+        return ;
+    }
 }
-void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity){
-    int a;
-}
+
+
 
 void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     quantityToMove++;
@@ -112,15 +221,26 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
 }
 
 
-
 void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight){
+
+    // KD tem que compensar rapido o suficiente pro KI não ficar muito tempo errado
+    // Se ele tiver oscilando demais, tira primeiro o KD e depois o KI
+
+    long currentTime = micros();
+    float deltaT = ((float)(currentTime-previousTime))/10e6;
+    previousTime = currentTime;
+
     int posEncoderLeft = motorLeft->getEncoder();
     int posEncoderRight = motorRight->getEncoder();
-
     int erro = posEncoderRight - posEncoderLeft;
-    int incremento = erro*KP;
+
+    float derivativeErro = (erro - previouError)/deltaT;
+    integralError = integralError + erro*deltaT;
+
+    int incremento = erro*KP + derivativeErro*KD + integralError*KI;
+    
     int parameterVelocityLeft = velocity + incremento;
-    int parameterVelocityRight = velocity - incremento;
+    int parameterVelocityRight = velocity;
 
 
     switch (direction)
