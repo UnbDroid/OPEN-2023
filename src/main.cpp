@@ -5,6 +5,16 @@
 #include <ColorSensor.h>
 #include<LightSensor.h>
 #include<Sol.h>
+
+#include <StepMotor.h>
+#include <Claw.h>
+#include <Forklift.h> 
+
+
+Claw Robot_Claw(DIR_GARRA, PUL_GARRA);
+Forklift emp(DIR_EMPILHADEIRA, PUL_EMPILHADEIRA);
+
+
 #include <PickCube.h>
 #include <Ultrassonic.h>
 
@@ -216,7 +226,8 @@ void loop(){
 //   Serial.print(" ");
 //   Serial.print(rightIR.read());
 //   Serial.println();
-}
+
+  }
 
 
 

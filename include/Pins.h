@@ -50,6 +50,22 @@ pbrav
 /**/
 
 
+
+/* Motores de Passo
+
+Empilhadeira*/
+
+#define DIR_EMPILHADEIRA 51
+#define PUL_EMPILHADEIRA 53
+
+/*Garra*/
+
+#define DIR_GARRA 50
+#define PUL_GARRA 52
+
+
+
+
 /*Ultrassom*/
 #define echo_ultrassom 45
 #define trig_ultrassom 43
@@ -63,6 +79,7 @@ pbrav
 
 // extern int leftWhite = 100;
 // extern int rightWhite = 200;
+
 
 
 #endif
