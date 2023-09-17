@@ -8,9 +8,11 @@
 #include<LightSensor.h>
 #include<Pins.h>
 #include <Ultrassonic.h>
+#include <Claw.h>
+#include <Forklift.h>
 
 
-int pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, LightSensor * light_LateralRight, LightSensor * rightIR, Ultrassonic * ultrassonicSensor);
+int pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, LightSensor * light_LateralRight, LightSensor * rightIR, Ultrassonic * ultrassonicSensor,Claw * RobotClaw);
 int pick_cube_from_left( MotorDC * leftMotor, MotorDC * rightMotor, LightSensor * light_LateralLeft);
 
 

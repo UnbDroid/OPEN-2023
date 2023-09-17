@@ -39,11 +39,14 @@ void TakeMemoryLeftMotor(){ // fica na main
 void TakeMemoryRightMotor(){ // fica na main
   rightMotor.readEncoder();
 }
+
 void setup()
 {
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
+  // Robot_Claw.open_claw_with_cube();
+  delay(10000);
 
   // for (i = 0; i < 30; i++){
   //   min_right_distance += lateral_rightIR.read();
@@ -68,7 +71,8 @@ void setup()
 
 
 void loop(){
-    pick_cube_from_right(&leftMotor,&rightMotor, &lateral_rightIR, &rightIR, &ultrassonicSensor);
+    pick_cube_from_right(&leftMotor,&rightMotor, &lateral_rightIR, &rightIR, &ultrassonicSensor, &Robot_Claw);
+    Robot_Claw.open_claw_with_cube();
     // Serial.println(UltrassonicSensor.distance_cm());
     // leftMotor.moveForward(75);
     // rightMotor.moveForward(55);

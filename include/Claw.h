@@ -16,8 +16,8 @@ class Claw: public StepMotor{
     
     private:
         int positions_per_cm = 104;
-        float distance_close_cube;
-        float distance_open_cube;
+        float distance_close_cube = 9;
+        float distance_open_cube = 9;
         float distance_open_entirely;
         float distance_close_entirely;
 

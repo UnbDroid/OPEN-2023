@@ -1,6 +1,6 @@
 #include<PickCube.h>
 
-int pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, LightSensor * light_LateralRight, LightSensor * rightIR, Ultrassonic * ultrassonicSensor){
+int pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, LightSensor * light_LateralRight, LightSensor * rightIR, Ultrassonic * ultrassonicSensor, Claw * RobotClaw){
     int count, max_distance_right, right_distance, right_floor;
     float frontal_distance;
     max_distance_right = 0;
@@ -53,6 +53,8 @@ int pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, LightSensor
     while (frontal_distance > 10);
     stop(leftMotor,rightMotor);
     delay(3000);
+    RobotClaw->close_claw_with_cube();
+    delay(2000);
 
     return 0;
 
