@@ -10,19 +10,21 @@
 #include <Forklift.h> 
 
 
-// Claw Robot_Claw(DIR_GARRA, PUL_GARRA);
+Claw Robot_Claw(DIR_GARRA, PUL_GARRA);
 Forklift emp(DIR_EMPILHADEIRA, PUL_EMPILHADEIRA);
 
 void setup() {
   Serial.begin(9600);
   Serial.println("Olá");
   delay(5000);
-  // Robot_Claw.close_claw_distance_cm(15);
-  emp.forklift_up_distance_cm(100);
+  // Robot_Claw.close_claw_distance_cm(9.5);
+
+  emp.forklift_up_distance_cm(14);
 }
 
 
 
 void loop() {
-  
+  // emp.forklift_up_distance_cm(100);
+  // Robot_Claw.open_claw_distance_cm(15);
 }

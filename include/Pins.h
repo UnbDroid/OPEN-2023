@@ -57,8 +57,8 @@ Empilhadeira*/
 
 /*Garra*/
 
-#define DIR_GARRA 49
-#define PUL_GARRA 47
+#define DIR_GARRA 50
+#define PUL_GARRA 52
 
 
 
