@@ -202,7 +202,7 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
     return ;
 }
 void navegateInRegion(int * currentY,int * currentX,int yDestino, int xDestino,int *destinationYX, int* currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor , int *arrayPosicaoAtual){
-    if((*currentY >=5 && yDestino>=5)  || (*currentY <=2  && xDestino<=2)){
+    if((*currentY >=5 && yDestino>=5)  || (*currentY <=2  && yDestino<=2)){
             Serial.println("to aqui na navegate");
             moveYandMoveX(currentX,currentY,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
     }
