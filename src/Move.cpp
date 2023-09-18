@@ -24,13 +24,9 @@ void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motor
     }
 }
 
-void initialPosition(MPU9250 * mpu){
-    int a;
-}
 void correctingDirection(int * direction, MotorDC * leftMotor,MotorDC* rightMotor){
     // leftMotor->moveForward(60);
     // rightMotor->moveForward(40);
-    static int flag = 1;
     if(*direction>=SOL::Oeste){
         rotates90(RIGHT,80,leftMotor,rightMotor);
         stop(leftMotor,rightMotor);
