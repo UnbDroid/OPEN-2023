@@ -5,8 +5,8 @@ int blocosSemCubos[]={55,56,53};
 
 int smallPosition=0;
 int closestBlock[2];
-int squareBlocks [][2]={ {22,1},{23,1},      {25,0},{26,1},
-                        {52,2},{53,0},      {55,1},{56,1}
+int squareBlocks [][2]={ {22,1},{23,1},      {25,0},{26,0},
+                        {52,0},{53,0},      {55,0},{56,0}
     };
 
 int manhattamDistance(int y1,int x1,int y2,int x2){
@@ -90,41 +90,44 @@ int* bestBlock(int currentY,int currentX){
         }
         indice++;
     }
-    
+    Serial.print(*closestBlock);
+    Serial.print(" ");
+    Serial.println(*(closestBlock+1));
     squareBlocks[smallPosition][1]=(squareBlocks[smallPosition][1])-1;
     return closestBlock;
 }
 static int state=0;
 void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
-    
-    delay(2000);
     int destination[2];
-    
-
-    if(state==0){
-        int *ddd = bestBlock(*y,*x);    
-        destination[0]=*ddd;
-        destination[1]=*(ddd+1);
-        Serial.print(*destination);
-        Serial.print("  ");
-        Serial.println(*(destination+1));
+    delay(3000);
+    int *best = bestBlock(*y,*x);
+    while(*best!=0){
+        if(state==0){
+        destination[0]=*best;
+        destination[1]=*(best+1);
 
         moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-        /*
-        *y=destination[0];
-        *x = destination[1];
+            *y= *best;
+            *x = *(best+1);
+            state=1;
+        }
+        if(state==1){
+            //vou deixar pra ele entregar em um lugar só por enquanto
+            //mas a ideia é ter uma função que identifica o bloco e manda o lugar
+            destination[0]=1;
+            destination[1]=2;
+            *y =1;
+            *x=2;
+            
+            moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+        }
+        best = bestBlock(*y,*x);
+        state=0;
         
-        destination[0]=1;
-        destination[1]=2;
-        moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-        */
-
-        delay(3000);
-        state=1;
     }
-    else{
-        stop(leftMotor,rightMotor);
-    }
+    Serial.println("nao existe mais blocos para serem pegos");
+    stop(leftMotor,rightMotor);
+    
 }
     
     
