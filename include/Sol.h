@@ -5,7 +5,10 @@
 #include<LightSensor.h>
 #include<Move.h>
 #include<MotorDC.h>
+#include<Ultrassonic.h>
 #include<math.h>
+#include <ColorSensor.h>
+#include <Bumper.h>
 
 namespace SOL{
     enum Direcao{Norte=0,Oeste=3,Sul=2,Leste=1};
@@ -16,5 +19,6 @@ int * shortestArea(bool cross,int y,int x);
 SOL::Direcao direction(char eixo,int yInicial, int yFinal, SOL::Direcao direcao);
 void maquinaDeEstados(int* y,int* x,int *direcaoAtual,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor);
 void corrigirDirecao(int * direction, MotorDC * leftMotor,MotorDC* rightMotor);
+void beginning(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * ultrassonic, ColorSensor * colorSensor, Bumper * bumper);
 
 #endif

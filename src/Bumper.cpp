@@ -10,9 +10,5 @@ Bumper :: Bumper(int pinBumper){
 
 bool Bumper::checkBumper(){
     bool value = digitalRead(pinBumper);
-    
-    Serial.print("entrei aqui ");
-    Serial.println(value);
-
     return value;
 }

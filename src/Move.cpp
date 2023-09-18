@@ -119,8 +119,13 @@ void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * mot
 }
 
 void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLeft, MotorDC * motorRight, int PWM){
-    int leftWhite = 140;
-    int rightWhite = 140;
+    int leftWhite = 500;
+    int rightWhite = 500;
+
+    Serial.print("sensores IR: ");
+    Serial.print(lightSensorLeft->read());
+    Serial.print(" ");
+    Serial.println(lightSensorRight->read());
     
     motorLeft->setEncoder(0);
     motorRight->setEncoder(0);
@@ -134,15 +139,19 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
         {
             Serial.print("esquerdo ve branco ");
             while (lightSensorLeft->read()<leftWhite) { // && lightSensorRight->read()>rightWhite){ // ve branco
-                Serial.println(lightSensorLeft->read());
+               
+                Serial.print(lightSensorLeft->read());
+                Serial.print(" ");
+                Serial.println(lightSensorRight->read());
+
                 motorLeft->moveForward(PWM+10);
-                if(lightSensorRight->read()<rightWhite){
-                    motorRight->readEncoder();
-                    while (motorRight->getEncoder() < 1024){
-                    motorRight->moveBackward(PWM);
-                  }
-                  Serial.println("sai 1");
+                
+                motorRight->setEncoder(0);
+                while(motorRight->getEncoder() < 10){
+                    motorRight->moveBackward(40);
                 }
+                
+
             }
 
         }
@@ -151,13 +160,15 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
             Serial.println("direito ve branco");
             while (lightSensorRight->read()<rightWhite) {// ve branco
                 motorRight->moveForward(PWM);
-                if(lightSensorLeft->read()<leftWhite){
-                motorLeft->readEncoder();
-                while (motorLeft->getEncoder() < 1024){
-                    motorLeft->moveBackward(PWM);
-                  }
-                Serial.println("sai");
-                }   
+
+                Serial.print(lightSensorLeft->read());
+                Serial.print(" ");
+                Serial.println(lightSensorRight->read());
+
+                motorLeft->setEncoder(0);
+                while (motorLeft->getEncoder() < 15){
+                    motorLeft->moveBackward(50);
+                }    
             }
         }  
     stop(motorLeft, motorRight);
@@ -194,7 +205,6 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
 void movePID(Directions direction, int goalPWM ,MotorDC* motorLeft, MotorDC* motorRight){
     // KD tem que compensar rapido o suficiente pro KI não ficar muito tempo errado
     // Se ele tiver oscilando demais, tira primeiro o KD e depois o KI
-
     double currentTime = micros();
     double deltaT = ((currentTime-previousTime));
     deltaT = deltaT/(double)1000000;
@@ -203,19 +213,17 @@ void movePID(Directions direction, int goalPWM ,MotorDC* motorLeft, MotorDC* mot
     previousMotorLeftTurns = motorLeftTurns;
     previousMotorRightTurns = motorRightTurns;
 
+     //descobrindo o número de rotações
     motorLeftTurns = motorLeft->getEncoder()/(double)2048;
-    motorRightTurns = motorRight->getEncoder()/(double)2048; // sendo o valor uma constante do sistema!! 2^12 na thamires
+    motorRightTurns = motorRight->getEncoder()/(double)2048; 
 
-    // descobrindo o RPM e o PWM atual do robô
-
+    // descobrindo o RPS de cada roda
     double leftPWM = (motorLeftTurns - previousMotorLeftTurns)/(deltaT);
     double rightPWM = (motorRightTurns - previousMotorRightTurns)/(deltaT);
-    //constante do sistema direito 1.8388671875
-    //constante do sistema esquerdo 1.77099609375
 
-    rightPWM = rightPWM*158.28; // conversão de rps pra pwm
-    leftPWM = leftPWM*148.19;
-    
+    // conversão de rps pra pwm
+    leftPWM = leftPWM*155.98; //o número que multiplica é uma ct do motor. Sendo 255/RPS_Máximo
+    rightPWM = rightPWM*171.06; 
 
     double leftError = goalPWM - leftPWM;
     double rightError = goalPWM - rightPWM;
@@ -226,12 +234,10 @@ void movePID(Directions direction, int goalPWM ,MotorDC* motorLeft, MotorDC* mot
     double parameterPWMLeft = leftPWM + leftError*KP_LEFT + leftIntegralError*KI_LEFT;
     double parameterPWMRight = rightPWM + rightError*KP_RIGHT + rightIntegralError*KI_RIGHT;
     
-    // // Serial.print(" ");
+    // Serial.print(" ");
     // Serial.print(leftPWM);
     // Serial.print(" ");
-    Serial.print(leftPWM);
-    Serial.print(" ");
-    Serial.println(leftError);
+    // Serial.println(rightPWM);
 
     switch (direction)
     {

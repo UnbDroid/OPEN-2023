@@ -155,3 +155,119 @@ void maquinaDeEstados(int* y,int* x,int *currentDirection,LightSensor * lightSen
     moveTo(x,y,destinationYX,currentDirection,lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
     
 }
+
+
+void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * ultrassonic, ColorSensor * colorSensor, Bumper * bumper){
+    Serial.println("to no começo");
+    float closeToUltra = 10;
+    //objetos = prateleira(1), cubo(2), cores(3), borda(4).
+    // bool objectsItSees[2] = {false,};
+    // int memory = 0;
+    int lastSeen[2] = {0,0}; // bool pra borda e qualquer outra coisa, nessa ordem
+    bool mustTurn = false;
+
+
+    while(lastSeen[0]==0 || lastSeen[1]==0){ 
+        float readingUltra = 0;
+        for (int i = 0; i < 20; i++) { //faz uma média das leituras do ultrassom
+            readingUltra =  readingUltra + ultrassonic->distance_cm(); }
+        readingUltra = readingUltra/20;
+        // float readingColor = colorSensor->identify_color();
+    
+
+        if (!bumper->checkBumper()){
+            stop(leftMotor,rightMotor);
+            lastSeen[0] = 4;
+            mustTurn = true;
+            Serial.println("bumper acionou");
+
+        } else if(readingUltra<closeToUltra && readingUltra>0){
+            Serial.print("distancia: ");
+            Serial.print(" ");
+            Serial.println(readingUltra);
+
+            lastSeen[1] = 2;
+            mustTurn = true;
+        }
+
+        /*
+        if(readingColor<=3){
+            Serial.print("cor: ");
+            Serial.print(" ");
+            Serial.println(readingColor);
+            mustTurn = true;
+            stop(leftMotor,rightMotor);
+            
+             while(leftMotor->getEncoder()< 512 and rightMotor->getEncoder() < 512){
+                movePID(BACKWARD,80,leftMotor,rightMotor);
+            }
+            stop(leftMotor, rightMotor);
+
+            lastSeen[1]=3;
+        }
+        */
+        
+        if (mustTurn){
+
+            stop(leftMotor,rightMotor);
+            resetEncoders(leftMotor,rightMotor);
+            while(leftMotor->getEncoder()< 300 and rightMotor->getEncoder() < 300){
+                // movePID(BACKWARD,40,leftMotor,rightMotor);
+                leftMotor->moveBackward(70);
+                rightMotor->moveBackward(55);
+                // Serial.println("indo pra trass");
+            } 
+            stop(leftMotor,rightMotor);
+            delay(500);
+            rotates(RIGHT,leftMotor, rightMotor);
+            stop(leftMotor,rightMotor);
+            delay(1000);
+            
+            while(lightSensorLeft->read()<500 && lightSensorRight->read()<500){
+                leftMotor->moveForward(50);
+                rightMotor->moveForward(40);
+
+                Serial.print(lightSensorLeft->read());
+                Serial.print(" ");
+                Serial.println(lightSensorRight->read());
+
+            } 
+            stop(leftMotor,rightMotor);
+            delay(1000);
+            align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,50);
+
+            // resetEncoders(leftMotor,rightMotor);
+            mustTurn = false;
+
+        } else {
+            // resetEncoders(leftMotor,rightMotor);
+            // movePID(FORWARD,60,leftMotor,rightMotor);
+            leftMotor->moveForward(70);
+            rightMotor->moveForward(55);
+            // Serial.println("eu to indo reto");
+
+        }
+    }
+    
+    if (lastSeen[1] == 2){
+        stop(leftMotor,rightMotor);
+        Serial.print(lastSeen[0]);
+        Serial.print(" ");
+        Serial.println(lastSeen[1]);
+        Serial.print("vi algo e borda");
+    }
+
+
+    
+}
+
+/*
+Coisas que ele pode ver em frente:
+    borda da arena - bumper
+    objeto frontal (prateleira ou cubos) - ultrassom
+    área das cores - sensor de cor
+    
+
+
+
+*/
