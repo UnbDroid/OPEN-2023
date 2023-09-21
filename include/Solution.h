@@ -15,5 +15,5 @@ int * shortestArea(bool cross,int y,int x);
 SOL::Direcao direction(char eixo,int yInicial, int yFinal, SOL::Direcao direcao);
 void stateMachine(int* y,int* x,int *direcaoAtual,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor);
 SOL::Direcao futureDirection(char axis,int start, int final);
-
+int * deliveryPlace(int y,int x,int blockType);
 #endif
