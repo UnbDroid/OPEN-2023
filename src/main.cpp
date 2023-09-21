@@ -31,6 +31,7 @@ Ultrassonic ultrassonicSensor(echo_ultrassom, trig_ultrassom);
 int min_right_distance;
 int right_distance;
 int i;
+char data;
 
 void TakeMemoryLeftMotor(){ // fica na main
   leftMotor.readEncoder();
@@ -46,7 +47,8 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
   // Robot_Claw.open_claw_with_cube();
-  delay(10000);
+  // CentralColorSensor.read_limit_values(0);
+  // delay(5000);
 
   // for (i = 0; i < 30; i++){
   //   min_right_distance += lateral_rightIR.read();
@@ -64,20 +66,41 @@ void setup()
   // Serial.print(" ");
   // Serial.print(rightIR.read());
   // Serial.println();
-
+  // Robot_Claw.close_claw_with_cube();
   // 
+  delay(20000);
+  for(i; i<10000; i++){
+    Serial.print("p");
+  }
+  data = Serial.read();
+  while (data != 'a' && data != 'b' && data != 'c'){
+    data = Serial.read();
+  }
+  
   
 }
 
 
 void loop(){
-    pick_cube_from_right(&leftMotor,&rightMotor, &lateral_rightIR, &rightIR, &ultrassonicSensor, &Robot_Claw);
-    Robot_Claw.open_claw_with_cube();
-    // Serial.println(UltrassonicSensor.distance_cm());
+
+    Serial.println("Oi");
+    // pick_cube_from_right(&leftMotor,&rightMotor, &lateral_rightIR, &rightIR, &ultrassonicSensor, &Robot_Claw);
+    // Robot_Claw.open_claw_with_cube();
+    // CentralColorSensor.read_values();
+    // CentralColorSensor.print_color_components_RGB();
+    // emp.forklift_up_steps(0,1);
+    // delay(3000);
+    // emp.forklift_down_steps(1,0);
+    // Robot_Claw.close_claw_with_cube();
+    // emp.forklift_up_steps(0,1);
+    // delay(3000);
+    // emp.forklift_down_steps(1,0);
+    // Robot_Claw.open_claw_with_cube();
+    // Serial.println(ultrassonicSensor.distance_cm());
     // leftMotor.moveForward(75);
     // rightMotor.moveForward(55);
     // // movePID(FORWARD,30,&leftMotor,&rightMotor);
-    // right_distance = rightIR.read();
+    // right_distance =lateral_rightIR.read();
     // Serial.println(right_distance);
     // Serial.print(" é maior que");
     // Serial.println(min_right_distance - 30);
@@ -240,3 +263,4 @@ void loop(){
   
   // pos_atual_dir = fabs(rightMotor.getEncoder() - pos_atual_dir);
   // pos_atual_esq = fabs(leftMotor.getEncoder()- pos_atual_esq);
+

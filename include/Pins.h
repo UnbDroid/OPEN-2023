@@ -46,7 +46,7 @@ pbrav
 #define S1_COLORSENSOR 31 
 #define S2_COLORSENSOR 41
 #define S3_COLORSENSOR 39
-#define OUT_COLORSENSOR 37
+#define OUT_COLORSENSOR 35
 /**/
 
 
