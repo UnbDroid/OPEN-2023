@@ -15,7 +15,8 @@
 MotorDC leftMotor(M_LEFT_LPWM, M_LEFT_RPWM, EN_LEFT_MOTOR, ENC_A_LEFT,ENC_B_LEFT);
 MotorDC rightMotor(M_RIGHT_LPWM, M_RIGHT_RPWM, EN_RIGHT_MOTOR,ENC_A_RIGHT,ENC_B_RIGHT);
 ColorSensor colorSensor(S0_COLORSENSOR, S1_COLORSENSOR, S2_COLORSENSOR, S3_COLORSENSOR, OUT_COLORSENSOR);
-Ultrassonic ultrassonic(TRIG_UlLTRASSONIC,ECHO_UlLTRASSONIC);
+Ultrassonic frontalUltrassonic(TRIG_UlLTRASSONIC_FRONTAL,ECHO_UlLTRASSONIC_FRONTAL);
+Ultrassonic lateralUltrassonic(TRIG_UlLTRASSONIC_LATERAL,ECHO_UlLTRASSONIC_LATERAL);
 LightSensor rightIR(A0_DIREITA_FRENTE);
 LightSensor leftIR(A0_ESQUERDA_FRENTE);
 LightSensor lateralRightIR(A0_DIREITA_LATERAL);
@@ -37,25 +38,10 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
 
-  //   Serial.begin(9600);
-  //   colorSensor.calibra_sensor_inferior(0);  // Essa função serve para calibrar o sensor de cor inferior, se o sensor já estiver calibrado, comentar essa função.
-  //   colorSensor.read_limit_values(0); // Essa função serve para ler os últimos valores calibrados pelo sensor de cor
+  // colorSensor.calibra_sensor_inferior(0);  // Essa função serve para calibrar o sensor de cor inferior, se o sensor já estiver calibrado, comentar essa função.
+  colorSensor.read_limit_values(0); // Essa função serve para ler os últimos valores calibrados pelo sensor de cor
 
-  //   Serial.println("Iniciando...");
-  // // rotates(RIGHT,&leftMotor,&rightMotor);
-  // stop(&leftMotor,&rightMotor);
-  // delay(2000);
-
-  // Serial.print(leftIR.read());
-  // Serial.print(" ");
-  // Serial.print(rightIR.read());
-  // Serial.println();
-
-  // while (leftMotor.getEncoder() < 4096)
-  // {
-  //   leftMotor.moveForward(40);
-  // }
-  
+    // Serial.println("Iniciando...");
 
   // while (leftMotor.getEncoder() < 2048)
   // {
@@ -63,42 +49,61 @@ void setup()
   //   Serial.println(leftMotor.getEncoder());
   // }
 
-  
-
-
-  // stop(&leftMotor,&rightMotor);
-//   resetEncoders(&leftMotor,&rightMotor);
-//   while(micros()<5000000){
-//     leftMotor.moveForward(255);
-//     rightMotor.moveForward(255);
-//   }
-// stop(&leftMotor,&rightMotor);
-// Serial.println(leftMotor.getEncoder());
-// Serial.println(rightMotor.getEncoder());
-// Serial.println("-");
-  
 
 //   while(micros()<1000000){
 //     leftMotor.moveForward(255);
 //     rightMotor.moveForward(255);
 //   }
 // stop(&leftMotor,&rightMotor);
-// Serial.println(leftMotor.getEncoder());
+// Serial.print(leftMotor.getEncoder());
+// Serial.print(" ");
 // Serial.println(rightMotor.getEncoder());
-//   // 
-// beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&ultrassonic,&colorSensor);
 
-beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&ultrassonic,&colorSensor,&bumper);  
+//  
+
+// beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralUltrassonic,&colorSensor,&bumper);
 // movePID(FORWARD,60,&leftMotor,&rightMotor);
 
-// Serial.print(leftIR.read());
-// Serial.print(" ");
-// Serial.println(rightIR.read());
+// leftMotor.moveForward(255);
+// rightMotor.moveForward(255);
+//  Serial.println(checksUltrassonic(&frontalUltrassonic,&lateralUltrassonic, &leftMotor, &rightMotor));
+ setPreviusTime(200000);
 }
 
 
 void loop(){
-    // movePID(FORWARD,80,&leftMotor,&rightMotor);
+  
+  movePID(FORWARD,0.5,&leftMotor,&rightMotor);
+  // Serial.println(greenEdge(&leftMotor,&rightMotor,&leftIR,&rightIR));
+  // delay(1000);
+  
+  
+// Serial.print(leftIR.read());
+// Serial.print(" ");
+// Serial.println(rightIR.read());
+  
+
+  // Serial.println(lateralUltrassonic.distance_cm());
+  // leftMotor.moveForward(100);
+  // rightMotor.moveForward(100);
+  // Serial.print(leftMotor.getEncoder());
+  // Serial.print(" ");
+  // Serial.println(rightMotor.getEncoder());
+  
+  // Serial.println(ultrassonic.distance_cm());
+  // if(ultrassonic.distance_cm() < 10){
+  //   stop(&leftMotor,&rightMotor);
+  //   delay(100);
+    
+  // }
+  // Serial.println(bumper.checkBumper());
+  // colorSensor.read_values();
+  // colorSensor.print_color_components_RGB();
+  // colorSensor.identify_color();
+    // movePID(FORWARD,255,&leftMotor,&rightMotor);
+    // leftMotor.moveForward(255);
+    // rightMotor.moveForward(255);
+    // Serial.println("estou girando");
   // Serial.println("voltei pro começo");
   // leftMotor.moveForward(80);
   // rightMotor.moveForward(60);

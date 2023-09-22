@@ -43,7 +43,7 @@ void MotorDC::moveBackward(int velocidade){
 
 
 void MotorDC::readEncoder(){
-  int b = digitalRead(pinEncB);
+//   int b = digit;alRead(pinEncB);
   // Serial.println(b);
   posEncoder++;
 

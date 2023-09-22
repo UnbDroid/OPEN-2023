@@ -19,24 +19,26 @@
 #define M_LEFT_LPWM A7
 #define EN_LEFT_MOTOR 13
 
-#define ENC_A_LEFT 20 //18
-#define ENC_B_LEFT 21 //19
+#define ENC_A_LEFT 20 //20 //18
+#define ENC_B_LEFT 19 //21 //19
 
 
 #define M_RIGHT_RPWM A6//ANTIGO IN3
 #define M_RIGHT_LPWM A5//ANTIGO IN4
 #define EN_RIGHT_MOTOR 11
 
-#define ENC_A_RIGHT 18//3
-#define ENC_B_RIGHT 19 //2
+#define ENC_A_RIGHT 21
+#define ENC_B_RIGHT 18
 
 #define BUMPER_PIN 37
 
 
 
 //Ultrassom
-#define TRIG_UlLTRASSONIC 45
-#define ECHO_UlLTRASSONIC 43
+#define TRIG_UlLTRASSONIC_FRONTAL 45
+#define ECHO_UlLTRASSONIC_FRONTAL 43
+#define TRIG_UlLTRASSONIC_LATERAL 14
+#define ECHO_UlLTRASSONIC_LATERAL 15
 
 /* Infravermelhos
 
@@ -57,11 +59,11 @@
 #define KI 0 //0.0001 //1
 #define KD 0 // 0.5
 
-//PID ideiaThamires
-#define KP_LEFT 3 //1.108 //1.5
-#define KP_RIGHT 3//2.5
-#define KI_LEFT 0.5 //0.0001
-#define KI_RIGHT 1//0.0001
+
+#define KP_LEFT 1//2 //1.108 //1.5
+#define KP_RIGHT 1.7//0.01//3//2.5
+#define KI_LEFT 1//0.5 //0.0001
+#define KI_RIGHT 1.2//0.0001
 
 // extern int leftWhite = 100;
 // extern int rightWhite = 200;

@@ -12,9 +12,11 @@ enum Directions{FORWARD, BACKWARD};
 enum RotateDirections{LEFT, RIGHT, AROUND};
 
 void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor *lightSensorLeft,LightSensor* lightSensorRight);
-void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight);
+void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* motorRight);
 void stop(MotorDC* motorLeft, MotorDC* motorRight);
 void resetEncoders(MotorDC* motorLeft, MotorDC* motorRight);
+void setPreviusTime(int value);
+double getPreviusTime();
 
 
 void initialPosition(MPU9250 * mpu);

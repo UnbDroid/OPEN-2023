@@ -156,54 +156,176 @@ void maquinaDeEstados(int* y,int* x,int *currentDirection,LightSensor * lightSen
     
 }
 
+int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight){
+    int white = 100;
+    
+    // int leftValue = lightSensorLeft->read();
+    // int rightValue = lightSensorRight->read();
+    rotates(RIGHT,leftMotor,rightMotor);
 
-void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * ultrassonic, ColorSensor * colorSensor, Bumper * bumper){
+    while (leftMotor->getEncoder() < 2048 && rightMotor->getEncoder() < 2048)
+    {
+        leftMotor->moveForward(130);
+        rightMotor->moveForward(100);
+    }
+    
+    stop(leftMotor,rightMotor);
+    delay(500);
+
+    int leftValue = lightSensorLeft->read();
+    int rightValue = lightSensorRight->read();
+
+    if ( rightValue > white){
+        return 7;        
+    } else {
+        return 1;
+    }
+    
+    
+}
+  
+bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic, MotorDC * leftMotor, MotorDC * rightMotor){
+    bool seesSomething = false;
+    float closeToUltra = 10;
+    int readingUltra;
+
+    resetEncoders(leftMotor,rightMotor);
+    while(leftMotor->getEncoder()<300 && rightMotor->getEncoder()<300){
+        leftMotor->moveBackward(50);
+        rightMotor->moveBackward(40);
+    }
+
+    stop(leftMotor,rightMotor);
+    delay(500);
+    rotates(LEFT,leftMotor,rightMotor);
+    delay(500);
+
+    for (int i = 0; i < 20; i++) { //faz uma média das leituras do ultrassom
+        readingUltra =  readingUltra + lateralUltrassonic->distance_cm();
+        }
+    readingUltra = readingUltra/20;
+    
+    if (readingUltra < closeToUltra){
+        seesSomething = true;
+    }
+
+    stop(leftMotor,rightMotor);
+    delay(500);
+    rotates(RIGHT,leftMotor,rightMotor);
+    delay(500);
+
+    return seesSomething;
+}
+
+void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic, ColorSensor * colorSensor, Bumper * bumper){
+    //objetos = prateleira(1), cores(2), cubo(3), borda(4).
+
     Serial.println("to no começo");
     float closeToUltra = 10;
-    //objetos = prateleira(1), cubo(2), cores(3), borda(4).
-    // bool objectsItSees[2] = {false,};
-    // int memory = 0;
-    int lastSeen[2] = {0,0}; // bool pra borda e qualquer outra coisa, nessa ordem
     bool mustTurn = false;
+    bool edge = false;
+    int lastSeen = 0;
+    bool shelve = false;
+    int position[2] = {0,0}; //y,x, respectivamente
 
 
-    while(lastSeen[0]==0 || lastSeen[1]==0){ 
-        float readingUltra = 0;
-        for (int i = 0; i < 20; i++) { //faz uma média das leituras do ultrassom
-            readingUltra =  readingUltra + ultrassonic->distance_cm(); }
-        readingUltra = readingUltra/20;
+    while(!edge || !lastSeen){ 
         // float readingColor = colorSensor->identify_color();
-    
+        float readingUltra = 0;
 
-        if (!bumper->checkBumper()){
-            stop(leftMotor,rightMotor);
-            lastSeen[0] = 4;
-            mustTurn = true;
-            Serial.println("bumper acionou");
+        for (int i = 0; i < 30; i++) { //faz uma média das leituras do ultrassom
+            readingUltra =  readingUltra + frontalUltrassonic->distance_cm(); }
+        readingUltra = readingUltra/30;
 
-        } else if(readingUltra<closeToUltra && readingUltra>0){
+        if (bumper->checkBumper()){
+            //testa a cor do sensor de cor
+
+            if (edge){
+                shelve = checksUltrassonic(frontalUltrassonic, lateralUltrassonic,leftMotor,rightMotor);
+
+                if(shelve){
+                    Serial.println("estou na quina 1.7, pois vi borda/borda/prateleira");
+                    position[0] = 1;
+                    position[1] = 7;
+                    break;
+
+                } else {
+                    position[0] = 6;
+                    position[1] = greenEdge(leftMotor,rightMotor,lightSensorLeft,lightSensorRight);
+                    //ou está em 6.7 ou em 6.1
+                }
+
+            } else{
+                edge = true;
+                stop(leftMotor,rightMotor);
+
+                if (shelve){
+                    Serial.println("estou na quina 1.7, pois vi prateleira/borda");
+                    position[0] = 1;
+                    position[1] = 7;
+                    break;
+
+                } else {
+                    edge = true;
+                    mustTurn = true;
+                }
+                // if(lastSeen == 1){
+                //     Serial.println("estou na quina 1.7, pois vi prateleira/borda");
+                //     position[0] = 1;
+                //     position[1] = 7;
+                
+
+                // } else if(lastSeen == 2){
+                //     Serial.println("estou na quina 6.1");
+                //     position[0] = 6;
+                //     position[1] = 1;
+                
+
+                // } else {
+                //     Serial.println("vi a borda pela 1a vez");
+                //     mustTurn = true;
+
+                // }
+            }
+
+        } else if (readingUltra<closeToUltra){ //viu objeto
             Serial.print("distancia: ");
             Serial.print(" ");
             Serial.println(readingUltra);
 
-            lastSeen[1] = 2;
-            mustTurn = true;
-        }
+            shelve = checksUltrassonic(frontalUltrassonic,lateralUltrassonic,leftMotor,rightMotor);
+
+            if (shelve){ 
+                if(edge){
+                    Serial.println("estou na quina 1.1");
+                    position[0] = 1;
+                    position[1] = 1;
+                    
+                } else{
+                    lastSeen = 1;
+                    mustTurn = true;
+                }
+            } else { //cubo
+                mustTurn = true;
+            }      
+        } 
 
         /*
-        if(readingColor<=3){
+        else if(readingColor<=3){
             Serial.print("cor: ");
             Serial.print(" ");
             Serial.println(readingColor);
-            mustTurn = true;
-            stop(leftMotor,rightMotor);
             
-             while(leftMotor->getEncoder()< 512 and rightMotor->getEncoder() < 512){
+            if(edge){
+                Serial.println("estou na borda 6.7");
+            } else{
+                lastSeen = 2;
+                mustTurn = true;
+            }
+            while(leftMotor->getEncoder()< 512 and rightMotor->getEncoder() < 512){
                 movePID(BACKWARD,80,leftMotor,rightMotor);
             }
             stop(leftMotor, rightMotor);
-
-            lastSeen[1]=3;
         }
         */
         
@@ -217,6 +339,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
                 rightMotor->moveBackward(55);
                 // Serial.println("indo pra trass");
             } 
+            
             stop(leftMotor,rightMotor);
             delay(500);
             rotates(RIGHT,leftMotor, rightMotor);
@@ -236,7 +359,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
             delay(1000);
             align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,50);
 
-            // resetEncoders(leftMotor,rightMotor);
+            resetEncoders(leftMotor,rightMotor);
             mustTurn = false;
 
         } else {
@@ -249,25 +372,9 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
         }
     }
     
-    if (lastSeen[1] == 2){
-        stop(leftMotor,rightMotor);
-        Serial.print(lastSeen[0]);
-        Serial.print(" ");
-        Serial.println(lastSeen[1]);
-        Serial.print("vi algo e borda");
-    }
+    stop(leftMotor,rightMotor);
+    Serial.print(lastSeen);
+    Serial.print(" ");
+    Serial.println(edge);
 
-
-    
 }
-
-/*
-Coisas que ele pode ver em frente:
-    borda da arena - bumper
-    objeto frontal (prateleira ou cubos) - ultrassom
-    área das cores - sensor de cor
-    
-
-
-
-*/

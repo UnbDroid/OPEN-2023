@@ -3,13 +3,13 @@
 #include<MotorDC.h>
 #include<Move.h>
 #include<LightSensor.h>
-#include <Ultrassonic.h>>
+#include <Ultrassonic.h>
 #include <Pins.h>
 #include<Sol.h>
 // #define deltaT 500
 
 int previousError = 0;
-long previousTime = 0;
+double previousTime = 0;
 int integralError = 0; 
 double deltaT = 0.01248;//0.023;
 
@@ -22,6 +22,13 @@ double previousMotorRightTurns = 0;
 int leftIntegralError = 0;
 int rightIntegralError = 0;
 
+void setPreviusTime(int value){
+    previousTime = value;    
+}
+
+double getPreviusTime(){
+    return previousTime;
+}
 
 void move(Directions direction, int PWM ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
     switch (direction)
@@ -202,11 +209,12 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
 
 
 
-void movePID(Directions direction, int goalPWM ,MotorDC* motorLeft, MotorDC* motorRight){
+void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* motorRight){
     // KD tem que compensar rapido o suficiente pro KI não ficar muito tempo errado
     // Se ele tiver oscilando demais, tira primeiro o KD e depois o KI
+
     double currentTime = micros();
-    double deltaT = ((currentTime-previousTime));
+    double deltaT = (currentTime-previousTime);
     deltaT = deltaT/(double)1000000;
     previousTime = currentTime;
     
@@ -218,26 +226,50 @@ void movePID(Directions direction, int goalPWM ,MotorDC* motorLeft, MotorDC* mot
     motorRightTurns = motorRight->getEncoder()/(double)2048; 
 
     // descobrindo o RPS de cada roda
-    double leftPWM = (motorLeftTurns - previousMotorLeftTurns)/(deltaT);
-    double rightPWM = (motorRightTurns - previousMotorRightTurns)/(deltaT);
+
+
+    double rpsLeft = (motorLeftTurns - previousMotorLeftTurns)/(deltaT);
+    double rpsRight = (motorRightTurns - previousMotorRightTurns)/(deltaT);
 
     // conversão de rps pra pwm
-    leftPWM = leftPWM*155.98; //o número que multiplica é uma ct do motor. Sendo 255/RPS_Máximo
-    rightPWM = rightPWM*171.06; 
+    // double leftPWM = rpsLeft*199.25; //o número que multiplica é uma ct do motor. Sendo 255/RPS_Máximo
+    // double rightPWM = rpsRight*185.98; 
 
-    double leftError = goalPWM - leftPWM;
-    double rightError = goalPWM - rightPWM;
+    double leftError = goalRPS - rpsLeft;
+    double rightError = goalRPS - rpsRight;
 
     leftIntegralError = leftIntegralError + leftError*deltaT;
     rightIntegralError = rightIntegralError + rightError*deltaT;
 
-    double parameterPWMLeft = leftPWM + leftError*KP_LEFT + leftIntegralError*KI_LEFT;
-    double parameterPWMRight = rightPWM + rightError*KP_RIGHT + rightIntegralError*KI_RIGHT;
     
-    // Serial.print(" ");
-    // Serial.print(leftPWM);
-    // Serial.print(" ");
-    // Serial.println(rightPWM);
+    double PWMLeft = rpsLeft + leftError*KP_LEFT + leftIntegralError*KI_LEFT;
+    double PWMRight = rpsRight + rightError*KP_RIGHT + rightIntegralError*KI_RIGHT;
+
+    double parameterPWMLeft = PWMLeft*199.25;
+    double parameterPWMRight = PWMRight*170.25;
+
+    
+    Serial.print("RPS: ");
+    Serial.print(rpsLeft);
+    Serial.print(" ");
+    Serial.print(rpsRight);
+    Serial.print(" > ");
+    Serial.print("ERRO ");
+    Serial.print(leftError);
+    Serial.print(" ");
+    Serial.print(rightError);
+    Serial.print(" > ");
+    Serial.print("RPS enviado ");
+    Serial.print(PWMLeft);
+    Serial.print(" ");
+    Serial.print(PWMRight);
+    Serial.print(" > ");
+    Serial.print("no motor ");
+    Serial.print(parameterPWMLeft);
+    Serial.print(" ");
+    Serial.println(parameterPWMRight);
+ 
+    
 
     switch (direction)
     {

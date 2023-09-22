@@ -27,7 +27,7 @@ TEMOS DIFERENTES TIPOS DE VISUALIZAÇÕES DAS COISAS, COMO PUBLIC, PRIVATE, PROT
             int pinoRpwm;
             int pinoLpwm;
             int pinoEN;
-            int posEncoder = 0; 
+            unsigned int posEncoder = 0; 
             int pinEncA;
             int pinEncB;
             int value;
