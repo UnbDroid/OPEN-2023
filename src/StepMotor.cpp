@@ -24,6 +24,7 @@ int StepMotor::run_motor(int direction, int position, int velocity, int time_del
     }
 
     for (int i = 0; i < position; i++){
+        // Serial.println(i);
         digitalWrite(this->pin_pul, HIGH);
         delay(delay_per_pulse);
         digitalWrite(this->pin_pul, LOW);

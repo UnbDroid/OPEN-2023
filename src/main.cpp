@@ -25,7 +25,8 @@ LightSensor rightIR(A0_DIREITA_FRENTE);
 LightSensor leftIR(A0_ESQUERDA_FRENTE);
 LightSensor lateral_leftIR(A0_LATERAL_LEFT);
 LightSensor lateral_rightIR(A0_LATERAL_RIGHT);
-Ultrassonic ultrassonicSensor(echo_ultrassom, trig_ultrassom);
+Ultrassonic frontalUltrassonicSensor(echo_ultrassom_frontal, trig_ultrassom_frontal);
+Ultrassonic lateralUltrassonicSensor(echo_ultrassom_lateral, trig_ultrassom_lateral);
 
 
 int min_right_distance;
@@ -68,27 +69,45 @@ void setup()
   // Serial.println();
   // Robot_Claw.close_claw_with_cube();
   // 
-  delay(20000);
-  for(i; i<10000; i++){
-    Serial.print("p");
-  }
-  data = Serial.read();
-  while (data != 'a' && data != 'b' && data != 'c'){
-    data = Serial.read();
-  }
-  
+  // delay(20000);
+  // for(i=0; i<100; i++){
+  //   Serial.print("p");
+  // }
+  // data = Serial.read();
+  // while (data != 'a' && data != 'b' && data != 'c'){
+  //   data = Serial.read();
+  // }
+  // emp.forklift_up_steps(0,3);
+  Robot_Claw.close_claw_distance_cm(0.2);
+  // delay()
+
+  emp.forklift_up_distance_cm(0.1);
+  delay(1000);
+  emp.forklift_up_steps(0,3);
+
+  // emp.initial_lift();
+  // delay(1000);
   
 }
 
 
 void loop(){
+    // emp.run_motor(1, 5000000);;
 
-    Serial.println("Oi");
-    // pick_cube_from_right(&leftMotor,&rightMotor, &lateral_rightIR, &rightIR, &ultrassonicSensor, &Robot_Claw);
-    // Robot_Claw.open_claw_with_cube();
+    // Serial.println(lateralUltrassonicSensor.distance_cm());
+    // pick_cube_from_right
+    // Serial.println("Oi");
+    // delay(5000);
+    // emp.forklift_up_steps(0,3);
+    // emp.forklift_down_distance_cm(7);
+    pick_cube_from_right(&leftMotor,&rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor, &Robot_Claw, &emp);
+    Robot_Claw.open_claw_with_cube();
     // CentralColorSensor.read_values();
     // CentralColorSensor.print_color_components_RGB();
-    // emp.forklift_up_steps(0,1);
+    // emp.forklift_up_distance_cm(15);
+    // delay(2000);
+    // emp.forklift_down_distance_cm(15);
+    // delay(2000);
     // delay(3000);
     // emp.forklift_down_steps(1,0);
     // Robot_Claw.close_claw_with_cube();
@@ -96,7 +115,7 @@ void loop(){
     // delay(3000);
     // emp.forklift_down_steps(1,0);
     // Robot_Claw.open_claw_with_cube();
-    // Serial.println(ultrassonicSensor.distance_cm());
+    // Serial.println(frontalUltrassonicSensor.distance_cm());
     // leftMotor.moveForward(75);
     // rightMotor.moveForward(55);
     // // movePID(FORWARD,30,&leftMotor,&rightMotor);

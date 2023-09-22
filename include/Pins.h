@@ -66,9 +66,12 @@ Empilhadeira*/
 
 
 
-/*Ultrassom*/
-#define echo_ultrassom 45
-#define trig_ultrassom 43
+/*Ultrassom frontal*/
+#define echo_ultrassom_frontal 45
+#define trig_ultrassom_frontal 43
+
+#define echo_ultrassom_lateral 14
+#define trig_ultrassom_lateral 15
 
 
 /*-----------------*/
