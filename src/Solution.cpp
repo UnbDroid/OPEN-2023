@@ -2,11 +2,12 @@
 #include<Move.h>
 
 static int state=0;
+int typeOfBlock=2;
 int smallPosition=0;
 int closestBlock[2];
 int indexShelf;
 int squareBlocks [][2]={ {22,1},{23,1},      {25,0},{26,0},
-                        {52,0},{53,0},      {55,0},{56,0}
+                        {52,0},{53,0},      {55,1},{56,0}
     };
                                     //  g7 0 ,d4 3,a1 6   h8 2,e5 4 ,b2 7  i9 3 ,f6 6 ,c3 8
 static int deliveryLocations[][2][2]={  {{11,1},{15,1}},{{12,1},{16,1}},{{13,1},{17,1}},
@@ -14,7 +15,7 @@ static int deliveryLocations[][2][2]={  {{11,1},{15,1}},{{12,1},{16,1}},{{13,1},
                                         {{11,1},{15,1}},{{12,1},{16,1}},{{13,1},{17,1}},
 
                                     //    Verde 9            Azul 10           Amarelo 11       Vermelho 12
-                                    {{71,1},{77,1}},    {{72,1},{76,1}},    {{73,1},{75,1}},    {{74,2}}
+                                    {{61,1},{67,1}},    {{62,1},{66,1}},    {{63,1},{65,1}},    {{64,2}}
                             };
 
 int * deliveryPlace(int y,int x,int blockType){
@@ -22,6 +23,9 @@ int * deliveryPlace(int y,int x,int blockType){
     int *coordinatesPtr;
     switch (blockType)
     {
+    case 3:
+        indexShelf=11;
+        break;
     case 2:
         indexShelf=9;
         break;
@@ -134,9 +138,9 @@ int*  bestBlock(int currentY,int currentX){
         }
         indice++;
     }
-    Serial.print(*closestBlock);
-    Serial.print(" ");
-    Serial.println(*(closestBlock+1));
+    //Serial.print(*closestBlock);
+    //Serial.print(" ");
+    //Serial.println(*(closestBlock+1));
     return closestBlock;
 }
 
@@ -144,14 +148,22 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
     int destination[2];
     delay(3000);
     int *best = bestBlock(*y,*x);
+    //Serial.print("to no inicio ");
     while(*best!=0){
         if(state==0){
             destination[0]=*best;
             destination[1]=*(best+1);
             SOL::Direcao destinationDirection;
             moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-            // *y= *best;
-            // *x = *(best+1);
+            resetEncoders(leftMotor,rightMotor);
+            while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
+                leftMotor->moveBackward(100);
+                rightMotor->moveBackward(80);
+            }    
+            stop(leftMotor,rightMotor);
+            resetEncoders(leftMotor,rightMotor);
+            delay(1000);
+            
             
             if(*y==5){
                 destinationDirection=SOL::Norte;
@@ -159,11 +171,11 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             else if(*y==2){
                 destinationDirection=SOL::Sul;
             }
-            while(*currentDirection!=destinationDirection){
+            
+            while(*currentDirection!=destinationDirection){       
                     correctingDirection(currentDirection,leftMotor,rightMotor);
                     delay(1000);
             }
-            delay(1000);
             int numberOfBlocks=2;
             //aqui entra a função da camera que retorna a quantidade de blocos
             /*
@@ -171,41 +183,53 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 squareBlocks[smallPosition][1]=numberOfBlocks;     
             */
             squareBlocks[smallPosition][1]=(squareBlocks[smallPosition][1])-1;
-            if(numberOfBlocks>0){
+            //if(numberOfBlocks>0){
                 state=1;
-            }
-            else{
-                state=0;
-            }
+            //}
+            //else{
+                //state=0;
+            //}
         }
         if(state==1){
-            int typeOfBlock;
+            Serial.println("eu entrei aqui");
             /*
             a ideia é a camera colocar o valor nessa variável typeOfBlock    
             */
-            typeOfBlock=2;
+            
             int* ptrDelivery = deliveryPlace(*y,*x,typeOfBlock);
             destination[0]=*(ptrDelivery);
             destination[1]=*(ptrDelivery+1);
-            // *y =1;
-            // *x=2;
+            Serial.print("Local de Entrega: ");
+            Serial.print(*destination);
+            Serial.println(*(destination+1));
             if(destination[0]==1){
                 destination[0]=2;
                 //ja levantar a garra aqui a depender do tipo de bloco
                 moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
             }
-            else if (destination[0]==7){
-                destination[0]=6;
+            else if (destination[0]==6){
                 moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-                destination[0]=7;
-                moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+                resetEncoders(leftMotor,rightMotor);
+                while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
+                    leftMotor->moveBackward(100);
+                    rightMotor->moveBackward(80);
+                }    
+                stop(leftMotor,rightMotor);
+                resetEncoders(leftMotor,rightMotor);
+                delay(1000);
+                SOL::Direcao destinationDirection=SOL::Sul;
+                while(*currentDirection!=destinationDirection){       
+                    correctingDirection(currentDirection,leftMotor,rightMotor);
+                    delay(1000);
+                }
             }
         best = bestBlock(*y,*x);
         state=0;
+        typeOfBlock++;
+        }
     }
     Serial.println("nao existe mais blocos para serem pegos");
     stop(leftMotor,rightMotor);
-    
 }
     
     

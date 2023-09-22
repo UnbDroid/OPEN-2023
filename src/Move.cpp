@@ -89,7 +89,6 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
         lightSensorLeft->read();
         lightSensorRight->read();
             if(lightSensorRight->getCrossed()){
-                Serial.println("atravesseiiii");
                 count++;
                 lightSensorLeft->setCrossed(false);
                 lightSensorRight->setCrossed(false);
@@ -102,8 +101,6 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
 void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     if(*current<*destination){
         while(*current<*destination){
-            Serial.print(" Valor Aí :");
-            Serial.println(*current);
                 moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor);
                 *current = *current+1;
         }
@@ -185,8 +182,8 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
         while(!correctedYFlag &&(*currentY!=*destinationYX)){
 
             while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
-                leftMotor->moveBackward(100);
-                rightMotor->moveBackward(80);
+                leftMotor->moveBackward(120);
+                rightMotor->moveBackward(100);
             }    
             stop(leftMotor,rightMotor);
             delay(1000);
@@ -205,8 +202,8 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
         rightMotor->setEncoder(0);
         while(!correctedXFlag && (*currentX!=*(destinationYX+1))){
             while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
-                leftMotor->moveBackward(100);
-                rightMotor->moveBackward(80);
+                leftMotor->moveBackward(120);
+                rightMotor->moveBackward(100);
             }    
             stop(leftMotor,rightMotor);
             delay(1000);
@@ -214,8 +211,6 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
             rightMotor->setEncoder(0);
             destinationDirection= futureDirection('x',*currentX,*(destinationYX+1));
             while(*currentDirection !=destinationDirection){
-                Serial.print(" x: ");
-                Serial.println(*currentX);
                 correctingDirection(currentDirection,leftMotor,rightMotor);
                 delay(1000);
             }
