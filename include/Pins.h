@@ -34,20 +34,56 @@
 //
 
 /* Infravermelhos
-
+pbrav
 */
 #define A0_DIREITA_FRENTE   A12
 #define A0_ESQUERDA_FRENTE  A11
 #define A0_ESQUERDA_MEIO 9
 #define A0_DIREITA_MEIO 10
+#define A0_LATERAL_LEFT A9
+#define A0_LATERAL_RIGHT A10
 /*  Sensores de Cor*/
 #define S0_COLORSENSOR 33
 #define S1_COLORSENSOR 31 
 #define S2_COLORSENSOR 41
 #define S3_COLORSENSOR 39
-#define OUT_COLORSENSOR 37
+#define OUT_COLORSENSOR 35
 /**/
 
-#define KP 0.1
+
+
+/* Motores de Passo
+
+Empilhadeira*/
+
+#define DIR_EMPILHADEIRA 51
+#define PUL_EMPILHADEIRA 53
+
+/*Garra*/
+
+#define DIR_GARRA 50
+#define PUL_GARRA 52
+
+
+
+
+/*Ultrassom frontal*/
+#define echo_ultrassom_frontal 45
+#define trig_ultrassom_frontal 43
+
+#define echo_ultrassom_lateral 14
+#define trig_ultrassom_lateral 15
+
+
+/*-----------------*/
+
+#define KP 10
+#define KI 1
+#define KD 1
+
+// extern int leftWhite = 100;
+// extern int rightWhite = 200;
+
+
 
 #endif

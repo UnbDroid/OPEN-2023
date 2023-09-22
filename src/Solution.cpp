@@ -1,6 +1,7 @@
 #include<Solution.h>
 #include<Move.h>
 
+
 static int state=0;
 int typeOfBlock=2;
 int smallPosition=0;
@@ -144,7 +145,7 @@ int*  bestBlock(int currentY,int currentX){
     return closestBlock;
 }
 
-void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
+void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift){
     int destination[2];
     delay(3000);
     int *best = bestBlock(*y,*x);
@@ -183,12 +184,15 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 squareBlocks[smallPosition][1]=numberOfBlocks;     
             */
             squareBlocks[smallPosition][1]=(squareBlocks[smallPosition][1])-1;
-            //if(numberOfBlocks>0){
+            delay(3000);
+            robotClaw->close_claw_with_cube();
+
+            if(numberOfBlocks>0){
                 state=1;
-            //}
-            //else{
-                //state=0;
-            //}
+            }
+            else{
+                state=0;
+            }
         }
         if(state==1){
             Serial.println("eu entrei aqui");
@@ -223,6 +227,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                     delay(1000);
                 }
             }
+            robotClaw->open_claw_with_cube();
         best = bestBlock(*y,*x);
         state=0;
         typeOfBlock++;

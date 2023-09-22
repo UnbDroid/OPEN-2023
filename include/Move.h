@@ -9,14 +9,14 @@
 #include<Solution.h>
 
 enum Directions{FORWARD, BACKWARD};
-enum RotateDirections{LEFT, RIGHT};
+enum RotateDirections{LEFT, RIGHT, AROUND};
 
 void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor *lightSensorLeft,LightSensor* lightSensorRight);
 void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight);
 void stop(MotorDC* motorLeft, MotorDC* motorRight);
 void resetEncoders(MotorDC* motorLeft, MotorDC* motorRight);
 
-void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight);
+void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * motorRight);
 
 void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity);
 

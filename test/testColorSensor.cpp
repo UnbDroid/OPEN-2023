@@ -27,12 +27,16 @@
 #define s3_frontal 39
 #define out_frontal 37
 
-
+#define S0_COLORSENSOR 33
+#define S1_COLORSENSOR 31 
+#define S2_COLORSENSOR 41
+#define S3_COLORSENSOR 39
+#define OUT_COLORSENSOR 35
 
 ColorSensor frontalColorSensor(s0_frontal,s1_frontal,s2_frontal,s3_frontal,out_frontal);
 ColorSensor leftColorSensor(s0_left,s1_left,s2_left,s3_left,out_left);
 ColorSensor rightColorSensor(s0_right,s1_right,s2_right,s3_right,out_right);
-
+ColorSensor CentralColorSensor(S0_COLORSENSOR, S1_COLORSENSOR, S2_COLORSENSOR, S3_COLORSENSOR, OUT_COLORSENSOR);
 
 
 void setup(){
@@ -57,5 +61,6 @@ void loop()
   leftColorSensor.identify_color();
   rightColorSensor.identify_color();
   frontalColorSensor.identify_color();
+  CentralColorSensor.
 
 }
