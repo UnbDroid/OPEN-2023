@@ -79,10 +79,11 @@ void setup()
   // emp.forklift_up_steps(0,3);
   // Robot_Claw.close_claw_distance_cm(0.2);
   // // delay()
-
-  emp.forklift_up_distance_cm(0.1);
-  delay(1000);
+  // delay(5000);
+  // emp.forklift_up_distance_cm(0.1);
+  delay(4000);
   emp.forklift_up_steps(0,3);
+  // Robot_Claw.open_claw_with_cube();
 
   // emp.initial_lift();
   // delay(1000);
