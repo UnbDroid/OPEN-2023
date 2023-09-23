@@ -4,7 +4,7 @@
 #include <Move.h>
 #include <ColorSensor.h>
 #include<LightSensor.h>
-#include<Sol.h>
+//#include<Solution.h>
 
 #include <StepMotor.h>
 #include <Claw.h>
@@ -47,48 +47,19 @@ void setup()
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-  // Robot_Claw.open_claw_with_cube();
-  // CentralColorSensor.read_limit_values(0);
-  // delay(5000);
 
-  // for (i = 0; i < 30; i++){
-  //   min_right_distance += lateral_rightIR.read();
-  // }
-  // Serial.println(min_right_distance);
-  // // delay(10000);
-  // min_right_distance /= 30;
+  // rotates90(RIGHT,160,&leftMotor,&rightMotor);
+}
+int a = Directions::BACKWARD;
+int dir = 2;
+int y =6;
+int x =7;
+int direcaoAtual = SOL::Oeste;
+void loop(){
+  
+  stateMachine(&y,&x,&direcaoAtual,&sensorEsquerda,&sensorDireita,&leftMotor,&rightMotor);
 
-  // rotates(LEFT, &leftMotor,&rightMotor);
-  // rotates(RIGHT,&leftMotor,&rightMotor);
-  // stop(&leftMotor,&rightMotor);
-  // delay(2000);
 
-  // Serial.print(leftIR.read());
-  // Serial.print(" ");
-  // Serial.print(rightIR.read());
-  // Serial.println();
-  // Robot_Claw.close_claw_with_cube();
-  // 
-  // delay(20000);
-  // for(i=0; i<100; i++){
-  //   Serial.print("p");
-  // }
-  // data = Serial.read();
-  // while (data != 'a' && data != 'b' && data != 'c'){
-  //   data = Serial.read();
-  // }
-  // emp.forklift_up_steps(0,3);
-  // Robot_Claw.close_claw_distance_cm(0.2);
-  // // delay()
-  // delay(5000);
-  // emp.forklift_up_distance_cm(0.1);
-  delay(4000);
-  emp.forklift_up_steps(0,3);
-  // Robot_Claw.open_claw_with_cube();
-
-  // emp.initial_lift();
-  // delay(1000);
-  // Serial.println(return_type_of_cube());
 }
 
 
