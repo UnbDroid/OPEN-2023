@@ -11,14 +11,20 @@
 char return_type_of_cube(){ 
     char data;
     int i;
+    unsigned long startTime, loopDuration;
+    while (1){
     for(i=0; i<100; i++){
     Serial.print("t");      // A letra 'T' significa que o RASP precisa retornar o TIPO cubo na frente dele
   }
     data = Serial.read();
-    while (!(data >= 'a' && data <= 'i') && !(data >= '0' && data <= '9') && !(data >= 'w' && data <= 'z')){
+    startTime = millis();
+    loopDuration = 10000;
+    while ((!(data >= 'a' && data <= 'i') && !(data >= '0' && data <= '9') && !(data >= 'w' && data <= 'z')) && millis() - startTime < loopDuration ){
     data = Serial.read();
   }
-  return data;
+    if ((data >= 'a' && data <= 'i') || (data >= '0' && data <= '9') || (data >= 'w' && data <= 'z'))
+        return data;
+    }
 }
 
 

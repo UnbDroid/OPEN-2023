@@ -9,15 +9,14 @@
 #include <StepMotor.h>
 #include <Claw.h>
 #include <Forklift.h> 
-
-
-Claw Robot_Claw(DIR_GARRA, PUL_GARRA);
-Forklift emp(DIR_EMPILHADEIRA, PUL_EMPILHADEIRA);
-
+#include <Rasp.h>
 
 #include <PickCube.h>
 #include <Ultrassonic.h>
 
+
+Claw Robot_Claw(DIR_GARRA, PUL_GARRA);
+Forklift emp(DIR_EMPILHADEIRA, PUL_EMPILHADEIRA);
 MotorDC leftMotor(M_LEFT_LPWM, M_LEFT_RPWM, EN_LEFT_MOTOR, ENC_A_LEFT,ENC_B_LEFT);
 MotorDC rightMotor(M_RIGHT_LPWM, M_RIGHT_RPWM, EN_RIGHT_MOTOR,ENC_A_RIGHT,ENC_B_RIGHT);
 ColorSensor CentralColorSensor(S0_COLORSENSOR, S1_COLORSENSOR, S2_COLORSENSOR, S3_COLORSENSOR, OUT_COLORSENSOR);
@@ -78,20 +77,23 @@ void setup()
   //   data = Serial.read();
   // }
   // emp.forklift_up_steps(0,3);
-  Robot_Claw.close_claw_distance_cm(0.2);
-  // delay()
+  // Robot_Claw.close_claw_distance_cm(0.2);
+  // // delay()
 
-  emp.forklift_up_distance_cm(0.1);
-  delay(1000);
-  emp.forklift_up_steps(0,3);
+  // emp.forklift_up_distance_cm(0.1);
+  // delay(1000);
+  // emp.forklift_up_steps(0,3);
 
   // emp.initial_lift();
   // delay(1000);
-  
+  Serial.println(return_type_of_cube());
 }
 
 
 void loop(){
+
+    // Serial.println(return_type_of_cube());
+    // delay(5000);
     // emp.run_motor(1, 5000000);;
 
     // Serial.println(lateralUltrassonicSensor.distance_cm());
@@ -100,8 +102,8 @@ void loop(){
     // delay(5000);
     // emp.forklift_up_steps(0,3);
     // emp.forklift_down_distance_cm(7);
-    pick_cube_from_right(&leftMotor,&rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor, &Robot_Claw, &emp);
-    Robot_Claw.open_claw_with_cube();
+    // pick_cube_from_right(&leftMotor,&rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor, &Robot_Claw, &emp);
+    // Robot_Claw.open_claw_with_cube();
     // CentralColorSensor.read_values();
     // CentralColorSensor.print_color_components_RGB();
     // emp.forklift_up_distance_cm(15);
