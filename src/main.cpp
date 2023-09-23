@@ -80,13 +80,13 @@ void setup()
   // Robot_Claw.close_claw_distance_cm(0.2);
   // // delay()
 
-  // emp.forklift_up_distance_cm(0.1);
-  // delay(1000);
-  // emp.forklift_up_steps(0,3);
+  emp.forklift_up_distance_cm(0.1);
+  delay(1000);
+  emp.forklift_up_steps(0,3);
 
   // emp.initial_lift();
   // delay(1000);
-  Serial.println(return_type_of_cube());
+  // Serial.println(return_type_of_cube());
 }
 
 
@@ -102,8 +102,8 @@ void loop(){
     // delay(5000);
     // emp.forklift_up_steps(0,3);
     // emp.forklift_down_distance_cm(7);
-    // pick_cube_from_right(&leftMotor,&rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor, &Robot_Claw, &emp);
-    // Robot_Claw.open_claw_with_cube();
+    pick_cube_from_right(&leftMotor,&rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor, &Robot_Claw, &emp);
+    Robot_Claw.open_claw_with_cube();
     // CentralColorSensor.read_values();
     // CentralColorSensor.print_color_components_RGB();
     // emp.forklift_up_distance_cm(15);

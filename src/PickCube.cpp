@@ -2,37 +2,19 @@
 
 
 int pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * lateralUltrassonicSensor, LightSensor * rightIR, Ultrassonic * frontalUltrassonicSensor, Claw * RobotClaw, Forklift * Fork){
-    int count, max_distance_right, right_distance, right_floor;
-    float frontal_distance;
+
+    float frontal_distance, right_distance;
     unsigned long loopDuration = 2000;
     unsigned long startTime;
 
-    // delay(3000);
-    // leftMotor->moveForward(75);
-    // rightMotor->moveForward(55);
-    // delay(800);
-    // stop(leftMotor,rightMotor);
-    // delay(2000);
+    delay(500);
     rotates(LEFT, leftMotor,rightMotor);
-    delay(2000);
+    delay(500);
 
 
 
     do{
         right_distance = lateralUltrassonicSensor->distance_cm();
-        // Serial.println(right_distance);
-                // right_floor = rightIR->read();
-        // if (right_floor < 100){
-        //     rightMotor->moveForward(45);
-        // }
-        // else if (right_floor < 800){
-        //     rightMotor->moveForward(42 + (int)(right_floor/35));
-        // }
-        // else{
-        //     rightMotor->moveForward(65);
-        // }
-        // rightMotor->moveForward(55);
-        // leftMotor->moveForward(75);
         movePID(FORWARD, 90, leftMotor, rightMotor);
     }
     while(right_distance >= 15);
@@ -41,27 +23,34 @@ int pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic
     delay(2000);
 
     startTime = millis();
-    loopDuration = 200;
-
+    loopDuration = 500;
     while (millis() - startTime < loopDuration) {
         movePID(FORWARD, 90, leftMotor, rightMotor);
     }
 
     stop(leftMotor,rightMotor);
-    delay(2000);
+    delay(500);
     rotates(RIGHT, leftMotor,rightMotor);
-    delay(2000);
+    delay(500);
     do{
         frontal_distance = frontalUltrassonicSensor->distance_cm();
         movePID(FORWARD, 90, leftMotor, rightMotor);}
-    while (frontal_distance > 4);
+    while (frontal_distance > 12);
     stop(leftMotor,rightMotor);
     delay(1000);
     Fork->forklift_down_steps(3,0);
     delay(1000);
-    // RobotClaw->close_claw_with_cube();
+    Serial.println(return_type_of_cube());
+    
+    startTime = millis();
+    loopDuration = 500;
+    while (millis() - startTime < loopDuration) {
+        movePID(FORWARD, 90, leftMotor, rightMotor);
+    }
+
+    RobotClaw->close_claw_with_cube();
     Fork->forklift_up_steps(0,3);
-    delay(60000);
+    delay(500);
 
     return 0;
 
