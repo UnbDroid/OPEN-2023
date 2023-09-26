@@ -3,7 +3,6 @@
 .vscode/launch.json
 .vscode/ipch
 .__pycache
-.pio*
 .piolibdeps
 .pio/*
 .pioenvs

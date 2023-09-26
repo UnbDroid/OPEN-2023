@@ -16,7 +16,7 @@
 
 
 Claw Robot_Claw(DIR_GARRA, PUL_GARRA);
-Forklift forklift(DIR_EMPILHADEIRA, PUL_EMPILHADEIRA);
+Forklift emp(DIR_EMPILHADEIRA, PUL_EMPILHADEIRA);
 MotorDC leftMotor(M_LEFT_LPWM, M_LEFT_RPWM, EN_LEFT_MOTOR, ENC_A_LEFT,ENC_B_LEFT);
 MotorDC rightMotor(M_RIGHT_LPWM, M_RIGHT_RPWM, EN_RIGHT_MOTOR,ENC_A_RIGHT,ENC_B_RIGHT);
 ColorSensor CentralColorSensor(S0_COLORSENSOR, S1_COLORSENSOR, S2_COLORSENSOR, S3_COLORSENSOR, OUT_COLORSENSOR);
@@ -36,21 +36,22 @@ void TakeMemoryRightMotor(){ // fica na main
   rightMotor.readEncoder();
 }
 
-
+char type_of_cube;
 void setup()
 {
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-
+  emp.forklift_up_steps(0,3);
 
 }
-int y=6;
-int x =7;
-int direcao=SOL::Norte;
+
 
 void loop(){
-  stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor);
+
+    type_of_cube = pick_cube_from_right(&leftMotor,&rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor, &Robot_Claw, &emp);
+    Robot_Claw.open_claw_with_cube();
+   
   }
 
 
