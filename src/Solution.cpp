@@ -195,7 +195,6 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             }
         }
         if(state==1){
-            Serial.println("eu entrei aqui");
             /*
             a ideia é a camera colocar o valor nessa variável typeOfBlock    
             */
@@ -203,9 +202,6 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             int* ptrDelivery = deliveryPlace(*y,*x,typeOfBlock);
             destination[0]=*(ptrDelivery);
             destination[1]=*(ptrDelivery+1);
-            Serial.print("Local de Entrega: ");
-            Serial.print(*destination);
-            Serial.println(*(destination+1));
             if(destination[0]==1){
                 destination[0]=2;
                 //ja levantar a garra aqui a depender do tipo de bloco
