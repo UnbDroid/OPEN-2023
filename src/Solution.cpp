@@ -1,38 +1,92 @@
 #include<Solution.h>
 #include<Move.h>
-
+#include<Rasp.h>
+#include<PickCube.h>
 
 static int state=0;
-int typeOfBlock=2;
+char typeOfBlock=2;
 int smallPosition=0;
 int closestBlock[2];
 int indexShelf;
-int squareBlocks [][2]={ {22,1},{23,1},      {25,0},{26,0},
-                        {52,0},{53,0},      {55,1},{56,0}
+int squareBlocks [][2]={ {22,0},{23,0},      {25,0},{26,0},
+                        {52,0},{53,0},      {55,1},{56,1}
     };
-                                    //  g7 0 ,d4 3,a1 6   h8 2,e5 4 ,b2 7  i9 3 ,f6 6 ,c3 8
+                                    //  g7 0 ,d4 3,a1 6   h8 1,e5 4 ,b2 7  i9 3 ,f6 6 ,c3 8
 static int deliveryLocations[][2][2]={  {{11,1},{15,1}},{{12,1},{16,1}},{{13,1},{17,1}},
                                         {{11,1},{15,1}},{{12,1},{16,1}},{{13,1},{17,1}},
                                         {{11,1},{15,1}},{{12,1},{16,1}},{{13,1},{17,1}},
 
                                     //    Verde 9            Azul 10           Amarelo 11       Vermelho 12
-                                    {{61,1},{67,1}},    {{62,1},{66,1}},    {{63,1},{65,1}},    {{64,2}}
+                                    {{61,1},{67,1}},    {{62,1},{66,1}},    {{63,1},{65,1}},    {{64,1},{64,1}}
                             };
-
-int * deliveryPlace(int y,int x,int blockType){
+//rgby -wxyz 
+int * deliveryPlace(int y,int x,char blockType){
     int lowest =90;    
     int *coordinatesPtr;
     switch (blockType)
     {
-    case 3:
-        indexShelf=11;
+    case '1':
+        indexShelf=6;
         break;
-    case 2:
+    case 'a':
+        indexShelf=6;
+        break;
+    case '2':
+        indexShelf=7;
+        break;
+    case 'b':
+        indexShelf=7;
+        break;
+    case '3':
         indexShelf=9;
         break;
-    case 5:
-        indexShelf=0;
+    case '4':
+        indexShelf=3;
         break;
+    case 'd':
+        indexShelf=3;
+        break;
+    case '5':
+        indexShelf=4;
+        break;
+    case 'e':
+        indexShelf=4;
+        break;
+    case '6':
+        indexShelf=6;
+        break;
+    case 'f':
+        indexShelf=6;
+        break;
+    case '8':
+        indexShelf=1;
+        break;
+    case 'h':
+        indexShelf=1;
+        break;
+    case '9':
+        indexShelf=2;
+        break;
+    case 'i':
+        indexShelf=2;
+        break;    
+    case 'w':
+        //red
+        indexShelf=12;
+        Serial.println("eu to aquiii");
+        break;   
+    case 'x':
+        //green
+        indexShelf=9;
+        break;
+    case 'y':
+        //blue
+        indexShelf=10;
+        break;
+    case 'z':
+        //yellow
+        indexShelf=11;
+        break;         
     default:
         break;
     }
@@ -145,11 +199,11 @@ int*  bestBlock(int currentY,int currentX){
     return closestBlock;
 }
 
-void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift){
+void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic){
     int destination[2];
     delay(3000);
     int *best = bestBlock(*y,*x);
-    //Serial.print("to no inicio ");
+    forkLift->forklift_up_steps(0,3);
     while(*best!=0){
         if(state==0){
             destination[0]=*best;
@@ -185,7 +239,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             */
             squareBlocks[smallPosition][1]=(squareBlocks[smallPosition][1])-1;
             delay(3000);
-            robotClaw->close_claw_with_cube();
+            
 
             if(numberOfBlocks>0){
                 state=1;
@@ -195,17 +249,39 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             }
         }
         if(state==1){
-            /*
-            a ideia é a camera colocar o valor nessa variável typeOfBlock    
-            */
             
+            pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,lightSensorRight,frontalUltrassonic,robotClaw,forkLift);
+            //typeOfBlock= return_type_of_cube();
+            typeOfBlock='w';
+            forkLift->forklift_up_steps(0,1);
+            Serial.println("oi");
+            if(typeOfBlock=='g'||typeOfBlock=='7'||typeOfBlock=='h'||typeOfBlock=='8'||typeOfBlock=='i'||typeOfBlock=='9'){
+                forkLift->forklift_up_steps(1,3);
+            }
+            else if(typeOfBlock=='d'||typeOfBlock=='4'||typeOfBlock=='e'||typeOfBlock=='5'||typeOfBlock=='f'||typeOfBlock=='6'){
+                forkLift->forklift_up_steps(1,2);
+            }
             int* ptrDelivery = deliveryPlace(*y,*x,typeOfBlock);
+            Serial.print("Lugar de entrega YX: ");
+            Serial.print(ptrDelivery[0]);
+            Serial.print(" ");
+            Serial.println(ptrDelivery[1]);
+
+
             destination[0]=*(ptrDelivery);
             destination[1]=*(ptrDelivery+1);
             if(destination[0]==1){
                 destination[0]=2;
                 //ja levantar a garra aqui a depender do tipo de bloco
                 moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+                SOL::Direcao destinationDirection=SOL::Norte;
+                while(*currentDirection!=destinationDirection){       
+                    correctingDirection(currentDirection,leftMotor,rightMotor);
+                    delay(1000);
+                }
+                destination[0]=1;
+                moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+
             }
             else if (destination[0]==6){
                 moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
@@ -223,7 +299,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                     delay(1000);
                 }
             }
-            robotClaw->open_claw_with_cube();
+        robotClaw->open_claw_with_cube();
         best = bestBlock(*y,*x);
         state=0;
         typeOfBlock++;

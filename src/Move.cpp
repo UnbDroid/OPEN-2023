@@ -58,7 +58,7 @@ void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * mot
     case LEFT:
         motorLeft->moveBackward(velocity);
         motorRight->moveForward(velocity);
-        while (abs(motorLeft->getEncoder()) < 910 && abs(motorRight->getEncoder()) < 910){
+        while (abs(motorLeft->getEncoder()) < 1100 && abs(motorRight->getEncoder()) < 1100){
             motorLeft->moveBackward(velocity);
             motorRight->moveForward(velocity);
         }

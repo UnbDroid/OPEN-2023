@@ -4,30 +4,19 @@
 #include <Move.h>
 #include <ColorSensor.h>
 #include<LightSensor.h>
-#include <Rasp.h>
-#include <PickCube.h>
-#include <Ultrassonic.h>
 #include<Solution.h>
 
 #include <StepMotor.h>
-#include <Claw.h>
+#include <Claw.h> 
 #include <Forklift.h> 
+#include <Rasp.h>
 
-
-
-Claw robotClaw(DIR_GARRA, PUL_GARRA);
-Forklift forkLift(DIR_EMPILHADEIRA, PUL_EMPILHADEIRA);
-
-
-
-
-
-
-
+#include <PickCube.h>
+#include <Ultrassonic.h>
 
 
 Claw Robot_Claw(DIR_GARRA, PUL_GARRA);
-Forklift emp(DIR_EMPILHADEIRA, PUL_EMPILHADEIRA);
+Forklift forklift(DIR_EMPILHADEIRA, PUL_EMPILHADEIRA);
 MotorDC leftMotor(M_LEFT_LPWM, M_LEFT_RPWM, EN_LEFT_MOTOR, ENC_A_LEFT,ENC_B_LEFT);
 MotorDC rightMotor(M_RIGHT_LPWM, M_RIGHT_RPWM, EN_RIGHT_MOTOR,ENC_A_RIGHT,ENC_B_RIGHT);
 ColorSensor CentralColorSensor(S0_COLORSENSOR, S1_COLORSENSOR, S2_COLORSENSOR, S3_COLORSENSOR, OUT_COLORSENSOR);
@@ -39,11 +28,6 @@ Ultrassonic frontalUltrassonicSensor(echo_ultrassom_frontal, trig_ultrassom_fron
 Ultrassonic lateralUltrassonicSensor(echo_ultrassom_lateral, trig_ultrassom_lateral);
 
 
-int min_right_distance;
-int right_distance;
-int i;
-char data;
-
 void TakeMemoryLeftMotor(){ // fica na main
   leftMotor.readEncoder();
 }
@@ -52,25 +36,23 @@ void TakeMemoryRightMotor(){ // fica na main
   rightMotor.readEncoder();
 }
 
+
 void setup()
 {
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
 
-  //rotates90(RIGHT,160,&leftMotor,&rightMotor);
-
 
 }
-int y =6;
+int y=6;
 int x =7;
-int direcaoAtual = SOL::Oeste;
+int direcao=SOL::Norte;
 
 void loop(){
-  
-  stateMachine(&y,&x,&direcaoAtual,&leftIR,&rightIR,&leftMotor,&rightMotor,&robotClaw, &forkLift);
+  stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor);
+  }
 
-}
 
 
 

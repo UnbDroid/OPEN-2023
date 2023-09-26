@@ -4,7 +4,7 @@
 #include <Move.h>
 #include <ColorSensor.h>
 #include<LightSensor.h>
-#include<Sol.h>
+#include<Solution.h>
 
 #include <StepMotor.h>
 #include <Claw.h> 
