@@ -197,6 +197,7 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
 
 
 
+
 void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     quantityToMove++;
     int count =0;
@@ -215,6 +216,7 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
     }
     return ;
 }
+
 
 void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     if(*current<*destination){

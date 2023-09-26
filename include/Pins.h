@@ -18,15 +18,19 @@
 #define M_LEFT_RPWM A8 //ANTIGO IN1
 #define M_LEFT_LPWM A7
 
+
 #define ENC_A_LEFT 20
 #define ENC_B_LEFT 19
+
 #define EN_LEFT_MOTOR 13
 
 #define M_RIGHT_RPWM A6//ANTIGO IN3
 #define M_RIGHT_LPWM A5//ANTIGO IN4
 
+
 #define ENC_A_RIGHT 21
 #define ENC_B_RIGHT 18
+
 #define EN_RIGHT_MOTOR 11
 
 #define BUMPER_PIN 37

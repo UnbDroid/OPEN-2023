@@ -4,26 +4,15 @@
 #include <Move.h>
 #include <ColorSensor.h>
 #include<LightSensor.h>
-#include <Rasp.h>
-#include <PickCube.h>
-#include <Ultrassonic.h>
-#include<Solution.h>
+#include<Sol.h>
 
 #include <StepMotor.h>
-#include <Claw.h>
+#include <Claw.h> 
 #include <Forklift.h> 
+#include <Rasp.h>
 
-
-
-Claw robotClaw(DIR_GARRA, PUL_GARRA);
-Forklift forkLift(DIR_EMPILHADEIRA, PUL_EMPILHADEIRA);
-
-
-
-
-
-
-
+#include <PickCube.h>
+#include <Ultrassonic.h>
 
 
 Claw Robot_Claw(DIR_GARRA, PUL_GARRA);
@@ -39,11 +28,6 @@ Ultrassonic frontalUltrassonicSensor(echo_ultrassom_frontal, trig_ultrassom_fron
 Ultrassonic lateralUltrassonicSensor(echo_ultrassom_lateral, trig_ultrassom_lateral);
 
 
-int min_right_distance;
-int right_distance;
-int i;
-char data;
-
 void TakeMemoryLeftMotor(){ // fica na main
   leftMotor.readEncoder();
 }
@@ -52,25 +36,24 @@ void TakeMemoryRightMotor(){ // fica na main
   rightMotor.readEncoder();
 }
 
+char type_of_cube;
 void setup()
 {
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-
-  //rotates90(RIGHT,160,&leftMotor,&rightMotor);
-
+  emp.forklift_up_steps(0,3);
 
 }
-int y =6;
-int x =7;
-int direcaoAtual = SOL::Oeste;
+
 
 void loop(){
-  
-  stateMachine(&y,&x,&direcaoAtual,&leftIR,&rightIR,&leftMotor,&rightMotor,&robotClaw, &forkLift);
 
-}
+    type_of_cube = pick_cube_from_right(&leftMotor,&rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor, &Robot_Claw, &emp);
+    Robot_Claw.open_claw_with_cube();
+   
+  }
+
 
 
 

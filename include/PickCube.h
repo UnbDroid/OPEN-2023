@@ -10,12 +10,11 @@
 #include <Ultrassonic.h>
 #include <Claw.h>
 #include <Forklift.h>
+#include <Rasp.h>
 
 
 
-int pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * lateralUltrassonicSensor, LightSensor * rightIR, Ultrassonic * frontalUltrassonicSensor,Claw * RobotClaw, Forklift * Fork);
-int pick_cube_from_left( MotorDC * leftMotor, MotorDC * rightMotor, LightSensor * light_LateralLeft);
-
+char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * lateralUltrassonicSensor, LightSensor * rightIR, Ultrassonic * frontalUltrassonicSensor,Claw * RobotClaw, Forklift * Fork);
 
 
 #endif

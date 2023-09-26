@@ -16,7 +16,9 @@ void movePID(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* mo
 void stop(MotorDC* motorLeft, MotorDC* motorRight);
 void resetEncoders(MotorDC* motorLeft, MotorDC* motorRight);
 
+
 void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * motorRight);
+
 
 void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity);
 
