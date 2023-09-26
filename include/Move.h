@@ -17,9 +17,8 @@ void stop(MotorDC* motorLeft, MotorDC* motorRight);
 void resetEncoders(MotorDC* motorLeft, MotorDC* motorRight);
 
 
-void rotates90(RotateDirections rotateDirection, int velocity ,MotorDC * motorLeft, MotorDC * motorRight);
 
-
+void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * motorRight);
 void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity);
 
 void moveForSquare(int quantityToMove,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight);

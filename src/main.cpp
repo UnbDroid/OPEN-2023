@@ -55,13 +55,6 @@ int dir = 2;
 int y =6;
 int x =7;
 int direcaoAtual = SOL::Oeste;
-void loop(){
-  
-  stateMachine(&y,&x,&direcaoAtual,&sensorEsquerda,&sensorDireita,&leftMotor,&rightMotor);
-
-
-}
-
 
 void loop(){
 
