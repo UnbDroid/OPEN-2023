@@ -254,12 +254,15 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             //typeOfBlock= return_type_of_cube();
             typeOfBlock='w';
             forkLift->forklift_up_steps(0,1);
+            int forkDestiny=1;
             Serial.println("oi");
             if(typeOfBlock=='g'||typeOfBlock=='7'||typeOfBlock=='h'||typeOfBlock=='8'||typeOfBlock=='i'||typeOfBlock=='9'){
                 forkLift->forklift_up_steps(1,3);
+                forkDestiny=3;
             }
             else if(typeOfBlock=='d'||typeOfBlock=='4'||typeOfBlock=='e'||typeOfBlock=='5'||typeOfBlock=='f'||typeOfBlock=='6'){
                 forkLift->forklift_up_steps(1,2);
+                forkDestiny=2;
             }
             int* ptrDelivery = deliveryPlace(*y,*x,typeOfBlock);
             Serial.print("Lugar de entrega YX: ");
@@ -298,8 +301,17 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                     correctingDirection(currentDirection,leftMotor,rightMotor);
                     delay(1000);
                 }
+                while(lightSensorLeft->read()<=60 ||lightSensorRight->read()<=60){
+                    leftMotor->moveForward(100);
+                    rightMotor->moveForward(80);
+                }
+                stop(leftMotor,rightMotor);
+                delay(1000);
             }
         robotClaw->open_claw_with_cube();
+        if(forkDestiny!=3){
+            forkLift->forklift_up_steps(forkDestiny,3);
+        }
         best = bestBlock(*y,*x);
         state=0;
         typeOfBlock++;
