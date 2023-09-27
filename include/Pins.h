@@ -60,10 +60,10 @@
 #define KD 0 // 0.5
 
 
-#define KP_LEFT 1.1//1
-#define KP_RIGHT 1.4//1.4
-#define KI_LEFT 0.9//0.9 ou 0.5
-#define KI_RIGHT 0.7//0.7
+#define KP_LEFT 1//1
+#define KP_RIGHT 1 //0.85//1.4 //gigante, tentou compensar pra esquerda
+#define KI_LEFT 1//0.9 ou 0.5
+#define KI_RIGHT 1//0.7
 
 //quando oscila demais (KI), pode aumentar kp
 // extern int leftWhite = 100;

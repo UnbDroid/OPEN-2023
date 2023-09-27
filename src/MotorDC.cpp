@@ -54,7 +54,7 @@ void MotorDC::readEncoder(){
   // }
 }
 
-int MotorDC::getEncoder(){
+unsigned int MotorDC::getEncoder(){
     return posEncoder;
 }
 

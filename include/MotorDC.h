@@ -19,7 +19,7 @@ TEMOS DIFERENTES TIPOS DE VISUALIZAÇÕES DAS COISAS, COMO PUBLIC, PRIVATE, PROT
             void moveBackward(int velocity);
             void readEncoder();
             void stop();
-            int getEncoder();
+            unsigned int getEncoder();
             int setEncoder(int value);
 
         private:

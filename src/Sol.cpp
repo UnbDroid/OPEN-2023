@@ -198,13 +198,13 @@ int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSenso
   
 bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic, MotorDC * leftMotor, MotorDC * rightMotor){
     bool seesSomething = false;
-    float closeToUltra = 15;
+    float closeToUltra = 20;
     // resetEncoders(leftMotor,rightMotor);
     // while(leftMotor->getEncoder()<400 && rightMotor->getEncoder()<400){
     //     leftMotor->moveBackward(80);
     //     rightMotor->moveBackward(60);
     // }
-    movePID_cm(5,BACKWARD,0.3,leftMotor,rightMotor);
+    movePID_cm(10,BACKWARD,0.3,leftMotor,rightMotor);
 
     stop(leftMotor,rightMotor);
     delay(100);
@@ -236,7 +236,7 @@ bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralU
     rotates(RIGHT,leftMotor,rightMotor);
     delay(100);
 
-    movePID_cm(5,FORWARD,0.3,leftMotor,rightMotor);
+    movePID_cm(10,FORWARD,0.3,leftMotor,rightMotor);
     // resetEncoders(leftMotor,rightMotor);
     // while(leftMotor->getEncoder()<200 && rightMotor->getEncoder()<200){
     //     leftMotor->moveForward(80);
@@ -261,7 +261,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
     //objetos = prateleira(1), cores(2), cubo(3), borda(4).
 
     Serial.println("to no começo");
-    float closeToUltra = 20;
+    float closeToUltra = 25;
     bool mustTurn = false;
     bool edge = false;
     int lastSeen = 0;
@@ -282,7 +282,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
             }
 
         // Serial.println("fim iteração ultrassom");
-        // readingFrontalUltra = readingFrontalUltra/3;
+        readingFrontalUltra = readingFrontalUltra/3;
         // Serial.print(" vs tempo final: ");
         // Serial.println(micros());
 
@@ -379,7 +379,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
             while(lightSensorLeft->read()<150 && lightSensorRight->read()<150){
                 // leftMotor->moveForward(75);
                 // rightMotor->moveForward(55);
-                movePID(FORWARD,0.3,leftMotor,rightMotor);
+                movePID(FORWARD,0.1,leftMotor,rightMotor);
 
                 // Serial.print("alinha e le: Esq/Dir ");
                 Serial.print(lightSensorLeft->read());
@@ -398,6 +398,8 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
         } else {
             // resetEncoders(leftMotor,rightMotor);
             movePID(FORWARD,0.5,leftMotor,rightMotor);
+            // leftMotor->moveForward(80);
+            // rightMotor->moveForward(60);
 
         }
     }

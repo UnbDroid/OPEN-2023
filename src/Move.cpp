@@ -16,6 +16,9 @@ float constMotors[2] = {0,0};
 double motorLeftTurns = 0;
 double motorRightTurns = 0;
 
+double sumRPSLeft = 0;
+double sumRPSRight = 0;
+
 //PID separado motores
 double previousMotorLeftTurns = 0;
 double previousMotorRightTurns = 0;
@@ -289,6 +292,9 @@ void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* m
     double rpsLeft = (motorLeftTurns - previousMotorLeftTurns)/(deltaT);
     double rpsRight = (motorRightTurns - previousMotorRightTurns)/(deltaT);
 
+    sumRPSLeft = sumRPSLeft + rpsLeft;
+    sumRPSRight = sumRPSRight + rpsRight;
+
     double leftError = goalRPS - rpsLeft;
     double rightError = goalRPS - rpsRight;
 
@@ -310,7 +316,7 @@ void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* m
     }
 
     double parameterPWMLeft = PWMLeft*(double)200;//198 ou 210
-    double parameterPWMRight = PWMRight*(double)180; //157 ou 156
+    double parameterPWMRight = PWMRight*(double)154; //157 ou 156 ou 140
 
     // double delay_time = deltaT - (micros() - start_time);
     // if (delay_time > 0){
@@ -323,6 +329,10 @@ void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* m
     Serial.print(leftIntegralErrorSum);
     Serial.print(" ");
     Serial.print(rigthIntegralErrorSum);
+    // Serial.print("soma RPS ");
+    // Serial.print(sumRPSLeft);
+    // Serial.print(" ");
+    // Serial.print(sumRPSRight);
     Serial.print(" RPS: ");
     Serial.print(rpsLeft);
     Serial.print(" ");

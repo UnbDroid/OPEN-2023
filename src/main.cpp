@@ -57,15 +57,30 @@ void setup()
 
 // calibrateMotorsCT(&leftMotor,&rightMotor);
 // align(&leftIR,&rightIR,&leftMotor,&rightMotor,100);
-// beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralUltrassonic,&colorSensor,&bumper);
+beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralUltrassonic,&colorSensor,&bumper);
 // movePID_cm(30,FORWARD,0.3,&leftMotor,&rightMotor);
 // rotates(RIGHT,&leftMotor,&rightMotor);
 // stop(&leftMotor,&rightMotor);
+// leftMotor.moveForward(80);
+// rightMotor.moveForward(60);
+// while(micros() < 20000000){
 
+//   movePID(FORWARD,0.5,&leftMotor,&rightMotor);
+// }
+// delay(500);
+// Serial.println("giro: ");
+// rotates(RIGHT,&leftMotor,&rightMotor);
+// delay(500);
+
+// rotates(RIGHT,&leftMotor,&rightMotor);
+// stop(&leftMotor,&rightMotor);
+// delay(500);
 }
 
 void loop(){
   // Serial.println(leftIR.read());
-  movePID(FORWARD,0.5,&leftMotor,&rightMotor);
+  //movePID(FORWARD,0.5,&leftMotor,&rightMotor);
+  // leftMotor.moveForward(255);
+  // Serial.println(leftMotor.getEncoder());
 }
 
