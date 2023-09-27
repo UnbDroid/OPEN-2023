@@ -141,7 +141,7 @@ void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * mot
         motorLeft->moveForward(PWM);
         motorRight->moveBackward(PWM);
 
-        while (abs(motorLeft->getEncoder()) < 1100 && abs(motorRight->getEncoder()) < 1100){
+        while (abs(motorLeft->getEncoder()) < 1095 && abs(motorRight->getEncoder()) < 1095){
             motorLeft->moveForward(PWM);
             motorRight->moveBackward(PWM);
             

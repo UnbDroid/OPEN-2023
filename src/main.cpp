@@ -78,7 +78,9 @@ beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralU
 }
 
 void loop(){
-  // Serial.println(leftIR.read());
+  // rotates(RIGHT,&leftMotor,&rightMotor);
+  // delay(1000);
+  // // Serial.println(leftIR.read());
   //movePID(FORWARD,0.5,&leftMotor,&rightMotor);
   // leftMotor.moveForward(255);
   // Serial.println(leftMotor.getEncoder());
