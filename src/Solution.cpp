@@ -287,7 +287,8 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             }    
             stop(leftMotor,rightMotor);
             resetEncoders(leftMotor,rightMotor);
-            while(lightSensorLeft->read()<=110||lightSensorRight->read()<=110){
+            while(!(lightSensorLeft->read()>=150 && lightSensorRight->read()>=150)){
+                Serial.println(lightSensorLeft->read());
                 leftMotor->moveForward(100);
                 rightMotor->moveForward(80);
             }
@@ -297,7 +298,6 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             while(leftMotor->getEncoder()<1313&&rightMotor->getEncoder()<1283){
                     leftMotor->moveForward(100);
                     rightMotor->moveForward(80);
-                    Serial.println(leftMotor->getEncoder());
             }
             stop(leftMotor,rightMotor);
             robotClaw->open_claw_with_cube();
