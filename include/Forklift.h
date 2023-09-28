@@ -28,8 +28,8 @@ class Forklift: public StepMotor{
         float distance1_2 = 10.5;
         float distance2_3 = 9.3011;
         float distance1_0 = 7;
-        float distance2_1 = 11;
-        float distance3_2 = 11.5;
+        float distance2_1 = 10.5;
+        float distance3_2 = 9.3011;
 };
 
 #endif

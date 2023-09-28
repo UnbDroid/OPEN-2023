@@ -9,12 +9,15 @@
             float distance_meters();
             float distance_cm();
             void send_pulse();
+            float last_ten_values();
 
         private:
             float distance;
             float time;
             int echoPin;
             int trigPin;   
+            float list[10] = {100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0};
+
     };
 
 

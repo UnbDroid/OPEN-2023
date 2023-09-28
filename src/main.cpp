@@ -15,7 +15,6 @@
 #include <Ultrassonic.h>
 
 
-
 Claw Robot_Claw(DIR_GARRA, PUL_GARRA);
 Forklift forklift(DIR_EMPILHADEIRA, PUL_EMPILHADEIRA);
 MotorDC leftMotor(M_LEFT_LPWM, M_LEFT_RPWM, EN_LEFT_MOTOR, ENC_A_LEFT,ENC_B_LEFT);
@@ -37,21 +36,28 @@ void TakeMemoryRightMotor(){ // fica na main
   rightMotor.readEncoder();
 }
 
+
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
+  // forklift.forklift_up_steps(0,1);
+
 }
 int y=6;
 int x =7;
-int direcao = SOL::Norte;
-void loop(){
+int direcao=SOL::Norte;
 
-  stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor);  
-    
-    
-}
+void loop(){
+  
+  
+  // stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor);
+  forklift.forklift_up_steps(0,1);
+  pick_cube_from_right(&leftMotor, &rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor,&Robot_Claw, &forklift);
+  Robot_Claw.open_claw_with_cube();
+  }
+
 
 
 
