@@ -32,7 +32,6 @@ void Forklift::forklift_up_steps(int initial_step, int final_step, int velocity)
     if (initial_step == 2 && final_step == 3){
         distance += this->distance2_3;
     }
-    Serial.println(distance);
     this->forklift_up_distance_cm(distance);
 }
 

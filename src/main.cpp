@@ -15,6 +15,7 @@
 #include <Ultrassonic.h>
 
 
+
 Claw Robot_Claw(DIR_GARRA, PUL_GARRA);
 Forklift forklift(DIR_EMPILHADEIRA, PUL_EMPILHADEIRA);
 MotorDC leftMotor(M_LEFT_LPWM, M_LEFT_RPWM, EN_LEFT_MOTOR, ENC_A_LEFT,ENC_B_LEFT);
@@ -36,23 +37,21 @@ void TakeMemoryRightMotor(){ // fica na main
   rightMotor.readEncoder();
 }
 
-
 void setup()
 {
-  Serial.begin(9600); 
+  Serial.begin(9600);
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-
-
 }
 int y=6;
 int x =7;
-int direcao=SOL::Norte;
-
+int direcao = SOL::Norte;
 void loop(){
-  stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor);
-  }
 
+  stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor);  
+    
+    
+}
 
 
 

@@ -301,17 +301,41 @@ void moveBackAndCorrectDirection(SOL::Direcao destinationDirection,int*currentDi
     stop(leftMotor,rightMotor);
     delay(1000);
     resetEncoders(leftMotor,rightMotor);
-    while(*currentDirection!=destinationDirection){
-        correctingDirection(currentDirection,leftMotor,rightMotor);
-        delay(1000);
-    }
+    correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
     return ;
 }
-
+void correctDirection(int* currentDirection,int destinationDirection,MotorDC * leftMotor, MotorDC * rightMotor){
+    if(*currentDirection!=destinationDirection){
+      if(!(*currentDirection==0&&destinationDirection==3)){
+      if((*currentDirection+1==destinationDirection)||(*currentDirection==3&& destinationDirection==0)){
+        rotates(RIGHT,leftMotor,rightMotor);
+        *currentDirection=destinationDirection;
+      }
+      else if(*currentDirection-1 == destinationDirection){
+        rotates(LEFT,leftMotor,rightMotor);
+        *currentDirection= destinationDirection;
+      }
+      else{
+        rotates(RIGHT,leftMotor,rightMotor);
+        stop(leftMotor,rightMotor);
+        delay(500);
+        rotates(RIGHT,leftMotor,rightMotor);
+        stop(leftMotor,rightMotor);
+        delay(500);
+        *currentDirection=destinationDirection;
+      }
+      }
+      else{
+          rotates(LEFT,leftMotor,rightMotor);
+          stop(leftMotor,rightMotor);
+          *currentDirection= destinationDirection;
+      }
+      delay(500);
+    }
+}
 void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     SOL::Direcao destinationDirection= futureDirection('y',*currentY,*destinationYX);
-        leftMotor->setEncoder(0);
-        rightMotor->setEncoder(0);  
+        resetEncoders(leftMotor,rightMotor);  
         while(!correctedYFlag &&(*currentY!=*destinationYX)){
 
             while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
@@ -320,19 +344,13 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
             }    
             stop(leftMotor,rightMotor);
             delay(1000);
-            leftMotor->setEncoder(0);
-            rightMotor->setEncoder(0);
-            while(*currentDirection!=destinationDirection){
-                correctingDirection(currentDirection,leftMotor,rightMotor);
-                delay(1000);
-            }
-            stop(leftMotor,rightMotor);
+            resetEncoders(leftMotor,rightMotor);
+            correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
             changingAndCountingPosition(currentY,destinationYX,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
             correctedYFlag=1;
             break;
         }
-        leftMotor->setEncoder(0);
-        rightMotor->setEncoder(0);
+        resetEncoders(leftMotor,rightMotor);
         while(!correctedXFlag && (*currentX!=*(destinationYX+1))){
             while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
                 leftMotor->moveBackward(120);
@@ -340,14 +358,9 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
             }    
             stop(leftMotor,rightMotor);
             delay(1000);
-            leftMotor->setEncoder(0);
-            rightMotor->setEncoder(0);
+            resetEncoders(leftMotor,rightMotor);
             destinationDirection= futureDirection('x',*currentX,*(destinationYX+1));
-            while(*currentDirection !=destinationDirection){
-                correctingDirection(currentDirection,leftMotor,rightMotor);
-                delay(1000);
-            }
-            stop(leftMotor,rightMotor);
+            correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
             changingAndCountingPosition(currentX,destinationYX+1,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
             break;
         }
