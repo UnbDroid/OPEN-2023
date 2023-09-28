@@ -32,3 +32,16 @@ float Ultrassonic::distance_cm(){
 
     return distance;
 }
+
+float Ultrassonic::last_ten_values(){
+    float media = 0;
+    for (int i = 9; i > 0; i--) {
+            this->list[i] = this->list[i - 1];
+            media += this->list[i];
+        }
+
+        
+        this->list[0] = this->distance_cm();
+        media += this->list[0];
+        return media / 10.0;
+}
