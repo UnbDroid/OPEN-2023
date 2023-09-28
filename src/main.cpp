@@ -57,7 +57,7 @@ void setup()
 
 // calibrateMotorsCT(&leftMotor,&rightMotor);
 // align(&leftIR,&rightIR,&leftMotor,&rightMotor,100);
-beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralUltrassonic,&colorSensor,&bumper);
+// beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralUltrassonic,&colorSensor,&bumper);
 // movePID_cm(30,FORWARD,0.3,&leftMotor,&rightMotor);
 // rotates(RIGHT,&leftMotor,&rightMotor);
 // stop(&leftMotor,&rightMotor);
@@ -65,7 +65,7 @@ beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralU
 // rightMotor.moveForward(60);
 // while(micros() < 20000000){
 
-//   movePID(FORWARD,0.5,&leftMotor,&rightMotor);
+  // movePID(FORWARD,0.5,&leftMotor,&rightMotor);
 // }
 // delay(500);
 // Serial.println("giro: ");
@@ -75,13 +75,61 @@ beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralU
 // rotates(RIGHT,&leftMotor,&rightMotor);
 // stop(&leftMotor,&rightMotor);
 // delay(500);
+
+//   setPreviusTime(micros());
+//   while(!(rightIR.read()>110&&leftIR.read()>110)){
+//     movePID(FORWARD,0.5,&leftMotor,&rightMotor);
+//   } 
+
+//   stop(&leftMotor,&rightMotor);
+//   delay(500);
+//   align(&leftIR,&rightIR,&leftMotor,&rightMotor,100);
+
+
 }
 
 void loop(){
+
+  Serial.print(leftIR.read());
+  Serial.print(" ");
+  Serial.println(rightIR.read());
+if ((leftIR.read()<100 && leftIR.read()<300)){
+  leftMotor.moveForward(80);
+  rightMotor.moveForward(60);
+}
+
+if(leftIR.read()>100){
+  while(leftIR.read()>100){
+  leftMotor.moveForward(130);
+  }
+  stop(&leftMotor,&rightMotor);
+
+} else if(rightIR.read()>300){
+  while(rightIR.read()>300){
+    rightMotor.moveForward(100);
+  }
+  stop(&leftMotor,&rightMotor);
+} 
+
+
+
+  
+
+  
+  // delay(100);
+  // movePID_cm(30,FORWARD,0.5,&leftMotor,&rightMotor);
+  // stop(&leftMotor,&rightMotor);
+  // delay(1000);
+  // Serial.println(rightIR.read());
+
+
+
+   // movePID_cm(30,FORWARD,0.5,&leftMotor,&rightMotor);
+  // Serial.println(bumper.checkBumper());
   // rotates(RIGHT,&leftMotor,&rightMotor);
   // delay(1000);
   // // Serial.println(leftIR.read());
-  //movePID(FORWARD,0.5,&leftMotor,&rightMotor);
+  // movePID(FORWARD,0.5,&leftMotor,&rightMotor);
   // leftMotor.moveForward(255);
   // Serial.println(leftMotor.getEncoder());
 }

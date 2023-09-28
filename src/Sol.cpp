@@ -264,7 +264,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
     //objetos = prateleira(1), cores(2), cubo(3), borda(4).
 
     Serial.println("to no começo");
-    float closeToUltra = 18;
+    float closeToUltra = 8;
     bool mustTurn = false;
     bool edge = false;
     int lastSeen = 0;
@@ -273,41 +273,29 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
     setPreviusTime(micros());
 
     while(!edge || !lastSeen){ 
-        // float readingColor = colorSensor->identify_color();
         float readingFrontalUltra = 0;
-        // Serial.print("tempo atual: ");
-        // Serial.print(micros());
-        for (int i = 0; i < 2; i++) { //faz uma média das leituras do ultrassom
+
+        for (int i = 0; i < 5; i++) { //faz uma média das leituras do ultrassom
             readingFrontalUltra =  readingFrontalUltra + frontalUltrassonic->distance_cm();
-            // Serial.print("soma leitura ultra: ");
-            // Serial.println(readingFrontalUltra);
             movePID(FORWARD,0.5,leftMotor,rightMotor); 
             }
-
-        // Serial.println("fim iteração ultrassom");
-        readingFrontalUltra = readingFrontalUltra/2;
-        // Serial.print(" vs tempo final: ");
-        // Serial.println(micros());
+        readingFrontalUltra = readingFrontalUltra/5;
 
         if (false){//bumper->checkBumper()){
             stop(leftMotor,rightMotor);
-            // delay(2000);
             resetEncoders(leftMotor,rightMotor);
-            // Serial.println("vou p tras pq borda");
-            while (leftMotor->getEncoder()<600 && rightMotor->getEncoder() < 600){
-                leftMotor->moveBackward(80);
-                rightMotor->moveBackward(60);
-            }
+            // while (leftMotor->getEncoder()<600 && rightMotor->getEncoder() < 600){
+            //     leftMotor->moveBackward(80);
+            //     rightMotor->moveBackward(60);
+            // }
+            movePID_cm(5,BACKWARD,0.5,leftMotor,rightMotor); 
             stop(leftMotor,rightMotor);
             delay(500);
-            
-
-            //testa a cor do sensor de cor
-            // Serial.println("bumper sentiu algo, parei");
+        
             shelve = checksUltrassonic(frontalUltrassonic, lateralUltrassonic,leftMotor,rightMotor);
 
             if (edge){
-                // Serial.println("vejo borda e ja vi borda");
+               
                 if(shelve){
                     // Serial.println("estou na quina 1.7, pois vi borda/borda/prateleira");
                     position[0] = 1;
@@ -381,14 +369,14 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
             // Serial.println("quero alinhar");
 
             while(lightSensorLeft->read()<150 && lightSensorRight->read()<150){
-                // leftMotor->moveForward(75);
-                // rightMotor->moveForward(55);
-                movePID(FORWARD,0.25,leftMotor,rightMotor);
+                leftMotor->moveForward(75);
+                rightMotor->moveForward(55);
+                // movePID(FORWARD,0.25,leftMotor,rightMotor);
 
                 // Serial.print("alinha e le: Esq/Dir ");
-                Serial.print(lightSensorLeft->read());
-                Serial.print(" ");
-                Serial.println(lightSensorRight->read());
+                // Serial.print(lightSensorLeft->read());
+                // Serial.print(" ");
+                // Serial.println(lightSensorRight->read());
 
             } 
             stop(leftMotor,rightMotor);
@@ -402,8 +390,8 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
         } else {
             // resetEncoders(leftMotor,rightMotor);
             movePID(FORWARD,0.5,leftMotor,rightMotor);
-            // leftMotor->moveForward(80);
-            // rightMotor->moveForward(60);
+            // leftMotor->moveForward(85);
+            // rightMotor->moveForward(55);
 
         }
     }

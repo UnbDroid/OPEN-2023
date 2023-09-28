@@ -172,8 +172,8 @@ void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * mot
 }
 
 void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLeft, MotorDC * motorRight, int PWM){
-    int leftWhite = 150;
-    int rightWhite = 300;
+    int leftWhite = 110;
+    int rightWhite = 110;
 
     Serial.print("sensores IR: ");
     Serial.print(lightSensorLeft->read());
@@ -198,14 +198,11 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
                 Serial.print(" ");
                 Serial.println(lightSensorRight->read());
 
-                motorLeft->moveForward(PWM+10);
-                
-                motorRight->setEncoder(0);
-                while(motorRight->getEncoder() < 10){
-                    motorRight->moveBackward(50);
-                }
-                
-
+                motorLeft->moveForward(PWM+10);                
+            }
+            motorRight->setEncoder(0);
+            while(motorRight->getEncoder() < 50){
+                motorRight->moveBackward(50);
             }
 
         }
@@ -219,17 +216,20 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
                 Serial.print(" ");
                 Serial.println(lightSensorRight->read());
 
-                motorLeft->setEncoder(0);
-                while (motorLeft->getEncoder() < 15){
-                    motorLeft->moveBackward(70);
-                }    
+                // motorLeft->setEncoder(0);
+                // while (motorLeft->getEncoder() < 15){
+                //     motorLeft->moveBackward(70);
+                // }    
             }
-        }  
+        } else {
+            movePID_cm(2,FORWARD,0.5,motorLeft,motorRight);
+        }
+
     stop(motorLeft, motorRight);
     delay(500);
     
     } else{
-        return ;
+        return;
     }
 }
 
@@ -256,11 +256,11 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
 }
 
 void movePID_cm(int distance_cm, Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* motorRight){
+    setPreviusTime(micros());
+    delay(100);
     float circunference = 37.7;
     int leftEncoderValue = (2048/circunference)*distance_cm;
     int rightEncoderValue = (2000/circunference)*distance_cm;
-
-    setPreviusTime(0);
     resetEncoders(motorLeft,motorRight);
     while(motorLeft->getEncoder() < leftEncoderValue && motorRight->getEncoder() < rightEncoderValue){
         movePID(direction, 0.5, motorLeft, motorRight);
@@ -325,10 +325,10 @@ void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* m
 
     Serial.print("DeltaT: ");
     Serial.print(deltaT);
-    Serial.print(" integral:");
-    Serial.print(leftIntegralErrorSum);
-    Serial.print(" ");
-    Serial.print(rigthIntegralErrorSum);
+    // Serial.print(" integral:");
+    // Serial.print(leftIntegralErrorSum);
+    // Serial.print(" ");
+    // Serial.print(rigthIntegralErrorSum);
     // Serial.print("soma RPS ");
     // Serial.print(sumRPSLeft);
     // Serial.print(" ");
