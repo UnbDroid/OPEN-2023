@@ -172,8 +172,8 @@ void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * mot
 }
 
 void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLeft, MotorDC * motorRight, int PWM){
-    int leftWhite = 110;
-    int rightWhite = 110;
+    int leftWhite = 300;
+    int rightWhite = 500;
 
     Serial.print("sensores IR: ");
     Serial.print(lightSensorLeft->read());
@@ -183,12 +183,12 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
     motorLeft->setEncoder(0);
     motorRight->setEncoder(0);
     
-    if (lightSensorLeft->read()>leftWhite || lightSensorRight->read()>rightWhite){
+    if (lightSensorLeft->read()>110 || lightSensorRight->read()>110){
         Serial.println("estou me alinhando");
         stop(motorLeft,motorRight);
         delay(500);
         
-        if (lightSensorLeft->read()<leftWhite) //vê branco
+        if (lightSensorLeft->read()<lightSensorRight->read()) //vê branco
         {
             Serial.print("esquerdo ve branco ");
             while (lightSensorLeft->read()<leftWhite) { // && lightSensorRight->read()>rightWhite){ // ve branco
@@ -200,35 +200,36 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
 
                 motorLeft->moveForward(PWM+10);                
             }
-            motorRight->setEncoder(0);
-            while(motorRight->getEncoder() < 50){
-                motorRight->moveBackward(50);
-            }
-
+            return;
+            // motorRight->setEncoder(0);
+            // while(motorRight->getEncoder() < 50){
+            //     motorRight->moveBackward(50);
+            // }
         }
-        else if (lightSensorRight->read() < rightWhite) //ve branco
+        else if (lightSensorRight->read() < lightSensorRight->read()) //ve branco
         {
             Serial.println("direito ve branco");
             while (lightSensorRight->read()<rightWhite) {// ve branco
-                motorRight->moveForward(PWM);
-
+            
+                Serial.print("leitura IR ao alinhar: ");    
                 Serial.print(lightSensorLeft->read());
                 Serial.print(" ");
                 Serial.println(lightSensorRight->read());
+                motorRight->moveForward(PWM);
 
                 // motorLeft->setEncoder(0);
                 // while (motorLeft->getEncoder() < 15){
                 //     motorLeft->moveBackward(70);
                 // }    
-            }
-        } else {
-            movePID_cm(2,FORWARD,0.5,motorLeft,motorRight);
+                } 
+            return;
         }
 
+    // return aligned;
     stop(motorLeft, motorRight);
     delay(500);
     
-    } else{
+    } else {
         return;
     }
 }
@@ -255,17 +256,63 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
     return ;
 }
 
-void movePID_cm(int distance_cm, Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* motorRight){
-    setPreviusTime(micros());
-    delay(100);
+void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR){
+  int leftBlack = 100;
+  int rightBlack = 300;
+
+  if ((leftIR->read()<leftBlack && leftIR->read()<rightBlack) || (leftIR->read()>leftBlack && rightIR->read()>rightBlack)){
+  leftMotor->moveForward(80);
+  rightMotor->moveForward(60);
+}
+
+if(leftIR->read()>leftBlack){
+  while(leftIR->read()>leftBlack){
+  leftMotor->moveForward(130);
+  }
+  stop(leftMotor,rightMotor);
+
+} else if(rightIR->read()>rightBlack){
+  while(rightIR->read()>rightBlack){
+    rightMotor->moveForward(leftBlack);
+  }
+  stop(leftMotor,rightMotor);
+} 
+
+
+
+}
+
+void move_cm(int distance_cm, Directions direction ,MotorDC* motorLeft, MotorDC* motorRight){
+    // setPreviusTime(micros());
+    // delay(100);
     float circunference = 37.7;
     int leftEncoderValue = (2048/circunference)*distance_cm;
     int rightEncoderValue = (2000/circunference)*distance_cm;
     resetEncoders(motorLeft,motorRight);
-    while(motorLeft->getEncoder() < leftEncoderValue && motorRight->getEncoder() < rightEncoderValue){
-        movePID(direction, 0.5, motorLeft, motorRight);
+    
+    switch (direction)
+    {
+    case FORWARD:
+        while(motorLeft->getEncoder() < leftEncoderValue && motorRight->getEncoder() < rightEncoderValue){
+            motorLeft->moveForward(80);
+            motorRight->moveForward(60);
+            }
+        break;
+    
+    case BACKWARD:
+        while(motorLeft->getEncoder() < leftEncoderValue && motorRight->getEncoder() < rightEncoderValue){
+            motorLeft->moveBackward(80);
+            motorRight->moveBackward(60);
+            }
+        break;
+
+    default:
+        break;
     }
     stop(motorLeft,motorRight);
+    delay(500);
+
+    
 
 }
 

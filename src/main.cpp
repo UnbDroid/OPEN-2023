@@ -57,8 +57,18 @@ void setup()
 
 // calibrateMotorsCT(&leftMotor,&rightMotor);
 // align(&leftIR,&rightIR,&leftMotor,&rightMotor,100);
-// beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralUltrassonic,&colorSensor,&bumper);
-// movePID_cm(30,FORWARD,0.3,&leftMotor,&rightMotor);
+// while(leftIR.read()<110 && rightIR.read()<110){
+//   leftMotor.moveForward(100);
+//   rightMotor.moveForward(80);
+//   Serial.println("to andando");
+// } 
+// stop(&leftMotor,&rightMotor);
+// delay(1000);
+// align(&leftIR,&rightIR,&leftMotor,&rightMotor,80);
+// Serial.println("terminei de alinhar");
+
+beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralUltrassonic,&colorSensor,&bumper);
+// move_cm(30,FORWARD,&leftMotor,&rightMotor);
 // rotates(RIGHT,&leftMotor,&rightMotor);
 // stop(&leftMotor,&rightMotor);
 // leftMotor.moveForward(80);
@@ -88,28 +98,34 @@ void setup()
 
 }
 
+
 void loop(){
 
-  Serial.print(leftIR.read());
-  Serial.print(" ");
-  Serial.println(rightIR.read());
-if ((leftIR.read()<100 && leftIR.read()<300)){
-  leftMotor.moveForward(80);
-  rightMotor.moveForward(60);
-}
+// boucing(&leftMotor,&rightMotor, &leftIR, &rightIR);
+//   Serial.print(leftIR.read());
+//   Serial.print(" ");
+//   Serial.println(rightIR.read());
 
-if(leftIR.read()>100){
-  while(leftIR.read()>100){
-  leftMotor.moveForward(130);
-  }
-  stop(&leftMotor,&rightMotor);
+// if ((leftIR.read()<80 && rightIR.read()<300) || (leftIR.read()>80 && rightIR.read()>300)){ // esq e dir no branco ou os dois no preto
+//   Serial.println("os dois =");
+//   leftMotor.moveForward(80);
+//   rightMotor.moveForward(60);
+// }
 
-} else if(rightIR.read()>300){
-  while(rightIR.read()>300){
-    rightMotor.moveForward(100);
-  }
-  stop(&leftMotor,&rightMotor);
-} 
+// if(leftIR.read()>80 && rightIR.read() < 300){ //esq no preto e dir no branco
+//   Serial.println("ESQ preto");
+//   while(leftIR.read()>80){
+//     leftMotor.moveForward(130);
+//   }
+//   stop(&leftMotor,&rightMotor);
+
+// } else if(rightIR.read()>300 && leftIR.read()<80) { // esq no branco e dir no preto
+//   Serial.println("DIR preto");
+//   while(rightIR.read()>300){
+//     rightMotor.moveForward(100);
+//   }
+//   stop(&leftMotor,&rightMotor);
+// } 
 
 
 

@@ -175,7 +175,7 @@ int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSenso
     //     leftMotor->moveForward(100);
     //     rightMotor->moveForward(80);
     // }
-    movePID_cm(10,FORWARD,0.3,leftMotor,rightMotor);
+    move_cm(10,FORWARD,leftMotor,rightMotor);
     
     stop(leftMotor,rightMotor);
     delay(500);
@@ -206,7 +206,7 @@ bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralU
     // }
     stop(leftMotor,rightMotor);
     delay(500);
-    movePID_cm(5,BACKWARD,0.3,leftMotor,rightMotor);
+    move_cm(5,BACKWARD,leftMotor,rightMotor);
 
     stop(leftMotor,rightMotor);
     delay(500);
@@ -229,7 +229,7 @@ bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralU
     Serial.print(" ");
     Serial.println(readingUltraLateral);
 
-    if (readingUltraLateral < closeToUltra || readingUltraFrontal < closeToUltra){
+    if (readingUltraLateral <= closeToUltra || readingUltraFrontal <= closeToUltra){
         seesSomething = true;
     }
 
@@ -239,7 +239,7 @@ bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralU
     stop(leftMotor,rightMotor);
     delay(500);
 
-    movePID_cm(5,FORWARD,0.3,leftMotor,rightMotor);
+    move_cm(5,FORWARD,leftMotor,rightMotor);
     // resetEncoders(leftMotor,rightMotor);
     // while(leftMotor->getEncoder()<200 && rightMotor->getEncoder()<200){
     //     leftMotor->moveForward(80);
@@ -277,7 +277,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
 
         for (int i = 0; i < 5; i++) { //faz uma média das leituras do ultrassom
             readingFrontalUltra =  readingFrontalUltra + frontalUltrassonic->distance_cm();
-            movePID(FORWARD,0.5,leftMotor,rightMotor); 
+            boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight);
             }
         readingFrontalUltra = readingFrontalUltra/5;
 
@@ -288,7 +288,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
             //     leftMotor->moveBackward(80);
             //     rightMotor->moveBackward(60);
             // }
-            movePID_cm(5,BACKWARD,0.5,leftMotor,rightMotor); 
+            move_cm(5,BACKWARD,leftMotor,rightMotor); 
             stop(leftMotor,rightMotor);
             delay(500);
         
@@ -353,7 +353,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
             resetEncoders(leftMotor,rightMotor);
             // Serial.println("vou p tras pq preciso girar");
 
-            movePID_cm(3,BACKWARD,0.30,leftMotor,rightMotor);
+            move_cm(3,BACKWARD,leftMotor,rightMotor);
             // while(leftMotor->getEncoder()< 200 and rightMotor->getEncoder() < 200){
                 // movePID(BACKWARD,40,leftMotor,rightMotor);
                 // leftMotor->moveBackward(70);
@@ -368,31 +368,24 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
             delay(500);
             // Serial.println("quero alinhar");
 
-            while(lightSensorLeft->read()<150 && lightSensorRight->read()<150){
+            while(lightSensorLeft->read()<110 && lightSensorRight->read()<110){
                 leftMotor->moveForward(75);
                 rightMotor->moveForward(55);
-                // movePID(FORWARD,0.25,leftMotor,rightMotor);
-
-                // Serial.print("alinha e le: Esq/Dir ");
-                // Serial.print(lightSensorLeft->read());
-                // Serial.print(" ");
-                // Serial.println(lightSensorRight->read());
-
             } 
+
             stop(leftMotor,rightMotor);
             delay(1000);
-            align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,55);
-            // Serial.println("terminei de alinhar");
+            align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,80);
+            Serial.println("terminei de alinhar");
 
             resetEncoders(leftMotor,rightMotor);
             mustTurn = false;
 
         } else {
             // resetEncoders(leftMotor,rightMotor);
-            movePID(FORWARD,0.5,leftMotor,rightMotor);
+            boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight);
             // leftMotor->moveForward(85);
             // rightMotor->moveForward(55);
-
         }
     }
     

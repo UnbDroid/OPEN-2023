@@ -13,13 +13,14 @@ enum RotateDirections{LEFT, RIGHT, AROUND};
 
 void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor *lightSensorLeft,LightSensor* lightSensorRight);
 void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* motorRight);
-void movePID_cm(int distance_cm, Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* motorRight);
+void move_cm(int distance_cm, Directions direction,MotorDC* motorLeft, MotorDC* motorRight);
 void stop(MotorDC* motorLeft, MotorDC* motorRight);
 void resetEncoders(MotorDC* motorLeft, MotorDC* motorRight);
 void setPreviusTime(double value);
 void calibrateMotorsCT(MotorDC * leftMotor, MotorDC * rightMotor);
 double getPreviusTime();
 double add(double * ptr, double valor);
+void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR);
 
 
 void initialPosition(MPU9250 * mpu);
