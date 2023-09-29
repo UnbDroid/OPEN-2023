@@ -261,19 +261,22 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
   int rightBlack = 300;
 
   if ((leftIR->read()<leftBlack && leftIR->read()<rightBlack) || (leftIR->read()>leftBlack && rightIR->read()>rightBlack)){
-  leftMotor->moveForward(80);
-  rightMotor->moveForward(60);
+  leftMotor->moveForward(120);
+  rightMotor->moveForward(100);
 }
 
 if(leftIR->read()>leftBlack){
+    
   while(leftIR->read()>leftBlack){
-  leftMotor->moveForward(130);
+  leftMotor->moveForward(70);
+  rightMotor->moveBackward(80);
   }
   stop(leftMotor,rightMotor);
 
 } else if(rightIR->read()>rightBlack){
   while(rightIR->read()>rightBlack){
-    rightMotor->moveForward(leftBlack);
+    rightMotor->moveForward(100);
+    leftMotor->moveBackward(80);
   }
   stop(leftMotor,rightMotor);
 } 

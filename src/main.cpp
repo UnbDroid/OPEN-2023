@@ -67,7 +67,7 @@ void setup()
 // align(&leftIR,&rightIR,&leftMotor,&rightMotor,80);
 // Serial.println("terminei de alinhar");
 
-beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralUltrassonic,&colorSensor,&bumper);
+//beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralUltrassonic,&colorSensor,&bumper);
 // move_cm(30,FORWARD,&leftMotor,&rightMotor);
 // rotates(RIGHT,&leftMotor,&rightMotor);
 // stop(&leftMotor,&rightMotor);
@@ -101,7 +101,7 @@ beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic, &lateralU
 
 void loop(){
 
-// boucing(&leftMotor,&rightMotor, &leftIR, &rightIR);
+boucing(&leftMotor,&rightMotor, &leftIR, &rightIR);
 //   Serial.print(leftIR.read());
 //   Serial.print(" ");
 //   Serial.println(rightIR.read());
