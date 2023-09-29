@@ -214,13 +214,6 @@ bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralU
     stop(leftMotor,rightMotor);
     delay(500);
 
-    // for (int i = 1; i < 20; i++) { //faz uma média das leituras do ultrassom
-    //     readingUltraLateral =  readingUltraLateral + lateralUltrassonic->distance_cm();
-    //     readingUltraFrontal = readingUltraFrontal + frontalUltrassonic->distance_cm();
-    //     }
-    // readingUltraLateral = readingUltraLateral/20;
-    // readingUltraFrontal = readingUltraFrontal/20;
-    
     int readingUltraLateral = lateralUltrassonic->distance_cm();
     int readingUltraFrontal = frontalUltrassonic->distance_cm();
 
@@ -240,11 +233,7 @@ bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralU
     delay(500);
 
     move_cm(5,FORWARD,leftMotor,rightMotor);
-    // resetEncoders(leftMotor,rightMotor);
-    // while(leftMotor->getEncoder()<200 && rightMotor->getEncoder()<200){
-    //     leftMotor->moveForward(80);
-    //     rightMotor->moveForward(60);
-    // }
+
 
     stop(leftMotor,rightMotor);
     delay(500);
@@ -264,13 +253,12 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
     //objetos = prateleira(1), cores(2), cubo(3), borda(4).
 
     Serial.println("to no começo");
-    float closeToUltra = 8;
+    float closeToUltra = 10;
     bool mustTurn = false;
     bool edge = false;
     int lastSeen = 0;
     bool shelve = false;
     int position[2] = {0,0}; //y,x, respectivamente
-    setPreviusTime(micros());
 
     while(!edge || !lastSeen){ 
         float readingFrontalUltra = 0;
@@ -353,7 +341,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
             resetEncoders(leftMotor,rightMotor);
             // Serial.println("vou p tras pq preciso girar");
 
-            move_cm(3,BACKWARD,leftMotor,rightMotor);
+            // move_cm(3,BACKWARD,leftMotor,rightMotor);
             // while(leftMotor->getEncoder()< 200 and rightMotor->getEncoder() < 200){
                 // movePID(BACKWARD,40,leftMotor,rightMotor);
                 // leftMotor->moveBackward(70);

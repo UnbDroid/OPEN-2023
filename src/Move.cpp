@@ -47,36 +47,6 @@ double add(double * ptr, double valor){
    return sum;
 }
 
-void calibrateMotorsCT(MotorDC * leftMotor, MotorDC * rightMotor){
-    resetEncoders(leftMotor,rightMotor);
-    leftMotor->moveForward(255);
-    rightMotor->moveForward(255);
-    delay(1000);
-    stop(leftMotor,rightMotor);
-
-    constMotors[0] = leftMotor->getEncoder();
-    constMotors[1] = rightMotor->getEncoder();
-
-    constMotors[0] = constMotors[0]/2048;
-    constMotors[1] = constMotors[1] /2000;
-
-    constMotors[0] = 255/constMotors[0];
-    constMotors[1] = 255/constMotors[1];
-
-    Serial.print("constantes das rodas Esq/Dir: ");
-    Serial.print(constMotors[0]);
-    Serial.print(" ");
-    Serial.println(constMotors[1]);
-}
-
-void setPreviusTime(double value){
-    previousTime = value;    
-}
-
-double getPreviusTime(){
-    return previousTime;
-}
-
 void move(Directions direction, int PWM ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor * lightSensorLeft,LightSensor* lightSensorRight){
     switch (direction)
     {
@@ -93,9 +63,6 @@ void move(Directions direction, int PWM ,MotorDC* motorLeft, MotorDC* motorRight
     }
 }
 
-void initialPosition(MPU9250 * mpu){
-    int a;
-}
 void correctingDirection(int * direction, MotorDC * leftMotor,MotorDC* rightMotor){
     // leftMotor->moveForward(60);
     // rightMotor->moveForward(40);
@@ -120,9 +87,6 @@ void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * mot
     int PWM = 130;
     
     resetEncoders(motorLeft,motorRight);
-
-    // int encoderLeftValue = abs(motorLeft->getEncoder());
-    // int encoderRightValue = abs(motorRight->getEncoder());
 
     switch(rotateDirection)
     {
@@ -201,10 +165,6 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
                 motorLeft->moveForward(PWM+10);                
             }
             return;
-            // motorRight->setEncoder(0);
-            // while(motorRight->getEncoder() < 50){
-            //     motorRight->moveBackward(50);
-            // }
         }
         else if (lightSensorRight->read() < lightSensorRight->read()) //ve branco
         {
@@ -216,11 +176,6 @@ void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC
                 Serial.print(" ");
                 Serial.println(lightSensorRight->read());
                 motorRight->moveForward(PWM);
-
-                // motorLeft->setEncoder(0);
-                // while (motorLeft->getEncoder() < 15){
-                //     motorLeft->moveBackward(70);
-                // }    
                 } 
             return;
         }
@@ -261,38 +216,28 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
   int rightBlack = 300;
 
   if ((leftIR->read()<leftBlack && leftIR->read()<rightBlack) || (leftIR->read()>leftBlack && rightIR->read()>rightBlack)){
-  leftMotor->moveForward(120);
+  leftMotor->moveForward(130);
   rightMotor->moveForward(100);
 }
 
-if(leftIR->read()>leftBlack){
-    
-  while(leftIR->read()>leftBlack){
-  leftMotor->moveForward(70);
-  rightMotor->moveBackward(80);
-  }
-  stop(leftMotor,rightMotor);
-
-} else if(rightIR->read()>rightBlack){
-  while(rightIR->read()>rightBlack){
-    rightMotor->moveForward(100);
-    leftMotor->moveBackward(80);
-  }
-  stop(leftMotor,rightMotor);
+if (leftIR->read()>leftBlack) {
+    while(leftIR->read() > leftBlack){
+        leftMotor->moveForward(160);
+        }
+} else if (rightIR->read()>rightBlack) {
+    while(rightIR->read() > rightBlack){
+        rightMotor->moveForward(130);
+    }
 } 
-
-
 
 }
 
 void move_cm(int distance_cm, Directions direction ,MotorDC* motorLeft, MotorDC* motorRight){
-    // setPreviusTime(micros());
-    // delay(100);
     float circunference = 37.7;
     int leftEncoderValue = (2048/circunference)*distance_cm;
     int rightEncoderValue = (2000/circunference)*distance_cm;
+
     resetEncoders(motorLeft,motorRight);
-    
     switch (direction)
     {
     case FORWARD:
@@ -314,9 +259,6 @@ void move_cm(int distance_cm, Directions direction ,MotorDC* motorLeft, MotorDC*
     }
     stop(motorLeft,motorRight);
     delay(500);
-
-    
-
 }
 
 void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* motorRight){
@@ -373,35 +315,35 @@ void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* m
     //     delayMicroseconds(delay_time);
     // }
 
-    Serial.print("DeltaT: ");
-    Serial.print(deltaT);
-    // Serial.print(" integral:");
-    // Serial.print(leftIntegralErrorSum);
+    // Serial.print("DeltaT: ");
+    // Serial.print(deltaT);
+    // // Serial.print(" integral:");
+    // // Serial.print(leftIntegralErrorSum);
+    // // Serial.print(" ");
+    // // Serial.print(rigthIntegralErrorSum);
+    // // Serial.print("soma RPS ");
+    // // Serial.print(sumRPSLeft);
+    // // Serial.print(" ");
+    // // Serial.print(sumRPSRight);
+    // Serial.print(" RPS: ");
+    // Serial.print(rpsLeft);
     // Serial.print(" ");
-    // Serial.print(rigthIntegralErrorSum);
-    // Serial.print("soma RPS ");
-    // Serial.print(sumRPSLeft);
+    // Serial.print(rpsRight);
+    // Serial.print(" > ");
+    // Serial.print("ERRO ");
+    // Serial.print(leftError);
     // Serial.print(" ");
-    // Serial.print(sumRPSRight);
-    Serial.print(" RPS: ");
-    Serial.print(rpsLeft);
-    Serial.print(" ");
-    Serial.print(rpsRight);
-    Serial.print(" > ");
-    Serial.print("ERRO ");
-    Serial.print(leftError);
-    Serial.print(" ");
-    Serial.print(rightError);
-    Serial.print(" > ");
-    Serial.print("RPS enviado ");
-    Serial.print(PWMLeft);
-    Serial.print(" ");
-    Serial.print(PWMRight);
-    Serial.print(" > ");
-    Serial.print("no motor ");
-    Serial.print(parameterPWMLeft);
-    Serial.print(" ");
-    Serial.println(parameterPWMRight);
+    // Serial.print(rightError);
+    // Serial.print(" > ");
+    // Serial.print("RPS enviado ");
+    // Serial.print(PWMLeft);
+    // Serial.print(" ");
+    // Serial.print(PWMRight);
+    // Serial.print(" > ");
+    // Serial.print("no motor ");
+    // Serial.print(parameterPWMLeft);
+    // Serial.print(" ");
+    // Serial.println(parameterPWMRight);
  
     
 
@@ -421,10 +363,6 @@ void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* m
     default:
         break;
     }
-
-    // currentTime = micros() - currentTime;
-    // Serial.print("tempo de execução do movePID: ");
-    // Serial.println(currentTime);
 }
 
 

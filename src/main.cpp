@@ -85,8 +85,6 @@ void setup()
 // rotates(RIGHT,&leftMotor,&rightMotor);
 // stop(&leftMotor,&rightMotor);
 // delay(500);
-
-//   setPreviusTime(micros());
 //   while(!(rightIR.read()>110&&leftIR.read()>110)){
 //     movePID(FORWARD,0.5,&leftMotor,&rightMotor);
 //   } 
