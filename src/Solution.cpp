@@ -25,6 +25,12 @@ int * deliveryPlace(int y,int x,char blockType){
     int *coordinatesPtr;
     switch (blockType)
     {
+    case 'g':
+        indexShelf=0;
+        break;
+    case '7': 
+        indexShelf=0;
+        break;   
     case '1':
         indexShelf=6;
         break;
@@ -73,7 +79,6 @@ int * deliveryPlace(int y,int x,char blockType){
     case 'w':
         //red
         indexShelf=12;
-        Serial.println("eu to aquiii");
         break;   
     case 'x':
         //green
@@ -201,9 +206,8 @@ int*  bestBlock(int currentY,int currentX){
 
 void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic){
     int destination[2];
-    delay(3000);
     int *best = bestBlock(*y,*x);
-    forkLift->forklift_up_steps(0,3);
+    forkLift->forklift_up_steps(0,1);
     while(*best!=0){
         if(state==0){
             destination[0]=*best;
@@ -227,10 +231,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 destinationDirection=SOL::Sul;
             }
             
-            while(*currentDirection!=destinationDirection){       
-                    correctingDirection(currentDirection,leftMotor,rightMotor);
-                    delay(1000);
-            }
+            correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
             int numberOfBlocks=2;
             //aqui entra a função da camera que retorna a quantidade de blocos
             /*
@@ -252,39 +253,61 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             
             pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,lightSensorRight,frontalUltrassonic,robotClaw,forkLift);
             //typeOfBlock= return_type_of_cube();
-            typeOfBlock='w';
-            forkLift->forklift_up_steps(0,1);
+            typeOfBlock='d';
             int forkDestiny=1;
-            Serial.println("oi");
             if(typeOfBlock=='g'||typeOfBlock=='7'||typeOfBlock=='h'||typeOfBlock=='8'||typeOfBlock=='i'||typeOfBlock=='9'){
-                forkLift->forklift_up_steps(1,3);
+                forkLift->forklift_up_steps(0,3);
                 forkDestiny=3;
             }
             else if(typeOfBlock=='d'||typeOfBlock=='4'||typeOfBlock=='e'||typeOfBlock=='5'||typeOfBlock=='f'||typeOfBlock=='6'){
-                forkLift->forklift_up_steps(1,2);
+                forkLift->forklift_up_steps(0,2);
                 forkDestiny=2;
             }
             int* ptrDelivery = deliveryPlace(*y,*x,typeOfBlock);
-            Serial.print("Lugar de entrega YX: ");
-            Serial.print(ptrDelivery[0]);
-            Serial.print(" ");
-            Serial.println(ptrDelivery[1]);
-
-
             destination[0]=*(ptrDelivery);
             destination[1]=*(ptrDelivery+1);
             if(destination[0]==1){
                 destination[0]=2;
-                //ja levantar a garra aqui a depender do tipo de bloco
                 moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
                 SOL::Direcao destinationDirection=SOL::Norte;
-                while(*currentDirection!=destinationDirection){       
-                    correctingDirection(currentDirection,leftMotor,rightMotor);
-                    delay(1000);
-                }
-                destination[0]=1;
-                moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
-
+                resetEncoders(leftMotor,rightMotor);
+                
+            while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
+                leftMotor->moveBackward(100);
+                rightMotor->moveBackward(80);
+            }    
+            stop(leftMotor,rightMotor);
+            resetEncoders(leftMotor,rightMotor);
+            delay(500);
+            correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
+            resetEncoders(leftMotor,rightMotor);
+            while(rightMotor->getEncoder()<=500||leftMotor->getEncoder()<=500){
+                leftMotor->moveBackward(100);
+                rightMotor->moveBackward(80);
+            }    
+            stop(leftMotor,rightMotor);
+            resetEncoders(leftMotor,rightMotor);
+            while(!(lightSensorLeft->read()>=150 && lightSensorRight->read()>=150)){
+                Serial.println(lightSensorLeft->read());
+                leftMotor->moveForward(100);
+                rightMotor->moveForward(80);
+            }
+            stop(leftMotor,rightMotor);
+            delay(500);
+            resetEncoders(leftMotor,rightMotor);
+            while(leftMotor->getEncoder()<1313&&rightMotor->getEncoder()<1283){
+                    leftMotor->moveForward(100);
+                    rightMotor->moveForward(80);
+            }
+            stop(leftMotor,rightMotor);
+            robotClaw->open_claw_with_cube();
+            delay(500);
+            resetEncoders(leftMotor,rightMotor);
+            while(leftMotor->getEncoder()<1313&&rightMotor->getEncoder()<1283){
+                    leftMotor->moveBackward(100);
+                    rightMotor->moveBackward(80);
+            }
+            stop(leftMotor,rightMotor);
             }
             else if (destination[0]==6){
                 moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
@@ -297,20 +320,18 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 resetEncoders(leftMotor,rightMotor);
                 delay(1000);
                 SOL::Direcao destinationDirection=SOL::Sul;
-                while(*currentDirection!=destinationDirection){       
-                    correctingDirection(currentDirection,leftMotor,rightMotor);
-                    delay(1000);
-                }
+                correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
                 while(lightSensorLeft->read()<=60 ||lightSensorRight->read()<=60){
                     leftMotor->moveForward(100);
                     rightMotor->moveForward(80);
                 }
                 stop(leftMotor,rightMotor);
-                delay(1000);
+                delay(500);
+                robotClaw->open_claw_with_cube();
             }
-        robotClaw->open_claw_with_cube();
-        if(forkDestiny!=3){
-            forkLift->forklift_up_steps(forkDestiny,3);
+        
+        if(forkDestiny!=1){
+            forkLift->forklift_up_steps(forkDestiny,1);
         }
         best = bestBlock(*y,*x);
         state=0;

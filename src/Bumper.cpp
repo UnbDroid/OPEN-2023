@@ -1,8 +1,10 @@
+
 #include<Arduino.h>
 #include<Wire.h>
 #include <Bumper.h>
 
-Bumper :: Bumper(int pinBumper){
+
+Bumper::Bumper(int pinBumper){
     
     this->pinBumper = pinBumper;
     pinMode(pinBumper, INPUT_PULLUP);
@@ -11,4 +13,5 @@ Bumper :: Bumper(int pinBumper){
 bool Bumper::checkBumper(){
     bool value = digitalRead(pinBumper);
     return value;
+
 }

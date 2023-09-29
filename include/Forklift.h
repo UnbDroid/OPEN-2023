@@ -12,9 +12,7 @@ class Forklift: public StepMotor{
         void forklift_down_steps(int initial_step, int final_step, int velocity = 400);
         void initial_lift();
 
-
-
-    private:
+    /*
         float positions_per_cm = 200;
         float distance0_1 = 3; // Distance from step 0 (floor) to 1 
         float distance1_2 = 11.5;
@@ -22,6 +20,16 @@ class Forklift: public StepMotor{
         float distance1_0 = 3;
         float distance2_1 = 11.5;
         float distance3_2 = 11.5;
+    */
+
+    private:
+        float positions_per_cm = 200;
+        float distance0_1 = 7; // Distance from step 0 (floor) to 1 
+        float distance1_2 = 10.5;
+        float distance2_3 = 9.3011;
+        float distance1_0 = 7;
+        float distance2_1 = 10.5;
+        float distance3_2 = 9.3011;
 };
 
 #endif
