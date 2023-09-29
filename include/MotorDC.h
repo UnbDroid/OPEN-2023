@@ -9,7 +9,7 @@
             void moveBackward(int velocity);
             void readEncoder();
             void stop();
-            int getEncoder();
+            unsigned int getEncoder();
             int setEncoder(int value);
 
         private:
@@ -17,7 +17,7 @@
             int pinoRpwm;
             int pinoLpwm;
             int pinoEN;
-            int posEncoder = 0; 
+            unsigned int posEncoder = 0; 
             int pinEncA;
             int pinEncB;
             int value;
