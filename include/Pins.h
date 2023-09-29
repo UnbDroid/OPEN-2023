@@ -68,8 +68,4 @@
 #define KI_RIGHT 1//0.7
 
 //quando oscila demais (KI), pode aumentar kp
-// extern int leftWhite = 100;
-// extern int rightWhite = 200;
-
-
 #endif
