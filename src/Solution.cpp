@@ -342,6 +342,95 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
     stop(leftMotor,rightMotor);
 }
     
+
+int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight){
+    int white = 100;
+    int coord = 0;
+    Serial.println("checando em qual verde to");
+    
+    // int leftValue = lightSensorLeft->read();
+    // int rightValue = lightSensorRight->read();
+    stop(leftMotor,rightMotor);
+    delay(500);
+    rotates(RIGHT,leftMotor,rightMotor);
+    stop(leftMotor,rightMotor);
+    delay(500);
+
+    resetEncoders(leftMotor,rightMotor);
+    // while (leftMotor->getEncoder() < 1000 && rightMotor->getEncoder() < 1000)
+    // {
+    //     leftMotor->moveForward(100);
+    //     rightMotor->moveForward(80);
+    // }
+    move_cm(10,FORWARD,leftMotor,rightMotor);
+    
+    stop(leftMotor,rightMotor);
+    delay(500);
+
+    int leftValue = lightSensorLeft->read();
+    int rightValue = lightSensorRight->read();
+    
+    if ( rightValue > white){
+        coord = 7;        
+    } else {
+        coord = 1;
+    }
+
+    Serial.print("estou na ponta 6.");
+    Serial.println(coord);
+    return coord;
     
     
-    
+}
+  
+bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic, MotorDC * leftMotor, MotorDC * rightMotor){
+    bool seesSomething = false;
+    float closeToUltra = 20;
+    // resetEncoders(leftMotor,rightMotor);
+    // while(leftMotor->getEncoder()<400 && rightMotor->getEncoder()<400){
+    //     leftMotor->moveBackward(80);
+    //     rightMotor->moveBackward(60);
+    // }
+    stop(leftMotor,rightMotor);
+    delay(500);
+    move_cm(5,BACKWARD,leftMotor,rightMotor);
+
+    stop(leftMotor,rightMotor);
+    delay(500);
+    rotates(LEFT,leftMotor,rightMotor);
+    stop(leftMotor,rightMotor);
+    delay(500);
+
+    int readingUltraLateral = lateralUltrassonic->distance_cm();
+    int readingUltraFrontal = frontalUltrassonic->distance_cm();
+
+    Serial.print("as leituras  dos ultra frontal/lateral: ");
+    Serial.print(readingUltraFrontal);
+    Serial.print(" ");
+    Serial.println(readingUltraLateral);
+
+    if (readingUltraLateral <= closeToUltra || readingUltraFrontal <= closeToUltra){
+        seesSomething = true;
+    }
+
+    stop(leftMotor,rightMotor);
+    delay(500);
+    rotates(RIGHT,leftMotor,rightMotor);
+    stop(leftMotor,rightMotor);
+    delay(500);
+
+    move_cm(5,FORWARD,leftMotor,rightMotor);
+
+
+    stop(leftMotor,rightMotor);
+    delay(500);
+    Serial.println("checagem com o ultrassom");
+    Serial.print("checando ultra lateral, li: ");
+    Serial.print(readingUltraLateral);
+    Serial.println(" checando ultra frontal, li: ");
+    Serial.print(readingUltraFrontal);
+    Serial.print(" depois eu li: ");
+    Serial.println(seesSomething);
+
+    return seesSomething;
+}

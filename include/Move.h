@@ -7,6 +7,7 @@
 #include<LightSensor.h>
 #include<LightSensor.h>
 #include<Solution.h>
+#include <Bumper.h>
 
 enum Directions{FORWARD, BACKWARD};
 enum RotateDirections{LEFT, RIGHT, AROUND};
@@ -23,6 +24,7 @@ double add(double * ptr, double valor);
 void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR);
 
 
+
 void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * motorRight);
 
 
@@ -37,4 +39,5 @@ void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirectio
 
 void correctDirection(int* atual,int destino,MotorDC * leftMotor, MotorDC * rightMotor);
 
+void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic, Bumper * bumper);
 #endif

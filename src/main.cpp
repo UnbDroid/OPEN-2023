@@ -60,14 +60,6 @@ int x =7;
 int direcao=SOL::Norte;
 
 void loop(){
-  
-  Serial.print("ESQ DIR MEIO: ");
-  Serial.print(leftIR.read());
-  Serial.print(" ");
-  Serial.print(rightIR.read());
-  Serial.print(" ");
-  Serial.println(middleIR.read());
-
 
   // stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor);
   //forklift.forklift_up_steps(0,1);
