@@ -10,6 +10,7 @@
             float distance_cm();
             void send_pulse();
             float last_ten_values();
+            // float mediumValueUltrassonic();
 
         private:
             float distance;

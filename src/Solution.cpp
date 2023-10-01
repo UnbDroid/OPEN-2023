@@ -2,6 +2,7 @@
 #include<Move.h>
 #include<Rasp.h>
 #include<PickCube.h>
+#include <Bumper.h>
 
 static int state=0;
 char typeOfBlock=2;
@@ -382,7 +383,24 @@ int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSenso
     
     
 }
-  
+
+bool checksBumper(Bumper * bumper){
+    int bumperValue = 0;
+    bool seesBumper = false;
+
+    for (int i = 0; i < 100; i++)
+    {
+        bumperValue = bumperValue+ bumper->checkBumper();    
+    }
+    Serial.print("validei bumper e li: ");
+    Serial.println(bumperValue);
+    if(bumperValue >= 90){
+        seesBumper = true;
+    }
+
+    return seesBumper;  
+}
+
 bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic, MotorDC * leftMotor, MotorDC * rightMotor){
     bool seesSomething = false;
     float closeToUltra = 20;
@@ -434,3 +452,4 @@ bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralU
 
     return seesSomething;
 }
+

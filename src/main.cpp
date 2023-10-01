@@ -49,22 +49,47 @@ void setup()
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-
-
-  // colorSensor.calibra_sensor_inferior(0);  // Essa função serve para calibrar o sensor de cor inferior, se o sensor já estiver calibrado, comentar essa função.
-  colorSensor.read_limit_values(0); // Essa função serve para ler os últimos valores calibrados pelo sensor de cor
-
+  beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper);
+  // align(&leftIR,&rightIR,&leftMotor,&rightMotor,80);
+  // rotates(RIGHT,&leftMotor,&rightMotor);
 }
 int y=6;
 int x =7;
 int direcao=SOL::Norte;
 
 void loop(){
-
+  // Serial.println(frontalUltrassonic.distance_cm());
+  // boucing(&leftMotor,&rightMotor,&leftIR,&leftIR);
+  // Serial.print(" LEFT  e RIGHT: ");
+  // Serial.print(leftIR.read());
+  // Serial.print(" ");
+  // Serial.println(rightIR.read());
+  // Serial.println(bumper.checkBumper());
   // stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor);
   //forklift.forklift_up_steps(0,1);
   //pick_cube_from_right(&leftMotor, &rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor,&Robot_Claw, &forklift);
   //Robot_Claw.open_claw_with_cube();
-}
 
+// int leftBlack = 100;
+// int rightBlack = 100;
+
+// if(leftIR.read()>leftBlack && leftIR.read()>rightBlack){
+//   leftMotor.moveForward(130);
+//   rightMotor.moveForward(100);
+// }
+
+// if (leftIR.read()<leftBlack) {
+//     while(leftIR.read() < leftBlack){
+//         leftMotor.moveForward(160);
+//         rightMotor.moveBackward(60);
+//     }
+// }    
+// else if (rightIR.read()<rightBlack) {
+//     while(rightIR.read() < rightBlack){
+//         rightMotor.moveForward(130);
+//         leftMotor.moveBackward(80);
+//     }
+// } 
+// }
+}
 

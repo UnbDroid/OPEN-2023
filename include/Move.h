@@ -21,7 +21,7 @@ void setPreviusTime(double value);
 void calibrateMotorsCT(MotorDC * leftMotor, MotorDC * rightMotor);
 double getPreviusTime();
 double add(double * ptr, double valor);
-void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR);
+void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR,Bumper * bumper);
 
 
 

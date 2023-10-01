@@ -8,6 +8,7 @@
 #include<Claw.h>
 #include<Forklift.h>
 #include<Ultrassonic.h>
+#include <Bumper.h>
 
 namespace SOL{
     enum Direcao{Norte=0,Oeste=3,Sul=2,Leste=1};
@@ -21,5 +22,6 @@ SOL::Direcao futureDirection(char axis,int start, int final);
 int * deliveryPlace(int y,int x,int blockType);
 int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight);
 bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic, MotorDC * leftMotor, MotorDC * rightMotor);
+bool checksBumper(Bumper * bumper);
 
 #endif
