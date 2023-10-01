@@ -388,13 +388,13 @@ bool checksBumper(Bumper * bumper){
     int bumperValue = 0;
     bool seesBumper = false;
 
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 10; i++)
     {
         bumperValue = bumperValue+ bumper->checkBumper();    
     }
     Serial.print("validei bumper e li: ");
     Serial.println(bumperValue);
-    if(bumperValue >= 90){
+    if(bumperValue >= 9){
         seesBumper = true;
     }
 

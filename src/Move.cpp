@@ -205,33 +205,53 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
 }
 
 void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR, Bumper * bumper){
-    int leftBlack = 300;
+    int leftBlack = 100;
     int rightBlack = 100;
-    if((leftIR->read()<leftBlack && leftIR->read()<rightBlack) || (leftIR->read()>leftBlack && rightIR->read()>rightBlack)){
-    leftMotor->moveForward(100);
-    rightMotor->moveForward(80);
-    }
 
+    if((leftIR->read()>leftBlack && leftIR->read()>rightBlack)){
+        Serial.println("vi bumper com boucing");
+        if(bumper->checkBumper()){
+            stop(leftMotor,rightMotor);
+            return;
+        } else {
+        leftMotor->moveForward(100);
+        rightMotor->moveForward(80);
+        }
+    } else if (leftIR->read()<leftBlack && rightIR->read()<rightBlack){
+        leftMotor->moveForward(100);
+        rightMotor->moveForward(80);
+    }
+    
     if (leftIR->read() > leftBlack) {
+        Serial.print("esquerdo preto ");
+        Serial.println(leftIR->read());
         while(leftIR->read() > leftBlack){
             if(bumper->checkBumper()){
-                break;
+                stop(leftMotor,rightMotor);
+                return;
             } else {
                 leftMotor->moveForward(130);
+                // rightMotor->moveForward(50);
             }
-            // rightMotor->moveForward(60);
+            
         }
     }    
     else if (rightIR->read() > rightBlack) {
+        Serial.print("direito preto R");
+        Serial.println(rightIR->read());
         while(rightIR->read() > rightBlack){
             if(bumper->checkBumper()){
-                break;
+                stop(leftMotor,rightMotor);
+                return;
+            } else {
+                rightMotor->moveForward(100);
+                
+                // leftMotor->moveForward(60);
             }
-            rightMotor->moveForward(100);
-            // leftMotor->moveForward(80);
         }
     } 
 }
+
 
 void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor){
     if(*current<*destination){
@@ -542,7 +562,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
         //     }
         // readingFrontalUltra = readingFrontalUltra/3;
 
-        while(readingFrontalUltra > closeToUltra){ // && !readingBumper){ 
+        while(readingFrontalUltra > closeToUltra && !readingBumper){ 
             boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight, bumper);
             readingBumper = bumper->checkBumper();
             readingFrontalUltra = frontalUltrassonic->distance_cm();
@@ -552,11 +572,11 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
             // Serial.print(readingFrontalUltra);
         }
         // Serial.println("passei do while");
-        // Serial.println("vi algo!");
+        Serial.println("vi algo!");
         stop(leftMotor,rightMotor);
         delay(500);
-        if (false){//readingBumper){
-            Serial.print("vou validar bumper");
+        if (readingBumper){
+            Serial.println("vou validar bumper");
             bool seesBumper = checksBumper(bumper);
             if(seesBumper){
                 Serial.print("senti bumper");
@@ -631,7 +651,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Mo
             delay(500);
             resetEncoders(leftMotor,rightMotor);
 
-            // move_cm(3,BACKWARD,leftMotor,rightMotor);
+            move_cm(3,BACKWARD,leftMotor,rightMotor);
   
             stop(leftMotor,rightMotor);
             delay(500);

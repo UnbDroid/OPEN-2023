@@ -59,11 +59,12 @@ int direcao=SOL::Norte;
 
 void loop(){
   // Serial.println(frontalUltrassonic.distance_cm());
-  // boucing(&leftMotor,&rightMotor,&leftIR,&leftIR);
+  // boucing(&leftMotor,&rightMotor,&leftIR,&leftIR,&bumper);
   // Serial.print(" LEFT  e RIGHT: ");
   // Serial.print(leftIR.read());
   // Serial.print(" ");
-  // Serial.println(rightIR.read());
+  // Serial.print(rightIR.read());
+  // Serial.print(" bumper: ");
   // Serial.println(bumper.checkBumper());
   // stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor);
   //forklift.forklift_up_steps(0,1);
