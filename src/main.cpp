@@ -49,6 +49,7 @@ void setup()
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
+  moveForSquare(3,&leftIR,&rightIR,&leftMotor,&rightMotor,&bumper);
   // beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper);
   // rotates(RIGHT,&leftMotor,&rightMotor);
 
@@ -58,7 +59,7 @@ void setup()
 }
 void loop(){
   // Serial.println(frontalUltrassonic.distance_cm());
-  boucing(&leftMotor,&rightMotor,&leftIR,&leftIR,&bumper);
+  // boucing(&leftMotor,&rightMotor,&leftIR,&leftIR,&bumper);
   // Serial.print(" LEFT  e RIGHT: ");
   // Serial.print(leftIR.read());
   // Serial.print(" ");
