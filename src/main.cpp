@@ -53,21 +53,29 @@ void setup()
 
   // colorSensor.calibra_sensor_inferior(0);  // Essa função serve para calibrar o sensor de cor inferior, se o sensor já estiver calibrado, comentar essa função.
   colorSensor.read_limit_values(0); // Essa função serve para ler os últimos valores calibrados pelo sensor de cor
+  /*
+  
+  
+  testeMove(5,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIR);
+  resetEncoders(&leftMotor,&rightMotor);
+  while(rightMotor.getEncoder()<=150||leftMotor.getEncoder()<=150){
+        leftMotor.moveBackward(100);
+        rightMotor.moveBackward(80);
+    }
+  stop(&leftMotor,&rightMotor);
+  */
+  int y=5;
+  int x =6;
+  int direcao=SOL::Norte; 
+  int destination[2];
+  destination[0]=2;
+  destination[1]=6;
+  moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIR);
 
 }
-int y=6;
-int x =7;
-int direcao=SOL::Norte;
+
 
 void loop(){
-  
-  Serial.print("ESQ DIR MEIO: ");
-  Serial.print(leftIR.read());
-  Serial.print(" ");
-  Serial.print(rightIR.read());
-  Serial.print(" ");
-  Serial.println(middleIR.read());
-
 
   // stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor);
   //forklift.forklift_up_steps(0,1);

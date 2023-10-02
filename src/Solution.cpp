@@ -204,7 +204,7 @@ int*  bestBlock(int currentY,int currentX){
     return closestBlock;
 }
 
-void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic){
+void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic,LightSensor * middleSensor){
     int destination[2];
     int *best = bestBlock(*y,*x);
     forkLift->forklift_up_steps(0,1);
@@ -213,7 +213,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             destination[0]=*best;
             destination[1]=*(best+1);
             SOL::Direcao destinationDirection;
-            moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+            moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor);
             resetEncoders(leftMotor,rightMotor);
             while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
                 leftMotor->moveBackward(100);
@@ -268,7 +268,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             destination[1]=*(ptrDelivery+1);
             if(destination[0]==1){
                 destination[0]=2;
-                moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+                moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor);
                 SOL::Direcao destinationDirection=SOL::Norte;
                 resetEncoders(leftMotor,rightMotor);
                 
@@ -310,7 +310,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             stop(leftMotor,rightMotor);
             }
             else if (destination[0]==6){
-                moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor);
+                moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor);
                 resetEncoders(leftMotor,rightMotor);
                 while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
                     leftMotor->moveBackward(100);
