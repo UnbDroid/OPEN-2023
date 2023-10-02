@@ -49,7 +49,7 @@ void setup()
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-  moveForSquare(3,&leftIR,&rightIR,&leftMotor,&rightMotor,&bumper);
+  moveForSquare(3,&leftIR,&rightIR,&leftMotor,&rightMotor);
   // beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper);
   // rotates(RIGHT,&leftMotor,&rightMotor);
 
@@ -58,6 +58,7 @@ void setup()
 // int direcao=SOL::Norte;
 }
 void loop(){
+  Serial.println(middleIR.read());
   // Serial.println(frontalUltrassonic.distance_cm());
   // boucing(&leftMotor,&rightMotor,&leftIR,&leftIR,&bumper);
   // Serial.print(" LEFT  e RIGHT: ");
