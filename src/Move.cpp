@@ -210,7 +210,7 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
 
     if((leftIR->read()>leftBlack && leftIR->read()>rightBlack)){
         Serial.println("vi bumper com boucing");
-        if(bumper->checkBumper()){
+        if(false){//bumper->checkBumper()){
             stop(leftMotor,rightMotor);
             return;
         } else {
@@ -226,7 +226,7 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
         Serial.print("esquerdo preto ");
         Serial.println(leftIR->read());
         while(leftIR->read() > leftBlack){
-            if(bumper->checkBumper()){
+            if(false){//bumper->checkBumper()){
                 stop(leftMotor,rightMotor);
                 return;
             } else {
