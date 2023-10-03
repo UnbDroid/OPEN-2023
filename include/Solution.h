@@ -23,5 +23,7 @@ int * deliveryPlace(int y,int x,int blockType);
 int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleIR);
 bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic, MotorDC * leftMotor, MotorDC * rightMotor);
 bool checksBumper(Bumper * bumper,MotorDC * leftMotor, MotorDC * rightMotor1);
+void repositionBeginning(int y, int x,  int orientacao, MotorDC * leftMotor, MotorDC * rightMotor, LightSensor * leftIR, LightSensor * rightIR, LightSensor * backIR);
+
 
 #endif

@@ -40,5 +40,5 @@ void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirectio
 
 void correctDirection(int* atual,int destino,MotorDC * leftMotor, MotorDC * rightMotor);
 
-void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, LightSensor * middleIR, MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic,Bumper * bumper);
+void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, LightSensor * middleIR, LightSensor * backIR,MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic,Bumper * bumper);
 #endif

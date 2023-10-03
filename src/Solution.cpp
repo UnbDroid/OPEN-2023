@@ -353,7 +353,7 @@ int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSenso
     // int rightValue = lightSensorRight->read();
     stop(leftMotor,rightMotor);
     delay(500);
-    move_cm(5,BACKWARD,leftMotor,rightMotor);
+    move_cm(7,BACKWARD,leftMotor,rightMotor);
     stop(leftMotor,rightMotor);
     delay(500);
     rotates(RIGHT,leftMotor,rightMotor);
@@ -467,3 +467,52 @@ bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralU
     return seesSomething;
 }
 
+void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, MotorDC * rightMotor, LightSensor * leftIR, LightSensor * rightIR, LightSensor * backIR){
+    move_cm(8,BACKWARD,leftMotor,rightMotor);
+        stop(leftMotor,rightMotor);
+        delay(500);
+
+    if (y == 1){
+        if(x== 1){
+            //pos 1.1
+        } else {
+            //pos 1.7
+            if(orientacao == 0){
+                rotates(AROUND,leftMotor,rightMotor);
+                stop(leftMotor,rightMotor);
+                delay(500);
+            } else {
+                rotates(RIGHT,leftMotor,rightMotor);
+                stop(leftMotor,rightMotor);
+                delay(500);
+            }
+        }
+        move_cm(8,BACKWARD,leftMotor,rightMotor);
+        stop(leftMotor,rightMotor);
+        delay(500);
+        
+        stop(leftMotor,rightMotor);
+        delay(500);
+        
+    } else {
+        if(x == 1){
+            //pos 6.1
+        } else {
+            //pos 6.7
+        }
+    }
+
+    while(leftIR->read()<=150 && rightIR->read()<=150){ //anda reto ate ver preto com o sensor IR e se alinha
+        leftMotor->moveForward(75);
+        rightMotor->moveForward(55);
+    } 
+
+    stop(leftMotor,rightMotor);
+    delay(500);
+    align(leftIR,rightIR,leftMotor,rightMotor,70);
+    stop(leftMotor,rightMotor);
+    delay(500);
+    
+    return;
+
+}
