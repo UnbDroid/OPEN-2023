@@ -344,8 +344,8 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
 }
     
 
-int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight){
-    int white = 100;
+int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleIR){
+    int white = 30;
     int coord = 0;
     Serial.println("checando em qual verde to");
     
@@ -353,25 +353,37 @@ int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSenso
     // int rightValue = lightSensorRight->read();
     stop(leftMotor,rightMotor);
     delay(500);
+    move_cm(5,BACKWARD,leftMotor,rightMotor);
+    stop(leftMotor,rightMotor);
+    delay(500);
     rotates(RIGHT,leftMotor,rightMotor);
     stop(leftMotor,rightMotor);
     delay(500);
 
-    resetEncoders(leftMotor,rightMotor);
-    // while (leftMotor->getEncoder() < 1000 && rightMotor->getEncoder() < 1000)
-    // {
-    //     leftMotor->moveForward(100);
-    //     rightMotor->moveForward(80);
-    // }
-    move_cm(10,FORWARD,leftMotor,rightMotor);
+    while(lightSensorLeft->read()<110 && lightSensorRight->read()<110){
+        leftMotor->moveForward(75);
+        rightMotor->moveForward(55);
+    } 
+
+    stop(leftMotor,rightMotor);
+    delay(500);
+    align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,70);
+    stop(leftMotor,rightMotor);
+    delay(500);
+
+    
+    move_cm(20,FORWARD,leftMotor,rightMotor);
     
     stop(leftMotor,rightMotor);
     delay(500);
 
-    int leftValue = lightSensorLeft->read();
-    int rightValue = lightSensorRight->read();
+    // int leftValue = lightSensorLeft->read();
+    // int rightValue = lightSensorRight->read();
+    float middleValue = middleIR->read();
+    Serial.print("IR do meio: ");
+    Serial.println(middleValue);
     
-    if ( rightValue > white){
+    if ( middleValue > white){
         coord = 7;        
     } else {
         coord = 1;
@@ -384,17 +396,19 @@ int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSenso
     
 }
 
-bool checksBumper(Bumper * bumper){
+bool checksBumper(Bumper * bumper, MotorDC * leftMotor, MotorDC * rightMotor){
     int bumperValue = 0;
     bool seesBumper = false;
-
-    for (int i = 0; i < 10; i++)
+    stop(leftMotor,rightMotor);
+    
+    for (int i = 0; i < 3; i++)
     {
         bumperValue = bumperValue+ bumper->checkBumper();    
+        delay(150);
     }
     Serial.print("validei bumper e li: ");
     Serial.println(bumperValue);
-    if(bumperValue >= 9){
+    if(bumperValue >= 2){
         seesBumper = true;
     }
 
@@ -403,7 +417,7 @@ bool checksBumper(Bumper * bumper){
 
 bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic, MotorDC * leftMotor, MotorDC * rightMotor){
     bool seesSomething = false;
-    float closeToUltra = 20;
+    float closeToUltra = 30;
     // resetEncoders(leftMotor,rightMotor);
     // while(leftMotor->getEncoder()<400 && rightMotor->getEncoder()<400){
     //     leftMotor->moveBackward(80);

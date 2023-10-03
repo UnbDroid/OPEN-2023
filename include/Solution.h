@@ -20,8 +20,8 @@ SOL::Direcao direction(char eixo,int yInicial, int yFinal, SOL::Direcao direcao)
 void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic);
 SOL::Direcao futureDirection(char axis,int start, int final);
 int * deliveryPlace(int y,int x,int blockType);
-int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight);
+int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleIR);
 bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic, MotorDC * leftMotor, MotorDC * rightMotor);
-bool checksBumper(Bumper * bumper);
+bool checksBumper(Bumper * bumper,MotorDC * leftMotor, MotorDC * rightMotor1);
 
 #endif

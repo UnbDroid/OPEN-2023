@@ -10,8 +10,6 @@
 #define ENC_A_LEFT 20
 #define ENC_B_LEFT 19
 
-
-
 #define M_RIGHT_RPWM A6//ANTIGO IN3
 #define M_RIGHT_LPWM A5//ANTIGO IN4
 #define EN_RIGHT_MOTOR 11
@@ -33,6 +31,7 @@
 #define A0_MEIO A14 
 #define A0_DIREITA   A12
 #define A0_ESQUERDA  A11
+#define A0_ATRAS A10
 
 
 

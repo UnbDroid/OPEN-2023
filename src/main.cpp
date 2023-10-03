@@ -25,6 +25,7 @@ Ultrassonic lateralUltrassonic(TRIG_UlLTRASSONIC_LATERAL,ECHO_UlLTRASSONIC_LATER
 LightSensor rightIR(A0_DIREITA);
 LightSensor leftIR(A0_ESQUERDA);
 LightSensor middleIR(A0_MEIO);
+LightSensor atrasIr(A0_ATRAS);
 
 Ultrassonic frontalUltrassonicSensor(echo_ultrassom_frontal, trig_ultrassom_frontal);
 Ultrassonic lateralUltrassonicSensor(echo_ultrassom_lateral, trig_ultrassom_lateral);
@@ -49,8 +50,9 @@ void setup()
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-  moveForSquare(3,&leftIR,&rightIR,&leftMotor,&rightMotor);
-  // beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper);
+  // moveForSquare(3,&leftIR,&rightIR,&leftMotor,&rightMotor);
+  beginning(&leftIR,&rightIR,&middleIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper);
+  // move_cm(5,FORWARD,&leftMotor,&rightMotor);
   // rotates(RIGHT,&leftMotor,&rightMotor);
 
 // int y=6;
@@ -58,7 +60,13 @@ void setup()
 // int direcao=SOL::Norte;
 }
 void loop(){
-  Serial.println(middleIR.read());
+  // Serial.print(leftIR.read());
+  // Serial.print(" ");
+  // Serial.print(rightIR.read());
+  // Serial.print(" ");
+  // Serial.println(middleIR.read());
+  // Serial.println(atrasIr.read());
+  // Serial.println(middleIR.read());
   // Serial.println(frontalUltrassonic.distance_cm());
   // boucing(&leftMotor,&rightMotor,&leftIR,&leftIR,&bumper);
   // Serial.print(" LEFT  e RIGHT: ");
