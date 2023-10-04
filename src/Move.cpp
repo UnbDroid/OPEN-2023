@@ -5,6 +5,8 @@
 #include<LightSensor.h>
 #include <Ultrassonic.h>
 #include <Pins.h>
+#include <Solution.h>
+#include <Bumper.h>
 
 static int correctedYFlag = 0;
 static int correctedXFlag = 0;
@@ -87,7 +89,7 @@ void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * mot
         motorLeft->moveForward(PWM);
         motorRight->moveBackward(PWM);
 
-        while (abs(motorLeft->getEncoder()) < 1100 && abs(motorRight->getEncoder()) < 1100){
+        while (abs(motorLeft->getEncoder()) < 1050 && abs(motorRight->getEncoder()) < 1050){
             motorLeft->moveForward(PWM);
             motorRight->moveBackward(PWM);
             
@@ -113,135 +115,156 @@ void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * mot
     default:
         break;
     }
-
-
 }
 
 
-void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLeft, MotorDC * motorRight, int PWM){
-    int leftWhite = 300;
-    int rightWhite = 500;
+void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, MotorDC * motorRight, int PWM){
+    int leftWhite = 110; //200
+    int rightWhite = 110;
 
+    int leftReading = leftIR->read();
+    int rightReading = rightIR->read();
     Serial.print("sensores IR: ");
-    Serial.print(lightSensorLeft->read());
+    Serial.print(leftReading);
     Serial.print(" ");
-    Serial.println(lightSensorRight->read());
+    bool alinhou=false;
+    Serial.println(rightReading);
     
-    motorLeft->setEncoder(0);
-    motorRight->setEncoder(0);
-    
-    if (lightSensorLeft->read()>110 || lightSensorRight->read()>110){
+    if ((leftReading>leftWhite || rightReading>rightWhite)&&!alinhou && !(leftIR->read()>leftWhite && rightIR->read()>rightWhite)){
         Serial.println("estou me alinhando");
         stop(motorLeft,motorRight);
         delay(500);
         
-        if (lightSensorLeft->read()<lightSensorRight->read()) //vê branco
-        {
+        if (leftReading<rightReading) //vê branco
+        {   
             Serial.print("esquerdo ve branco ");
-            while (lightSensorLeft->read()<leftWhite) { // && lightSensorRight->read()>rightWhite){ // ve branco
-               
+            motorLeft->setEncoder(0);
+            motorRight->stop();
+            while (leftReading < rightReading&&motorLeft->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco
+                
+                motorLeft->moveForward(PWM+10);              
+                leftReading = leftIR->read();
+                rightReading = rightIR->read();
+                
                 Serial.print("leitura IR ao alinhar: ");            
-                Serial.print(lightSensorLeft->read());
+                Serial.print(leftReading);
                 Serial.print(" ");
-                Serial.println(lightSensorRight->read());
-
-                motorLeft->moveForward(PWM+10);                
+                Serial.println(rightReading);
             }
+            if(leftReading >=leftWhite){
+                alinhou=true;
+                stop(motorLeft,motorRight);
+                return;
+            }
+            else{
+                resetEncoders(motorLeft,motorRight);
+                motorRight->stop();
+                while(leftReading<=leftWhite&&motorLeft->getEncoder()<300){
+                    motorLeft->moveBackward(PWM+10);  
+                    leftReading = leftIR->read();               
+                }
+                motorLeft->stop();
+                if(leftReading>=leftWhite){
+                    alinhou=true;
+                    return;
+                }
+                else{
+                    resetEncoders(motorLeft,motorRight);
+                    while(leftIR->read()<=leftWhite&&motorLeft->getEncoder()<300){   
+                        motorLeft->moveBackward(PWM+10);                 
+                    }
+                    motorLeft->stop();
+                    while(motorRight->getEncoder()<50){
+                        motorRight->moveBackward(PWM+10);                 
+                    }
+                    motorRight->stop();
+                    if(leftReading>=leftWhite){
+                        alinhou=true;
+                        stop(motorLeft,motorRight);
+                        return;
+                    }
+                    /*
+                    if(!alinhou){
+                        resetEncoders(motorLeft,motorRight);
+                        while(motorLeft->getEncoder()<300){
+                            Serial.println("entrei aq");
+                            motorLeft->moveForward(PWM+10);                
+                        }
+                    } 
+                      
+                    
+                    motorRight->stop();
+                    */
+                }
+
+            }
+            stop(motorLeft,motorRight);
+            delay(300);
             return;
         }
-        else if (lightSensorRight->read() < lightSensorRight->read()) //ve branco
+        else if (rightReading < leftReading) //ve branco
         {
             Serial.println("direito ve branco");
-            while (lightSensorRight->read()<rightWhite) {// ve branco
-            
-                Serial.print("leitura IR ao alinhar: ");    
-                Serial.print(lightSensorLeft->read());
-                Serial.print(" ");
-                Serial.println(lightSensorRight->read());
+            motorLeft->stop();
+            motorRight->setEncoder(0);
+            while (rightIR->read()<rightWhite&&motorRight->getEncoder()<300) {// ve branco
                 motorRight->moveForward(PWM);
-                } 
+                leftReading = leftIR->read();
+                rightReading = rightIR->read();
+        
+                Serial.print("leitura IR ao alinhar: ");            
+                Serial.print(leftReading);
+                Serial.print(" ");
+                Serial.println(rightReading);
+                
+            }
+            if(rightReading >=rightWhite){
+                alinhou=true;
+                stop(motorLeft,motorRight);
+            }
+            else{
+                resetEncoders(motorLeft,motorRight);
+                motorLeft->stop();
+                while(rightIR->read()<=rightWhite){   
+                    motorRight->moveBackward(PWM+10);                 
+                }
+                motorRight->stop();
+                while(motorLeft->getEncoder()<50){
+                    motorLeft->moveBackward(PWM+10);                 
+                }
+            }   
+            stop(motorLeft,motorRight);
+            delay(300);
             return;
         }
-
-    // return aligned;
-    stop(motorLeft, motorRight);
-    delay(500);
-    
-    } else {
-        return;
     }
+    return;
 }
-
-
-
-
-
-void testeMove(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor, LightSensor * middleSensor){
-    quantityToMove++;
-    int count =0;
-    while(count<quantityToMove){
-        middleSensor->read();
-        int leftBlack = 100;
-        int rightBlack = 300;
-        if((lightSensorLeft->read()<leftBlack && lightSensorRight->read()<rightBlack) || (lightSensorLeft->read()>leftBlack && lightSensorRight->read()>rightBlack)){
-            leftMotor->moveForward(120); //130
-            rightMotor->moveForward(100);//100
-            middleSensor->read();
-            if(middleSensor->getCrossed()){
-                count++;
-                middleSensor->setCrossed(false);
-            }
-            if(!(count<quantityToMove)){
-                stop(leftMotor,rightMotor);
-                return ;
-            }
-        }
-        if (lightSensorLeft->read()>leftBlack){
-            while(lightSensorLeft->read() > leftBlack){
-                leftMotor->moveForward(140);//160
-                rightMotor->moveBackward(60);
-                middleSensor->read();
-                if(middleSensor->getCrossed()){
-                    count++;
-                    middleSensor->setCrossed(false);
-                }
-                if(!(count<quantityToMove)){
-                    stop(leftMotor,rightMotor);
-                    return ;
-                }
-            }
-        }    
-        if (lightSensorRight->read()>rightBlack) {
-            while(lightSensorRight->read() > rightBlack){
-                rightMotor->moveForward(110);//130
-                leftMotor->moveBackward(60);
-
-                middleSensor->read();
-                if(middleSensor->getCrossed()){
-                    count++;
-                    middleSensor->setCrossed(false);
-                }
-                if(!(count<quantityToMove)){
-                    stop(leftMotor,rightMotor);
-                    return ;
-                }
-            }
-        }
-    }
-}
-
-/*
 
 void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensor){
     quantityToMove++;
     int count =0;
+
     while(count<quantityToMove){
         middleSensor->read();
         int leftBlack = 100;
-        int rightBlack = 300;
-        if((lightSensorLeft->read()<leftBlack && lightSensorRight->read()<rightBlack) || (lightSensorLeft->read()>leftBlack && lightSensorRight->read()>rightBlack)){
-            leftMotor->moveForward(130); //130
-            rightMotor->moveForward(100);//100
+        int rightBlack = 100;
+        if((lightSensorLeft->read()>leftBlack && lightSensorLeft->read()>rightBlack)){
+            leftMotor->moveForward(90);
+            rightMotor->moveForward(70);
+            middleSensor->read();
+            if(middleSensor->getCrossed()){
+                count++;
+                middleSensor->setCrossed(false);
+            }
+            if(!(count<quantityToMove)){
+                stop(leftMotor,rightMotor);
+                return ;
+            }
+            
+        } else if (lightSensorLeft->read()<leftBlack && lightSensorRight->read()<rightBlack){
+            leftMotor->moveForward(90);
+            rightMotor->moveForward(70);
             middleSensor->read();
             if(middleSensor->getCrossed()){
                 count++;
@@ -252,10 +275,11 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
                 return ;
             }
         }
-        if (lightSensorLeft->read()>leftBlack){
+        
+        if (lightSensorLeft->read() > leftBlack) {
             while(lightSensorLeft->read() > leftBlack){
-                leftMotor->moveForward(160);//160
-                rightMotor->moveBackward(60);
+                leftMotor->moveForward(120);
+                // rightMotor->moveForward(50);
                 middleSensor->read();
                 if(middleSensor->getCrossed()){
                     count++;
@@ -267,11 +291,10 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
                 }
             }
         }    
-        if (lightSensorRight->read()>rightBlack) {
+        else if (lightSensorRight->read() > rightBlack) {
             while(lightSensorRight->read() > rightBlack){
-                rightMotor->moveForward(110);//130
-                leftMotor->moveBackward(60);
-
+                rightMotor->moveForward(90);
+                // leftMotor->moveForward(60);
                 middleSensor->read();
                 if(middleSensor->getCrossed()){
                     count++;
@@ -284,112 +307,116 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
             }
         }
     }
-}
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensor){
-    quantityToMove++;
-    int count =0;
-    while(count<quantityToMove){
-        middleSensor->read();
-        int leftBlack = 100;
-        int rightBlack = 300;
-        if((lightSensorLeft->read()<leftBlack && lightSensorRight->read()<rightBlack) || (lightSensorLeft->read()>leftBlack && lightSensorRight->read()>rightBlack)){
-            leftMotor->moveForward(130); //130
-            rightMotor->moveForward(100);//100
-            middleSensor->read();
-            if(middleSensor->getCrossed()){
-                count++;
-                middleSensor->setCrossed(false);
-            }
-            if(!(count<quantityToMove)){
-                stop(leftMotor,rightMotor);
-                return ;
-            }
-        }
-        if (lightSensorLeft->read()>leftBlack){
-            while(lightSensorLeft->read() > leftBlack){
-                leftMotor->moveForward(160);//160
-                middleSensor->read();
-                if(middleSensor->getCrossed()){
-                    count++;
-                    middleSensor->setCrossed(false);
-                }
-                if(!(count<quantityToMove)){
-                    stop(leftMotor,rightMotor);
-                    return ;
-                }
-            }
-        }    
-        if (lightSensorRight->read()>rightBlack) {
-            while(lightSensorRight->read() > rightBlack){
-                rightMotor->moveForward(130);//130
-
-                middleSensor->read();
-                if(middleSensor->getCrossed()){
-                    count++;
-                    middleSensor->setCrossed(false);
-                }
-                if(!(count<quantityToMove)){
-                    stop(leftMotor,rightMotor);
-                    return ;
-                }
-            }
-        }
-    }
+    return ;
 }
 
 void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR){
-    int leftBlack = 100;
-    int rightBlack = 300;
-    if((leftIR->read()<leftBlack && rightIR->read()<rightBlack) || (leftIR->read()>leftBlack && rightIR->read()>rightBlack)){
-    leftMotor->moveForward(130);
-    rightMotor->moveForward(100);
-    Serial.println("eu nao saio daqui");
-    }
-    if (leftIR->read()>leftBlack) {
+    int leftBlack = 80;
+    int rightBlack = 80;
+
+    if((leftIR->read()>leftBlack && leftIR->read()>rightBlack) || (leftIR->read()<leftBlack && rightIR->read()<rightBlack)){
+        leftMotor->moveForward(100);
+        rightMotor->moveForward(75);
+        
+    } 
+    
+    if (leftIR->read() > leftBlack) {
         while(leftIR->read() > leftBlack){
             leftMotor->moveForward(160);
+            // rightMotor->moveForward(50);
         }
     }    
-    else if (rightIR->read()>rightBlack) {
+    else if (rightIR->read() > rightBlack) {
         while(rightIR->read() > rightBlack){
-            rightMotor->moveForward(130);
+            rightMotor->moveForward(120);
+            // leftMotor->moveForward(60);
+        }
+    }
+}
+
+void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR, Bumper * bumper){
+    int leftBlack = 100;
+    int rightBlack = 100;
+
+    if((leftIR->read()>leftBlack && leftIR->read()>rightBlack)){
+        Serial.println("vi bumper com boucing");
+        if(false){//bumper->checkBumper()){
+            stop(leftMotor,rightMotor);
+            return;
+        } else {
+        leftMotor->moveForward(100);
+        rightMotor->moveForward(80);
+        }
+    } else if (leftIR->read()<leftBlack && rightIR->read()<rightBlack){
+        leftMotor->moveForward(100);
+        rightMotor->moveForward(80);
+    }
+    
+    if (leftIR->read() > leftBlack) {
+        Serial.print("esquerdo preto ");
+        Serial.println(leftIR->read());
+        while(leftIR->read() > leftBlack){
+            if(false){//bumper->checkBumper()){
+                stop(leftMotor,rightMotor);
+                return;
+            } else {
+                leftMotor->moveForward(130);
+                // rightMotor->moveForward(50);
+            }
+            
+        }
+    }    
+    else if (rightIR->read() > rightBlack) {
+        Serial.print("direito preto R");
+        Serial.println(rightIR->read());
+        while(rightIR->read() > rightBlack){
+            if(bumper->checkBumper()){
+                stop(leftMotor,rightMotor);
+                return;
+            } else {
+                rightMotor->moveForward(100);
+                
+                // leftMotor->moveForward(60);
+            }
         }
     }
     Serial.println("aaaaaaa");
     return ; 
 }
 
+
 void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensor){
+
     if(*current<*destination){
         while(*current<*destination){
                 moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor,middleSensor);
+                stop(leftMotor,rightMotor);
+                delay(500);
+                //align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,80);
                 *current = *current+1;
         }
             moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor,middleSensor);
+            stop(leftMotor,rightMotor);
+            delay(500);
+            Serial.println("alinhei aqui");
+            align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,70);
             stop(leftMotor,rightMotor);
         }
     else if(*current>*destination){
         while(*current>*destination){
                 moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor,middleSensor);
+                stop(leftMotor,rightMotor);
+                delay(500);
+                //align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,80);
                 *current = *current-1;
         }
             moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor,middleSensor);
             stop(leftMotor,rightMotor);
+            delay(500);
+            align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,70);
+            Serial.println("alinhei");
+            stop(leftMotor,rightMotor);
         }
-    Serial.println(*current);
     return ;
 }
 
@@ -407,20 +434,22 @@ void move_cm(int distance_cm, Directions direction ,MotorDC* motorLeft, MotorDC*
             motorLeft->moveForward(80);
             motorRight->moveForward(60);
             }
-        break;
+        stop(motorLeft,motorRight);
+        delay(500);
+        return;
     
     case BACKWARD:
         while(motorLeft->getEncoder() < leftEncoderValue && motorRight->getEncoder() < rightEncoderValue){
             motorLeft->moveBackward(80);
             motorRight->moveBackward(60);
             }
-        break;
+        stop(motorLeft,motorRight);
+        delay(500);
+        return;
 
     default:
         break;
     }
-    stop(motorLeft,motorRight);
-    delay(500);
 }
 
 void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* motorRight){
@@ -441,8 +470,6 @@ void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* m
     motorRightTurns = motorRight->getEncoder()/(double)2000; 
 
     // descobrindo o RPS de cada roda
-
-    
     double rpsLeft = (motorLeftTurns - previousMotorLeftTurns)/(deltaT);
     double rpsRight = (motorRightTurns - previousMotorRightTurns)/(deltaT);
 
@@ -543,10 +570,12 @@ void resetEncoders(MotorDC* motorLeft, MotorDC* motorRight){
 
 
 void moveBackAndCorrectDirection(SOL::Direcao destinationDirection,int*currentDirection,MotorDC *leftMotor,MotorDC *rightMotor){
-    while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
+    resetEncoders(leftMotor,rightMotor);
+    while(rightMotor->getEncoder()<=200||leftMotor->getEncoder()<=200){
         leftMotor->moveBackward(100);
         rightMotor->moveBackward(80);
     }    
+    Serial.println("corrigir direção");
     stop(leftMotor,rightMotor);
     delay(1000);
     resetEncoders(leftMotor,rightMotor);
@@ -582,34 +611,87 @@ void correctDirection(int* currentDirection,int destinationDirection,MotorDC * l
       delay(500);
     }
 }
-void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensor){
+void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensor,LightSensor*backIr){
     SOL::Direcao destinationDirection= futureDirection('y',*currentY,*destinationYX);
-        resetEncoders(leftMotor,rightMotor);  
-        while(!correctedYFlag &&(*currentY!=*destinationYX)){
-
-            while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
-                leftMotor->moveBackward(120);
-                rightMotor->moveBackward(100);
-            }    
+        resetEncoders(leftMotor,rightMotor);
+        while(!correctedYFlag &&(*currentY!=*destinationYX)){ 
+            while(backIr->read()<100){
+                leftMotor->moveBackward(80);
+                rightMotor->moveBackward(60);
+                Serial.println(backIr->read());
+            }  
             stop(leftMotor,rightMotor);
-            delay(1000);
-            resetEncoders(leftMotor,rightMotor);
-            correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
+            delay(500);
+            if(*currentDirection!=destinationDirection){
+                stop(leftMotor,rightMotor);
+                delay(500);
+                correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
+                while(!(middleSensor->read()>160)){
+                    leftMotor->moveForward(80);
+                    rightMotor->moveForward(60);
+                    Serial.print("leitura do meio ");
+                    Serial.println(middleSensor->read());
+                }
+                Serial.println("acabei de ver preto com o do meio");
+                stop(leftMotor,rightMotor);
+                delay(500);
+                //while(lightSensorLeft->read()>110||lightSensorRight->read()>110){
+                 //   leftMotor->moveBackward(80);
+                 //   rightMotor->moveBackward(60);
+                //}
+                //stop(leftMotor,rightMotor);
+                //delay(500);
+                align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,70);
+                Serial.println("irei p tras lendo backIR");
+                while(backIr->read() < 150){//lightSensorLeft->read()>110||lightSensorRight->read()>110){
+                    leftMotor->moveBackward(80);
+                    rightMotor->moveBackward(60);
+                }
+                stop(leftMotor,rightMotor);
+                delay(500);
+            }
+            //align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,80);
             changingAndCountingPosition(currentY,destinationYX,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensor);
             correctedYFlag=1;
             break;
         }
         resetEncoders(leftMotor,rightMotor);
         while(!correctedXFlag && (*currentX!=*(destinationYX+1))){
-            while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
-                leftMotor->moveBackward(120);
-                rightMotor->moveBackward(100);
-            }    
-            stop(leftMotor,rightMotor);
             delay(1000);
             resetEncoders(leftMotor,rightMotor);
+            while(backIr->read()<100){
+                Serial.println(backIr->read());
+                leftMotor->moveBackward(80);
+                rightMotor->moveBackward(60);
+            }
+            stop(leftMotor,rightMotor);
+            delay(500);
             destinationDirection= futureDirection('x',*currentX,*(destinationYX+1));
-            correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
+            //moveBackAndCorrectDirection(destinationDirection,currentDirection,leftMotor,rightMotor);
+            if(*currentDirection!=destinationDirection){
+                stop(leftMotor,rightMotor);
+                delay(500);
+                correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
+                while(!(middleSensor->read()>150)){
+                    leftMotor->moveForward(80);
+                    rightMotor->moveForward(60);
+                }
+                stop(leftMotor,rightMotor);
+                delay(500);
+                while(lightSensorLeft->read()>110||lightSensorRight->read()>110){
+                    leftMotor->moveBackward(80);
+                    rightMotor->moveBackward(60);
+                }
+                stop(leftMotor,rightMotor);
+                delay(500);
+                align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,70);
+                while(lightSensorLeft->read()>110||lightSensorRight->read()>110){
+                    leftMotor->moveBackward(80);
+                    rightMotor->moveBackward(60);
+                }
+                stop(leftMotor,rightMotor);
+                delay(500);
+            }           
             changingAndCountingPosition(currentX,destinationYX+1,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensor);
             break;
         }
@@ -620,8 +702,7 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
 
 
 
-
-void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirection, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensor){
+void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirection, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensor,LightSensor*backIr){
 
     
     int yDestino =*destinationYX;
@@ -630,34 +711,23 @@ void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirectio
     if(*currentX!=xDestino || *currentY !=yDestino){
         while(*currentX!=xDestino || *currentY !=yDestino){
             if((*currentY >=5 && yDestino>=5)  || (*currentY <=2  && yDestino<=2)){
-            moveYandMoveX(currentX,currentY,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensor);
-            }
-            else if(yDestino==3||yDestino==4){
-                int * lowestCrossBlock;
-                lowestCrossBlock = shortestArea(true,*currentY,*currentX);
-                delay(2000);
-                moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor);
-                stop(leftMotor,rightMotor);
-                moveYandMoveX(currentX,currentY,arrayPosicaoAtual,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor);
+            moveYandMoveX(currentX,currentY,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensor,backIr);
             }
             else{
                 int * lowestCrossBlock;
                 lowestCrossBlock = shortestArea(true,*currentY,*currentX);
-               
-                delay(2000);
-                moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor);
+                moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor,backIr);
                 if(*lowestCrossBlock==5){
                     *lowestCrossBlock =2;
-                    moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor);          
+                    moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor,backIr);          
                 }
                 else{
                     *lowestCrossBlock =5;
-                    
-                    moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor);
+                    moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor,backIr);
                     
                 }
                 stop(leftMotor,rightMotor);
-                moveYandMoveX(currentX,currentY,arrayPosicaoAtual,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor);
+                moveYandMoveX(currentX,currentY,arrayPosicaoAtual,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor,backIr);
                 
             }
         }
@@ -665,3 +735,152 @@ void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirectio
          
 }
 
+void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic,Bumper * bumper){
+    //objetos = prateleira(1), cores(2), cubo(3), borda(4).
+    Serial.println("to no comeco");
+    float closeToUltra = 10;
+    bool mustTurn = false;
+    bool edge = false;
+    int lastSeen = 0;
+    bool shelve = false;
+    int position[2] = {0,0}; //y,x, respectivamente
+
+    while(!edge || !lastSeen){ 
+        float readingFrontalUltra = frontalUltrassonic->distance_cm();
+        int readingBumper = 0;
+        // int bump = 0;
+
+        // for (int i = 0; i < 3; i++) { //faz uma média das leituras do ultrassom
+        //     readingFrontalUltra =  readingFrontalUltra + frontalUltrassonic->distance_cm();
+        //     readingBumper = readingBumper + bumper->checkBumper();
+        //     // boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight);
+        //     }
+        // readingFrontalUltra = readingFrontalUltra/3;
+
+        while(readingFrontalUltra > closeToUltra && !readingBumper){ 
+            boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight, bumper);
+            readingBumper = bumper->checkBumper();
+            readingFrontalUltra = frontalUltrassonic->distance_cm();
+            // Serial.print("bumper // ultra ");
+            // Serial.print(readingBumper);
+            // Serial.print(" ");
+            // Serial.print(readingFrontalUltra);
+        }
+        // Serial.println("passei do while");
+        Serial.println("vi algo!");
+        stop(leftMotor,rightMotor);
+        delay(500);
+        if (readingBumper){
+            Serial.println("vou validar bumper");
+            bool seesBumper = checksBumper(bumper);
+            if(seesBumper){
+                Serial.print("senti bumper");
+                Serial.println(readingBumper);
+                stop(leftMotor,rightMotor);
+                delay(500);
+                move_cm(5,BACKWARD,leftMotor,rightMotor); 
+                stop(leftMotor,rightMotor);
+                delay(500);
+            
+                shelve = checksUltrassonic(frontalUltrassonic, lateralUltrassonic,leftMotor,rightMotor);
+                
+
+                if (edge){
+                
+                    if(shelve){
+                        // Serial.println("estou na quina 1.7, pois vi borda/borda/prateleira");
+                        position[0] = 1;
+                        position[1] = 7;
+                        break;
+
+                    } else {
+                        position[0] = 6;
+                        position[1] = greenEdge(leftMotor,rightMotor,lightSensorLeft,lightSensorRight);
+                        //ou está em 6.7 ou em 6.1
+                        break;
+                    }
+
+                } else{
+                    edge = true;
+
+                    if (shelve){
+                        // Serial.println("estou na quina 1.7, pois vi prateleira/borda");
+                        position[0] = 1;
+                        position[1] = 7;
+                        break;
+
+                    } else {
+                        edge = true;
+                        mustTurn = true;
+                    }
+                }
+            }
+        } else if (readingFrontalUltra<closeToUltra && readingFrontalUltra > 0){ //viu objeto
+            // Serial.println("vou validar ultra");
+            readingFrontalUltra = frontalUltrassonic->distance_cm();
+            if(readingFrontalUltra < closeToUltra){
+                // Serial.print("validei ultra  e li ");
+                Serial.print(" ");
+                Serial.println(readingFrontalUltra);
+
+                shelve = checksUltrassonic(frontalUltrassonic,lateralUltrassonic,leftMotor,rightMotor);
+
+                if (shelve){ 
+                    if(edge){
+                        // Serial.println("estou na quina 1.1");
+                        position[0] = 1;
+                        position[1] = 1;
+                        
+                    } else{
+                        lastSeen = 1;
+                        mustTurn = true;
+                    }
+                } else { //cubo
+                    mustTurn = true;
+                }      
+            } 
+        }
+        if (mustTurn){
+
+            stop(leftMotor,rightMotor);
+            delay(500);
+            resetEncoders(leftMotor,rightMotor);
+
+            move_cm(3,BACKWARD,leftMotor,rightMotor);
+  
+            stop(leftMotor,rightMotor);
+            delay(500);
+            rotates(RIGHT,leftMotor, rightMotor);
+            stop(leftMotor,rightMotor);
+            delay(500);
+            // Serial.println("quero alinhar");
+
+            while(lightSensorLeft->read()<110 && lightSensorRight->read()<110){
+                leftMotor->moveForward(75);
+                rightMotor->moveForward(55);
+            } 
+
+            stop(leftMotor,rightMotor);
+            delay(500);
+            align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,70);
+            Serial.println("terminei de alinhar");
+
+            resetEncoders(leftMotor,rightMotor);
+            mustTurn = false;
+        }
+    //     } else {
+    //         boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight);
+    //     }
+    // }
+    
+    // stop(leftMotor,rightMotor);
+    // Serial.print(lastSeen);
+    // Serial.print(" ");
+    // Serial.println(edge);
+    }
+}
+    
+
+    
+    
+    

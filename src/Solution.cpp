@@ -2,6 +2,7 @@
 #include<Move.h>
 #include<Rasp.h>
 #include<PickCube.h>
+#include <Bumper.h>
 
 static int state=0;
 char typeOfBlock=2;
@@ -204,7 +205,7 @@ int*  bestBlock(int currentY,int currentX){
     return closestBlock;
 }
 
-void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic,LightSensor * middleSensor){
+void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic,LightSensor * middleSensor,LightSensor*backIr){
     int destination[2];
     int *best = bestBlock(*y,*x);
     forkLift->forklift_up_steps(0,1);
@@ -213,7 +214,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             destination[0]=*best;
             destination[1]=*(best+1);
             SOL::Direcao destinationDirection;
-            moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor);
+            moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor,backIr);
             resetEncoders(leftMotor,rightMotor);
             while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
                 leftMotor->moveBackward(100);
@@ -268,7 +269,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             destination[1]=*(ptrDelivery+1);
             if(destination[0]==1){
                 destination[0]=2;
-                moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor);
+                moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor,backIr);
                 SOL::Direcao destinationDirection=SOL::Norte;
                 resetEncoders(leftMotor,rightMotor);
                 
@@ -310,7 +311,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             stop(leftMotor,rightMotor);
             }
             else if (destination[0]==6){
-                moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor);
+                moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor,backIr);
                 resetEncoders(leftMotor,rightMotor);
                 while(rightMotor->getEncoder()<=450||leftMotor->getEncoder()<=450){
                     leftMotor->moveBackward(100);
@@ -342,6 +343,113 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
     stop(leftMotor,rightMotor);
 }
     
+
+int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight){
+    int white = 100;
+    int coord = 0;
+    Serial.println("checando em qual verde to");
+    
+    // int leftValue = lightSensorLeft->read();
+    // int rightValue = lightSensorRight->read();
+    stop(leftMotor,rightMotor);
+    delay(500);
+    rotates(RIGHT,leftMotor,rightMotor);
+    stop(leftMotor,rightMotor);
+    delay(500);
+
+    resetEncoders(leftMotor,rightMotor);
+    // while (leftMotor->getEncoder() < 1000 && rightMotor->getEncoder() < 1000)
+    // {
+    //     leftMotor->moveForward(100);
+    //     rightMotor->moveForward(80);
+    // }
+    move_cm(10,FORWARD,leftMotor,rightMotor);
+    
+    stop(leftMotor,rightMotor);
+    delay(500);
+
+    int leftValue = lightSensorLeft->read();
+    int rightValue = lightSensorRight->read();
+    
+    if ( rightValue > white){
+        coord = 7;        
+    } else {
+        coord = 1;
+    }
+
+    Serial.print("estou na ponta 6.");
+    Serial.println(coord);
+    return coord;
     
     
-    
+}
+
+bool checksBumper(Bumper * bumper){
+    int bumperValue = 0;
+    bool seesBumper = false;
+
+    for (int i = 0; i < 10; i++)
+    {
+        bumperValue = bumperValue+ bumper->checkBumper();    
+    }
+    Serial.print("validei bumper e li: ");
+    Serial.println(bumperValue);
+    if(bumperValue >= 9){
+        seesBumper = true;
+    }
+
+    return seesBumper;  
+}
+
+bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic, MotorDC * leftMotor, MotorDC * rightMotor){
+    bool seesSomething = false;
+    float closeToUltra = 20;
+    // resetEncoders(leftMotor,rightMotor);
+    // while(leftMotor->getEncoder()<400 && rightMotor->getEncoder()<400){
+    //     leftMotor->moveBackward(80);
+    //     rightMotor->moveBackward(60);
+    // }
+    stop(leftMotor,rightMotor);
+    delay(500);
+    move_cm(5,BACKWARD,leftMotor,rightMotor);
+
+    stop(leftMotor,rightMotor);
+    delay(500);
+    rotates(LEFT,leftMotor,rightMotor);
+    stop(leftMotor,rightMotor);
+    delay(500);
+
+    int readingUltraLateral = lateralUltrassonic->distance_cm();
+    int readingUltraFrontal = frontalUltrassonic->distance_cm();
+
+    Serial.print("as leituras  dos ultra frontal/lateral: ");
+    Serial.print(readingUltraFrontal);
+    Serial.print(" ");
+    Serial.println(readingUltraLateral);
+
+    if (readingUltraLateral <= closeToUltra || readingUltraFrontal <= closeToUltra){
+        seesSomething = true;
+    }
+
+    stop(leftMotor,rightMotor);
+    delay(500);
+    rotates(RIGHT,leftMotor,rightMotor);
+    stop(leftMotor,rightMotor);
+    delay(500);
+
+    move_cm(5,FORWARD,leftMotor,rightMotor);
+
+
+    stop(leftMotor,rightMotor);
+    delay(500);
+    Serial.println("checagem com o ultrassom");
+    Serial.print("checando ultra lateral, li: ");
+    Serial.print(readingUltraLateral);
+    Serial.println(" checando ultra frontal, li: ");
+    Serial.print(readingUltraFrontal);
+    Serial.print(" depois eu li: ");
+    Serial.println(seesSomething);
+
+    return seesSomething;
+}
+

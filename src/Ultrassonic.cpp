@@ -45,3 +45,13 @@ float Ultrassonic::last_ten_values(){
         media += this->list[0];
         return media / 10.0;
 }
+
+// float Ultrassonic::mediumValueUltrassonic(){
+//     float values[3] = {0,0,0};
+//     float values[3] = {0,0,0};
+
+//     for (int i = 0; i < 3; i++)
+//     {
+//         values[i] = this->distance_cm();
+//     }   
+// }

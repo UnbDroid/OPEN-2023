@@ -33,7 +33,7 @@
 #define A0_MEIO A14 
 #define A0_DIREITA   A12
 #define A0_ESQUERDA  A11
-
+#define A0_TRAS A10
 
 
 /*  Sensores de Cor*/
