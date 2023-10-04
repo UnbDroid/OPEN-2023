@@ -623,16 +623,11 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
             stop(leftMotor,rightMotor);
             delay(500);
             if(*currentDirection!=destinationDirection){
-                stop(leftMotor,rightMotor);
-                delay(500);
                 correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
                 while(!(middleSensor->read()>160)){
                     leftMotor->moveForward(80);
                     rightMotor->moveForward(60);
-                    Serial.print("leitura do meio ");
-                    Serial.println(middleSensor->read());
                 }
-                Serial.println("acabei de ver preto com o do meio");
                 stop(leftMotor,rightMotor);
                 delay(500);
                 //while(lightSensorLeft->read()>110||lightSensorRight->read()>110){
@@ -642,7 +637,6 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
                 //stop(leftMotor,rightMotor);
                 //delay(500);
                 align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,70);
-                Serial.println("irei p tras lendo backIR");
                 while(backIr->read() < 150){//lightSensorLeft->read()>110||lightSensorRight->read()>110){
                     leftMotor->moveBackward(80);
                     rightMotor->moveBackward(60);

@@ -71,10 +71,16 @@ void setup()
   */
 
   int y=2;
-  int x =3;
-  int direcao=SOL::Oeste; 
+  int x =6;
+  int direcao=SOL::Norte; 
   int destination[2];
+  destination[0]=6;
+  destination[1]=3;
+  moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIR,&backIR);
   destination[0]=5;
+  destination[1]=3;
+  moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIR,&backIR);
+  destination[0]=2;
   destination[1]=6;
   moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIR,&backIR);
 }
