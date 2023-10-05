@@ -64,9 +64,11 @@ void setup()
   int destination[2];
   destination[0]=5;
   destination[1]=6;
-  moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIrEsquerda,&backIR,&middleIRDireita);
+
+  //align(&middleIrEsquerda,&middleIRDireita,&leftMotor,&rightMotor,70);!(leftIR.read()>100&&rightIR.read()>100&&middleIRDireita.read()>100&&middleIrEsquerda.read()>100)  
+
 }
-  
+ 
 
 
 void loop(){

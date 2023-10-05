@@ -47,6 +47,9 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
 
 void correctDirection(int* atual,int destino,MotorDC * leftMotor, MotorDC * rightMotor);
 
+
+void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, MotorDC * motorRight, int PWM,LightSensor *middleIRDireita, LightSensor *middleIrEsquerda);
+
 void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic);
 
 void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensorRight,LightSensor * middleSensorLeft);
