@@ -24,13 +24,19 @@ Ultrassonic frontalUltrassonic(TRIG_UlLTRASSONIC_FRONTAL,ECHO_UlLTRASSONIC_FRONT
 Ultrassonic lateralUltrassonic(TRIG_UlLTRASSONIC_LATERAL,ECHO_UlLTRASSONIC_LATERAL);
 LightSensor rightIR(A0_DIREITA);
 LightSensor leftIR(A0_ESQUERDA);
-LightSensor middleIR(A0_MEIO);
+LightSensor middleIRDireita(A0_MEIO);
+
 LightSensor backIR(A0_TRAS);
+
+
+LightSensor middleIrEsquerda(A0_MEIO_ESQUERDA);
+
+
 
 Ultrassonic frontalUltrassonicSensor(echo_ultrassom_frontal, trig_ultrassom_frontal);
 Ultrassonic lateralUltrassonicSensor(echo_ultrassom_lateral, trig_ultrassom_lateral);
 
-//LightSensor lateralRightIR(A0_DIREITA_LATERAL);
+
 //LightSensor lateralLeftIR(A0_ESQUERDA_LATERAL);
 Bumper bumper(BUMPER_PIN);
 
@@ -47,42 +53,18 @@ void TakeMemoryRightMotor(){ // fica na main
 
 void setup()
 {
+
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-  //moveForSquare(5,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIR);
-
-  // beginning(&leftIR,&rightIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper);
-  //rotates(RIGHT,&leftMotor,&rightMotor);
-
-
-  // colorSensor.calibra_sensor_inferior(0);  // Essa função serve para calibrar o sensor de cor inferior, se o sensor já estiver calibrado, comentar essa função.
-  //colorSensor.read_limit_values(0); // Essa função serve para ler os últimos valores calibrados pelo sensor de cor
-  /*
-  
-  
-  testeMove(5,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIR);
-  resetEncoders(&leftMotor,&rightMotor);
-  while(rightMotor.getEncoder()<=150||leftMotor.getEncoder()<=150){
-        leftMotor.moveBackward(100);
-        rightMotor.moveBackward(80);
-    }
-  stop(&leftMotor,&rightMotor);
-  */
 
   int y=2;
   int x =6;
   int direcao=SOL::Norte; 
   int destination[2];
-  destination[0]=6;
-  destination[1]=3;
-  moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIR,&backIR);
   destination[0]=5;
-  destination[1]=3;
-  moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIR,&backIR);
-  destination[0]=2;
   destination[1]=6;
-  moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIR,&backIR);
+  moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIrEsquerda,&backIR,&middleIRDireita);
 }
   
 
@@ -94,6 +76,6 @@ void loop(){
   //pick_cube_from_right(&leftMotor, &rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor,&Robot_Claw, &forklift);
   //Robot_Claw.open_claw_with_cube();
   //Serial.print("IR meio ");
-  //Serial.println(backIR.read());
+  //Serial.println(analogRead(A13));
 }
 

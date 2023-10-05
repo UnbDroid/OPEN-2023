@@ -169,7 +169,7 @@ int * shortestArea(bool cross,int y,int x){
 SOL::Direcao futureDirection(char axis,int start, int final){
        
         if(axis =='y'){
-            if(final<=start){
+            if(final<start){
             return  SOL::Norte;
             }
             return  SOL::Sul;
