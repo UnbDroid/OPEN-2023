@@ -120,7 +120,8 @@ void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * mot
 
 void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, MotorDC * motorRight, int PWM,LightSensor *middleIRDireita, LightSensor *middleIrEsquerda){
     bool alinhou=false;
-    while((!(leftIR->read()>100&&rightIR->read()>100)&&!(middleIRDireita->read()>100&&middleIrEsquerda->read()>100))){
+    int vezes =2;
+    while((!(leftIR->read()>100&&rightIR->read()>100)&&!(middleIRDireita->read()>100&&middleIrEsquerda->read()>100))&& vezes){
     if(middleIrEsquerda->read()>150&&leftIR->read()<100){
       motorRight->stop();
       motorLeft->setEncoder(0);
@@ -417,6 +418,7 @@ void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, Moto
         }
       }
     }
+    vezes--;
   }
 }
 
@@ -573,12 +575,13 @@ void changingAndCountingPosition(int * current ,int *destination,LightSensor * l
                 delay(500);
                 //align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,80);
                 *current = *current+1;
+                Serial.print("eu chamei pra atravessar");
         }
             moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor,middleSensorRight);
             stop(leftMotor,rightMotor);
             delay(500);
             Serial.println("alinhei aqui");
-            align(middleSensorLeft,middleSensorRight,leftMotor,rightMotor,70);
+            align(middleSensorLeft,middleSensorRight,leftMotor,rightMotor,70,middleSensorRight,middleSensorLeft);
             stop(leftMotor,rightMotor);
         }
     else if(*current>*destination){
@@ -592,7 +595,7 @@ void changingAndCountingPosition(int * current ,int *destination,LightSensor * l
             moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor,middleSensorRight);
             stop(leftMotor,rightMotor);
             delay(500);
-            align(middleSensorLeft,middleSensorRight,leftMotor,rightMotor,70);
+            align(middleSensorLeft,middleSensorRight,leftMotor,rightMotor,70,middleSensorRight,middleSensorLeft);
             Serial.println("alinhei");
             stop(leftMotor,rightMotor);
         }
@@ -795,7 +798,10 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
 
     resetEncoders(leftMotor,rightMotor);
     while(!correctedYFlag &&(*currentY!=*destinationYX)){ 
-        while(backIr->read()<100){
+        delay(500);
+        Serial.print("valor  no Y ");
+        Serial.println(backIr->read());
+        while(backIr->read()<80){
             leftMotor->moveBackward(80);
             rightMotor->moveBackward(60);
         }  
@@ -803,17 +809,16 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
         delay(500);
         if(*currentDirection!=destinationDirection){
             correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
-            while(!(middleSensorLeft->read()>160)){
-        //lightSensorLeft->read()>110||lightSensorRight->read()>110){
+            while(!(middleSensorLeft->read()>100)){
                leftMotor->moveForward(80);
                rightMotor->moveForward(60);
 
-                }
+            }
             
             stop(leftMotor,rightMotor);
             delay(500);
 
-            align(middleSensorLeft,middleSensor,leftMotor,rightMotor,70);
+            align(middleSensorLeft,middleSensor,leftMotor,rightMotor,70,middleSensor,middleSensorLeft);
             while(lightSensorLeft->read()>110||lightSensorRight->read()>110){
                 leftMotor->moveBackward(80);
                 rightMotor->moveBackward(60);
@@ -828,7 +833,10 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
     resetEncoders(leftMotor,rightMotor);
     while(!correctedXFlag && (*currentX!=*(destinationYX+1))){
         resetEncoders(leftMotor,rightMotor);
-        while(backIr->read()<100){
+        delay(500);
+        Serial.print("valor  no X ");
+        Serial.println(backIr->read());
+        while(backIr->read()<80){
             Serial.println(backIr->read());
             leftMotor->moveBackward(80);
             rightMotor->moveBackward(60);
@@ -848,8 +856,8 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
             stop(leftMotor,rightMotor);
             delay(500);
             
-            align(middleSensorLeft,middleSensor,leftMotor,rightMotor,70);
-            while(lightSensorLeft->read()>110||lightSensorRight->read()>110){
+            align(middleSensorLeft,middleSensor,leftMotor,rightMotor,70,middleSensor,middleSensorLeft);
+            while(middleSensor->read()>110){
                 leftMotor->moveBackward(80);
                 rightMotor->moveBackward(60);
             }

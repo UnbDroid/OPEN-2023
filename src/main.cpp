@@ -58,13 +58,8 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
 
-  int y=2;
-  int x =6;
-  int direcao=SOL::Norte; 
-  int destination[2];
-  destination[0]=5;
-  destination[1]=6;
-
+  
+  //moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&middleIRDireita,&backIR,&middleIrEsquerda);
   //align(&middleIrEsquerda,&middleIRDireita,&leftMotor,&rightMotor,70);!(leftIR.read()>100&&rightIR.read()>100&&middleIRDireita.read()>100&&middleIrEsquerda.read()>100)  
 
 }
@@ -72,12 +67,17 @@ void setup()
 
 
 void loop(){
-
-  // stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor);
+  int y=1;
+  int x =7;
+  int direcao=SOL::Norte; 
+  int destination[2];
+  destination[0]=5;
+  destination[1]=6;
+  stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&middleIRDireita,&backIR,&leftIR);
   //forklift.forklift_up_steps(0,1);
   //pick_cube_from_right(&leftMotor, &rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor,&Robot_Claw, &forklift);
   //Robot_Claw.open_claw_with_cube();
   //Serial.print("IR meio ");
-  //Serial.println(analogRead(A13));
+  Serial.println(backIR.read());
 }
 
