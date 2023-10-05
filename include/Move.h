@@ -8,6 +8,7 @@
 #include<LightSensor.h>
 #include<Solution.h>
 #include <Bumper.h>
+#include <LDR.h>
 
 enum Directions{FORWARD, BACKWARD};
 enum RotateDirections{LEFT, RIGHT, AROUND};
@@ -29,7 +30,8 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
 void rotates(RotateDirections rotateDirection,MotorDC * motorLeft, MotorDC * motorRight);
 
 
-void align(LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight, int velocity);
+void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, MotorDC * motorRight, int PWM, LightSensor * backIR);
+void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, MotorDC * motorRight, int PWM);
 
 void moveForSquare(int quantityToMove,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * motorLef, MotorDC * motorRight);
 
@@ -40,5 +42,5 @@ void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirectio
 
 void correctDirection(int* atual,int destino,MotorDC * leftMotor, MotorDC * rightMotor);
 
-void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, LightSensor * middleIR, LightSensor * backIR,MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic,Bumper * bumper);
+void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, LightSensor * middleLeftIR,LightSensor * middleRightIR ,LightSensor * backIR, MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic,Bumper * bumper, LDR * ldr);
 #endif

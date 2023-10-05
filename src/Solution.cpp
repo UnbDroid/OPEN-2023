@@ -3,6 +3,7 @@
 #include<Rasp.h>
 #include<PickCube.h>
 #include <Bumper.h>
+#include <LDR.h>
 
 static int state=0;
 char typeOfBlock=2;
@@ -344,8 +345,8 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
 }
     
 
-int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleIR){
-    int white = 30;
+int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleLeftIR, LightSensor * middleRightIR, LDR * Ldr){
+    int blue = 60;
     int coord = 0;
     Serial.println("checando em qual verde to");
     
@@ -354,37 +355,36 @@ int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSenso
     stop(leftMotor,rightMotor);
     delay(500);
     move_cm(7,BACKWARD,leftMotor,rightMotor);
+    Serial.println("fui p tras");
     stop(leftMotor,rightMotor);
     delay(500);
     rotates(RIGHT,leftMotor,rightMotor);
     stop(leftMotor,rightMotor);
     delay(500);
 
-    while(lightSensorLeft->read()<110 && lightSensorRight->read()<110){
-        leftMotor->moveForward(75);
-        rightMotor->moveForward(55);
-    } 
+    // while(middleLeftIR->read() < 600){
+    //     leftMotor->moveForward(80);
+    //     rightMotor->moveForward(60);
+    // } 
 
-    stop(leftMotor,rightMotor);
-    delay(500);
-    align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,70);
-    stop(leftMotor,rightMotor);
-    delay(500);
+    // stop(leftMotor,rightMotor);
+    // delay(500);
+    // align(middleLeftIR,middleRightIR,leftMotor,rightMotor,70,lightSensorLeft);
+    // stop(leftMotor,rightMotor);
+    // delay(500);
 
     
     move_cm(20,FORWARD,leftMotor,rightMotor);
+    Serial.println("acabei de ir pra frente");
     
     stop(leftMotor,rightMotor);
     delay(500);
 
-    // int leftValue = lightSensorLeft->read();
-    // int rightValue = lightSensorRight->read();
-    float middleValue = middleIR->read();
-    Serial.print("IR do meio: ");
-    Serial.println(middleValue);
+    int LDRread = Ldr->read();
     
-    if ( middleValue > white){
+    if ( LDRread > blue){
         coord = 7;        
+        move_cm(12,BACKWARD,leftMotor,rightMotor);
     } else {
         coord = 1;
     }
@@ -475,17 +475,19 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
     if (y == 1){
         if(x== 1){
             //pos 1.1
+            rotates(AROUND,leftMotor,rightMotor);
+            
         } else {
             //pos 1.7
-            if(orientacao == 0){
-                rotates(AROUND,leftMotor,rightMotor);
-                stop(leftMotor,rightMotor);
-                delay(500);
-            } else {
+            // if(orientacao == 0){
+            //     rotates(AROUND,leftMotor,rightMotor);
+            //     stop(leftMotor,rightMotor);
+            //     delay(500);
+            // } else {
                 rotates(RIGHT,leftMotor,rightMotor);
                 stop(leftMotor,rightMotor);
                 delay(500);
-            }
+            // }
         }
         move_cm(8,BACKWARD,leftMotor,rightMotor);
         stop(leftMotor,rightMotor);
@@ -499,6 +501,13 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
             //pos 6.1
         } else {
             //pos 6.7
+            Serial.println("entrei aqui");
+            delay(500);
+            stop(leftMotor,rightMotor);
+            delay(500);
+            rotates(RIGHT,leftMotor,rightMotor);
+            move_cm(8,FORWARD,leftMotor,rightMotor);
+
         }
     }
 

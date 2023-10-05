@@ -28,12 +28,15 @@
 
 /* Infravermelhos
 */
-#define A0_MEIO A14 
+
 #define A0_DIREITA   A12
 #define A0_ESQUERDA  A11
-#define A0_ATRAS A10
+#define A0_TRAS A10
+#define A0_MEIO_ESQUERDA  A13
+#define A0_MEIO_DIREITA A14 
 
-
+//LDR
+#define pinLDR A13
 
 /*  Sensores de Cor*/
 #define S0_COLORSENSOR 33
