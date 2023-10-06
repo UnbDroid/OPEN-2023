@@ -559,7 +559,7 @@ void move_cm(int distance_cm, Directions direction ,MotorDC* motorLeft, MotorDC*
     switch (direction)
     {
     case FORWARD:
-        while(motorLeft->getEncoder() < leftEncoderValue && motorRight->getEncoder() < rightEncoderValue){
+        while(motorLeft->getEncoder() <= leftEncoderValue && motorRight->getEncoder() <= rightEncoderValue){
             motorLeft->moveForward(90);
             motorRight->moveForward(70);
             }
@@ -850,7 +850,7 @@ void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirectio
 
 void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, LightSensor * middleLeftIR,LightSensor * middleRightIR ,LightSensor * backIR, MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic,Bumper * bumper, LDR * ldr){
     Serial.println("to no comeco");
-    float closeToUltra = 13;
+    float closeToUltra = 10;
     bool mustTurn = false;
     bool edge = false;
     int lastSeen = 0;
@@ -889,6 +889,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Li
                 delay(500);
                 align(middleLeftIR,middleRightIR,leftMotor,rightMotor,80);
                 move_cm(5,BACKWARD,leftMotor,rightMotor); 
+                Serial.println("fui pra tras agraa");
                 stop(leftMotor,rightMotor);
                 delay(500);
             
@@ -927,7 +928,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Li
                 }
             }
         } else if (readingFrontalUltra<=closeToUltra && readingFrontalUltra > 0){ //viu objeto
-            readingFrontalUltra = frontalUltrassonic->distance_cm();
+            readingFrontalUltra = readingUltrasonic(frontalUltrassonic);
             Serial.print(" li com o ultrassom no elseIf ");
             Serial.println(readingFrontalUltra);
 
@@ -969,20 +970,22 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Li
 
             leftMotor->moveForward(80);
             rightMotor->moveForward(60);       
+
             Serial.print("Esq DIr");
             Serial.print(middleLeftIR->read());
             Serial.print(" ");
             Serial.println(middleRightIR->read());
 
             while(middleRightIR->read() < 300 || middleRightIR->read() < 300){//middleIR->read()
-                leftMotor->moveForward(80);
-                rightMotor->moveForward(60);       
+                leftMotor->moveForward(90);
+                rightMotor->moveForward(70);       
+                
                 Serial.print("Esq DIr");
                 Serial.print(middleLeftIR->read());
                 Serial.print(" ");
                 Serial.println(middleRightIR->read());
             } 
-            Serial.println("sai do while");
+            
 
             stop(leftMotor,rightMotor);
             delay(500);

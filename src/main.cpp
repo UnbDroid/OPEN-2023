@@ -58,7 +58,7 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
   // moveForSquare(3,&leftIR,&rightIR,&leftMotor,&rightMotor);
   // align(&LeftMiddleIR,&RightMiddleIR,&leftMotor,&rightMotor,70);
-  beginning(&leftIR,&rightIR,&LeftMiddleIR, &RightMiddleIR, &backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
+  //beginning(&leftIR,&rightIR,&LeftMiddleIR, &RightMiddleIR, &backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
   // move_cm(5,FORWARD,&leftMotor,&rightMotor);
   // rotates(RIGHT,&leftMotor,&rightMotor);
   // pinMode(ldr, INPUT);//Define ldr (pino analógico A0) como saída
@@ -78,10 +78,10 @@ void setup()
   // leftMotor.stopLow();
   // rightMotor.moveForward(80);
 
-}
-void loop(){
-
+  // Serial.println(frontalUltrassonic.distance_cm());
+  // sortedA
   // boucing(&leftMotor,&rightMotor,&leftIR,&rightIR,&LeftMiddleIR,&RightMiddleIR,&bumper);
+    // Serial.println(validatesUltrassonicReading(&frontalUltrassonic,10));
   // Serial.print(leftIR.read());
   // Serial.print(" ");
   // Serial.print(LeftMiddleIR.read());

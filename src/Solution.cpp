@@ -423,9 +423,9 @@ bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralU
     //     leftMotor->moveBackward(80);
     //     rightMotor->moveBackward(60);
     // }
-    stop(leftMotor,rightMotor);
+    stopLow(leftMotor,rightMotor);
     delay(500);
-    move_cm(5,BACKWARD,leftMotor,rightMotor);
+    move_cm(10,BACKWARD,leftMotor,rightMotor);
 
     stop(leftMotor,rightMotor);
     delay(500);
@@ -468,9 +468,7 @@ bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralU
 }
 
 void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, MotorDC * rightMotor, LightSensor * leftIR, LightSensor * rightIR, LightSensor * backIR){
-    move_cm(8,BACKWARD,leftMotor,rightMotor);
-        stop(leftMotor,rightMotor);
-        delay(500);
+    move_cm(5,BACKWARD,leftMotor,rightMotor);
 
     if (y == 1){
         if(x== 1){
@@ -489,7 +487,8 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
                 delay(500);
             // }
         }
-        move_cm(8,BACKWARD,leftMotor,rightMotor);
+        Serial.println("vou p tras");
+        move_cm(10,BACKWARD,leftMotor,rightMotor);
         stop(leftMotor,rightMotor);
         delay(500);
         
@@ -501,8 +500,10 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
             //pos 6.1
         } else {
             //pos 6.7
-            Serial.println("entrei aqui");
+            move_cm(8,BACKWARD,leftMotor,rightMotor);
+            stop(leftMotor,rightMotor);
             delay(500);
+            Serial.println("entrei aqui");
             stop(leftMotor,rightMotor);
             delay(500);
             rotates(RIGHT,leftMotor,rightMotor);
@@ -518,10 +519,63 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
 
     stop(leftMotor,rightMotor);
     delay(500);
-    align(leftIR,rightIR,leftMotor,rightMotor,70);
+    align(leftIR,rightIR,leftMotor,rightMotor,70,leftIR);
     stop(leftMotor,rightMotor);
     delay(500);
     
     return;
 
+}
+
+float median(int x, int y, int z){
+    float values[3] = {0,0,0};
+    if (x>=y>=z) {
+        values[0] = z;
+        values[1] = y;
+        values[2] = x;
+    } else if ((x>y<z )&&(z>=x)){
+        values[0] = y;
+        values[1] = x;
+        values[2] = z;
+    } else if ((x>y<z )&&(z<=x)){
+        values[0] = y;
+        values[1] = z;
+        values[2] = x;
+    } else if ((x<=y>=z) && (z >= x)){
+        values[0] = x;
+        values[1] = z;
+        values[2] = y;
+    } else if ((x<=y>=z) && (z <= x)){
+        values[0] = z;
+        values[1] = x;
+        values[2] = y;
+    } else if(x<=y<=z){
+        values[0] = x;
+        values[1] = y;
+        values[2] = z;
+    }
+    
+    return values[1];
+}
+
+float readingUltrasonic(Ultrassonic * ultrassonic){
+    float firstList[3] = {0,0,0};
+    float secondList[3] = {0,0,0};
+    float valuesToCalculate[2] = {0,0};
+    float meanReading = 0;
+
+    for (int i = 0; i < 3; i++)
+    {
+        firstList[i] = ultrassonic->distance_cm();      
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        secondList[i] = ultrassonic->distance_cm();      
+    }
+    valuesToCalculate[0] = median(firstList[0],firstList[1],firstList[2]);
+    valuesToCalculate[1] = median(secondList[0],secondList[1],secondList[2]);
+
+    meanReading = (valuesToCalculate[0] + valuesToCalculate[1])/2;
+    
+return meanReading;
 }
