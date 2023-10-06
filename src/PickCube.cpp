@@ -57,16 +57,23 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     startTime = millis();
     loopDuration = 1100;
      do{
-        frontal_distance = frontalUltrassonicSensor->last_ten_values();
         leftMotor->moveForward(80);
         rightMotor->moveForward(60);}
-    while (frontal_distance > 3.5);
+    while (millis() - startTime < loopDuration);
+    stop(leftMotor,rightMotor);
+    delay(1000);
+    startTime = millis();
+    loopDuration = 500;
+     do{
+        leftMotor->moveBackward(80);
+        rightMotor->moveBackward(60);}
+    while (millis() - startTime < loopDuration);
     stop(leftMotor,rightMotor);
     delay(1000);
     Fork->forklift_down_distance_cm(2.5);
     delay(500);
     RobotClaw->close_claw_with_cube();
-    Fork->forklift_down_distance_cm(2); // Como ele subiu 4,5 cm antes, agora ele desceu 2.5cm, pegou o cubo, depois desceu mais 2 cm
+    // Fork->forklift_down_distance_cm(2); // Como ele subiu 4,5 cm antes, agora ele desceu 2.5cm, pegou o cubo, depois desceu mais 2 cm
     
     delay(500);
 
