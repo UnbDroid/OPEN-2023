@@ -346,7 +346,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
     
 
 int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleLeftIR, LightSensor * middleRightIR, LDR * Ldr){
-    int blue = 60;
+    int blue = 40;
     int coord = 0;
     Serial.println("checando em qual verde to");
     
@@ -511,9 +511,9 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
         }
     }
 
-    while(leftIR->read()<=150 && rightIR->read()<=150){ //anda reto ate ver preto com o sensor IR e se alinha
-        leftMotor->moveForward(75);
-        rightMotor->moveForward(55);
+    while(leftIR->read()<=400 || rightIR->read()<=400){ //anda reto ate ver preto com o sensor IR e se alinha
+        leftMotor->moveForward(80);
+        rightMotor->moveForward(60);
     } 
 
     stop(leftMotor,rightMotor);

@@ -410,7 +410,7 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
     int leftBlack = 100;
     int rightBlack = 100;
 
-    if((leftIR->read()>leftBlack && leftIR->read()>rightBlack)){
+    if((leftIR->read()>leftBlack && rightIR->read()>rightBlack)){
         Serial.println("vi bumper com boucing");
         if(bumper->checkBumper()){
             stop(leftMotor,rightMotor);
@@ -427,36 +427,36 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
     
     resetEncoders(leftMotor,rightMotor);
     if (leftIR->read() > leftBlack) {
-        stop(leftMotor,rightMotor);
-        delay(100);
 
         Serial.print("esquerdo preto ");
         Serial.println(leftIR->read());
 
-        while(leftIR->read() > leftBlack || leftMotor->getEncoder() < 400){
+        resetEncoders(leftMotor,rightMotor);
+        while(leftIR->read() > leftBlack && leftMotor->getEncoder() < 300){
             if(bumper->checkBumper()){
                 stop(leftMotor,rightMotor);
                 return;
             } else {
-                leftMotor->moveForward(120);
+                leftMotor->moveForward(130);
                 rightMotor->moveForward(80);
             }
             
         }
     }   else if (rightIR->read() > rightBlack) {
-        stop(leftMotor,rightMotor);
-        delay(100);
+        // stop(leftMotor,rightMotor);
+        // delay(200);
 
         Serial.print("direito preto R");
         Serial.println(rightIR->read());
 
-        while(rightIR->read() > rightBlack  || rightMotor->getEncoder()<400){
+        resetEncoders(leftMotor,rightMotor);
+        while(rightIR->read() > rightBlack  && rightMotor->getEncoder()<300){
             if(bumper->checkBumper()){
                 Serial.println("vi bumper com boucing");
                 stop(leftMotor,rightMotor);
                 return;
             } else {
-                rightMotor->moveForward(90);
+                rightMotor->moveForward(100);
                 leftMotor->moveForward(100);
             }
         }
@@ -939,7 +939,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Li
     Serial.print(position[1]);
     
 
-    repositionBeginning(position[0],position[1],position[2],leftMotor,rightMotor,lightSensorLeft,lightSensorRight, backIR);
+    repositionBeginning(position[0],position[1],position[2],leftMotor,rightMotor,middleLeftIR,middleRightIR, backIR);
 
     
 
