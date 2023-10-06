@@ -406,61 +406,125 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
     }
 }
 
-void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR, Bumper * bumper){
+void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR, LightSensor * middleLeftIR, LightSensor * middleRightIR, Bumper * bumper){
     int leftBlack = 100;
     int rightBlack = 100;
+    int middleLeftBlack = 100;
+    int middleRightBlack = 100;
 
-    if((leftIR->read()>leftBlack && rightIR->read()>rightBlack)){
-        Serial.println("vi bumper com boucing");
+    if(leftIR->read()>leftBlack && rightIR->read()>rightBlack){
         if(bumper->checkBumper()){
+            stop(leftMotor,rightMotor);
+            Serial.println("vi bumper com boucing");
+            return;
+        } else {
+            leftMotor->moveForward(90);
+            rightMotor->moveForward(70);
+        }
+        
+    } else if (leftIR->read()<leftBlack && rightIR->read()<rightBlack){
+
+        leftMotor->moveForward(90);
+        rightMotor->moveForward(70);
+    }
+
+    if (leftIR->read() > leftBlack) {
+        Serial.print("left: ");
+        Serial.println(leftIR->read());
+        if(bumper->checkBumper()){
+            Serial.println("vi bumper com boucing");
             stop(leftMotor,rightMotor);
             return;
         } else {
-        leftMotor->moveForward(100);
-        rightMotor->moveForward(80);
-        }
-    } else if (leftIR->read()<leftBlack && rightIR->read()<rightBlack){
+            stopLow(leftMotor,rightMotor);
+            delay(100);
 
-        leftMotor->moveForward(100);
-        rightMotor->moveForward(80);
-    }
-    
-    resetEncoders(leftMotor,rightMotor);
-    if (leftIR->read() > leftBlack) {
+            // Serial.print("esquerdo preto ");
+            // Serial.println(leftIR->read());
 
-        Serial.print("esquerdo preto ");
-        Serial.println(leftIR->read());
-
-        resetEncoders(leftMotor,rightMotor);
-        while(leftIR->read() > leftBlack && leftMotor->getEncoder() < 300){
-            if(bumper->checkBumper()){
-                stop(leftMotor,rightMotor);
-                return;
-            } else {
-                leftMotor->moveForward(130);
-                rightMotor->moveForward(80);
+            resetEncoders(leftMotor,rightMotor);
+            while(leftMotor->getEncoder() < 40){ //leftIR->read() > leftBlack && 
+                if(bumper->checkBumper()){
+                    stop(leftMotor,rightMotor);
+                    return;
+                } else{
+                    if(leftIR->read() < leftBlack){
+                        break;
+                    } else {
+                        leftMotor->moveForward(100);
+                        // rightMotor->moveForward(80);
+                    }
+                }
             }
-            
         }
     }   else if (rightIR->read() > rightBlack) {
-        // stop(leftMotor,rightMotor);
-        // delay(200);
-
-        Serial.print("direito preto R");
+        Serial.print("rightIR: ");
         Serial.println(rightIR->read());
-
-        resetEncoders(leftMotor,rightMotor);
-        while(rightIR->read() > rightBlack  && rightMotor->getEncoder()<300){
             if(bumper->checkBumper()){
                 Serial.println("vi bumper com boucing");
                 stop(leftMotor,rightMotor);
                 return;
-            } else {
-                rightMotor->moveForward(100);
-                leftMotor->moveForward(100);
+        } else {
+            stopLow(leftMotor,rightMotor);
+            delay(100);
+
+            // Serial.print("direito preto R");
+            // Serial.println(rightIR->read());
+
+            resetEncoders(leftMotor,rightMotor);
+            while(rightMotor->getEncoder()<40){ // rightIR->read() > rightBlack  && 
+                if(bumper->checkBumper()){
+                    Serial.println("vi bumper com boucing");
+                    stop(leftMotor,rightMotor);
+                    return;
+                } else {
+                    if(rightIR->read() < rightBlack){
+                        break;
+                    } else {
+                        rightMotor->moveForward(100);
+                        // leftMotor->moveForward(100);
+                    }
+                }
             }
         }
-    } 
+    } else if (middleLeftIR->read() > middleLeftBlack && leftIR->read() < leftBlack && rightIR->read() < rightIR->read() && middleRightIR->read() < rightBlack) {
+        if(bumper->checkBumper()){
+            Serial.println("vi bumper com boucing");
+            stop(leftMotor,rightMotor);
+            return;
+        } else {
+            stopLow(leftMotor,rightMotor);
+            delay(100);
+            while(middleLeftIR->read() > middleLeftBlack){
+                if(bumper->checkBumper()){
+                    Serial.println("vi bumper com boucing");
+                    stop(leftMotor,rightMotor);
+                    return;
+                } else {
+                    leftMotor->moveForward(100);
+                }
+            }
+        }
+    } else if (middleLeftIR->read() < middleLeftBlack && leftIR->read() < leftBlack && rightIR->read() < rightIR->read() && middleRightIR->read() > rightBlack) {
+        if(bumper->checkBumper()){
+            Serial.println("vi bumper com boucing");
+            stop(leftMotor,rightMotor);
+            return;
+        } else {
+            stopLow(leftMotor,rightMotor);
+            delay(100);
+
+            while(middleRightIR->read() > rightBlack){
+                if(bumper->checkBumper()){
+                    Serial.println("vi bumper com boucing");
+                    stop(leftMotor,rightMotor);
+                    return;
+                } else {
+                rightMotor->moveForward(100);
+                }
+            }
+        }
+    }
 }
 
 
@@ -652,6 +716,12 @@ void stop(MotorDC* motorLeft, MotorDC* motorRight){
     return ;
 }
 
+void stopLow(MotorDC* motorLeft, MotorDC* motorRight){
+    motorLeft->stopLow();
+    motorRight->stopLow();
+    return ;
+}
+
 void resetEncoders(MotorDC* motorLeft, MotorDC* motorRight){
     motorLeft->setEncoder(0);
     motorRight->setEncoder(0);
@@ -793,7 +863,7 @@ void beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Li
         int readingBumper = 0;
 
         while((readingFrontalUltra > closeToUltra && readingFrontalUltra > 0) && !readingBumper){ 
-            boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight, bumper);
+            boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight, middleLeftIR,middleRightIR,bumper);
             readingBumper = bumper->checkBumper();
             delay(100);
             readingBumper = bumper->checkBumper();

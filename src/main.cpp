@@ -58,18 +58,37 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
   // moveForSquare(3,&leftIR,&rightIR,&leftMotor,&rightMotor);
   // align(&LeftMiddleIR,&RightMiddleIR,&leftMotor,&rightMotor,70);
-  // beginning(&leftIR,&rightIR,&LeftMiddleIR, &RightMiddleIR, &backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
+  beginning(&leftIR,&rightIR,&LeftMiddleIR, &RightMiddleIR, &backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
   // move_cm(5,FORWARD,&leftMotor,&rightMotor);
   // rotates(RIGHT,&leftMotor,&rightMotor);
   // pinMode(ldr, INPUT);//Define ldr (pino analógico A0) como saída
-  // while(rightMotor.getEncoder()<400){
+  // while(rightMotor.getEncoder()<50){
   //   rightMotor.moveForward(90);
   // }
+  // stopLow(&leftMotor,&rightMotor);
+  // leftMotor.moveForward(100);
+  // rightMotor.moveForward(80);
+  // delay(1000);
+  // stopLow(&leftMotor,&rightMotor);
+  // delay(500);
+  // leftMotor.moveForward(100);
+  // rightMotor.moveForward(80);
+  // delay(1000);
   // stop(&leftMotor,&rightMotor);
+  // leftMotor.stopLow();
+  // rightMotor.moveForward(80);
 
 }
 void loop(){
-  boucing(&leftMotor,&rightMotor,&leftIR,&rightIR,&bumper);
+
+  // boucing(&leftMotor,&rightMotor,&leftIR,&rightIR,&LeftMiddleIR,&RightMiddleIR,&bumper);
+  // Serial.print(leftIR.read());
+  // Serial.print(" ");
+  // Serial.print(LeftMiddleIR.read());
+  // Serial.print(" ");
+  // Serial.print(RightMiddleIR.read());
+  // Serial.print(" ");
+  // Serial.println(rightIR.read());
   // Serial.println(backIR.read());
   // Serial.println(ldr.read());
   // Serial.println(frontalUltrassonic.distance_cm());

@@ -35,6 +35,12 @@ void MotorDC::stop(){
     digitalWrite(this->pinoEN,HIGH);
 }
 
+void MotorDC::stopLow(){
+    digitalWrite(this->pinoRpwm, LOW);
+    digitalWrite(this->pinoLpwm, LOW);
+    digitalWrite(this->pinoEN,LOW);
+}
+
 void MotorDC::moveBackward(int velocidade){
     digitalWrite(this->pinoLpwm, LOW);
     digitalWrite(this->pinoRpwm, HIGH);

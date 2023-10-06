@@ -17,12 +17,13 @@ void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motor
 void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* motorRight);
 void move_cm(int distance_cm, Directions direction,MotorDC* motorLeft, MotorDC* motorRight);
 void stop(MotorDC* motorLeft, MotorDC* motorRight);
+void stopLow(MotorDC* motorLeft, MotorDC* motorRight);
 void resetEncoders(MotorDC* motorLeft, MotorDC* motorRight);
 void setPreviusTime(double value);
 void calibrateMotorsCT(MotorDC * leftMotor, MotorDC * rightMotor);
 double getPreviusTime();
 double add(double * ptr, double valor);
-void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR,Bumper * bumper);
+void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR, LightSensor * middleLeftIR, LightSensor * middleRightIR, Bumper * bumper);
 void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, LightSensor * rightIR);
 
 

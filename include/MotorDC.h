@@ -9,6 +9,7 @@
             void moveBackward(int velocity);
             void readEncoder();
             void stop();
+            void stopLow();
             unsigned int getEncoder();
             int setEncoder(int value);
 
