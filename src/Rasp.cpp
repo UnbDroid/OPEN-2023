@@ -43,3 +43,28 @@ char return_shelves(){
   }
   return data;
 }
+
+
+
+int return_count_of_cubes(){ 
+    char data;
+    int i;
+    unsigned long startTime, loopDuration;
+    while (1){
+    for(i=0; i<100; i++){
+    Serial.print("k");      // A letra 'K' significa que o RASP precisa retornar a contagem dos cubos na frente dele
+  }
+    data = Serial.read();
+    startTime = millis();
+    loopDuration = 10000;
+    while (!(data >= '0' && data <= '9') && millis() - startTime < loopDuration ){
+    data = Serial.read();
+  }
+    if ((data >= '0' && data <= '9')){
+        i = data - '0';
+        return i;
+        }
+    }
+}
+
+

@@ -6,6 +6,7 @@
 
 char return_type_of_cube();
 char return_shelves();
+int return_count_of_cubes();
  
  
 
