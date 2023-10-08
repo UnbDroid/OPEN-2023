@@ -177,482 +177,484 @@ void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, Moto
     }
 }
 
+//ABAIXO, ALIGNS ANTIGOS!!!
 // void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, MotorDC * motorRight, int PWM, LightSensor * backIR){
-void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, MotorDC * motorRight, int PWM,LightSensor *middleIRDireita, LightSensor *middleIrEsquerda){
-    int leftWhite = 110; //200
-    int rightWhite = 110;
+// void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, MotorDC * motorRight, int PWM,LightSensor *middleIRDireita, LightSensor *middleIrEsquerda){ 
+//     int leftWhite = 110; //200
+//     int rightWhite = 110;
 
-    int leftReading = leftIR->read();
-    int rightReading = rightIR->read();
-    Serial.print("sensores IR: ");
-    Serial.print(leftReading);
-    Serial.print(" ");
-    bool alinhou=false;
-    Serial.println(rightReading);
-    Serial.println("estou me alinhando");
-
-    if ((leftReading>leftWhite || rightReading>rightWhite)&&!alinhou && !(leftIR->read()>leftWhite && rightIR->read()>rightWhite)){
-        
-        stop(motorLeft,motorRight);
-        delay(500);
-        if (leftReading<rightReading) //vê branco
-        {   
-            Serial.print("esquerdo ve branco ");
-            motorLeft->setEncoder(0);
-            motorRight->stop();
-            while (leftReading < rightReading&&motorLeft->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco
-                
-                motorLeft->moveForward(PWM+20);              
-                leftReading = leftIR->read();
-                rightReading = rightIR->read();
-                
-                Serial.print("leitura IR ao alinhar: ");            
-                Serial.print(leftReading);
-                Serial.print(" ");
-                Serial.println(rightReading);
-            }
-
-            leftReading = leftIR->read();
-            rightReading = rightIR->read();
-
-            if(leftReading >=leftWhite){
-                stop(motorLeft,motorRight);
-                resetEncoders(motorLeft,motorRight);
-                while(motorRight->getEncoder() < 80){
-                    motorRight->moveBackward(PWM);
-                }
-                motorRight->stop();
-                alinhou=true;
-                
-                return;
-            }
-            else{
-                resetEncoders(motorLeft,motorRight);
-                motorRight->stop();
-                while(leftReading<=leftWhite&&motorLeft->getEncoder()<300){
-                    motorLeft->moveBackward(PWM+20);  
-                    leftReading = leftIR->read();               
-                }
-                motorLeft->stop();
-                if(leftReading>=leftWhite){
-                    alinhou=true;
-                    return;
-                }
-                else{
-                    resetEncoders(motorLeft,motorRight);
-                    while(leftIR->read()<=leftWhite&&motorLeft->getEncoder()<300){   
-                        motorLeft->moveBackward(PWM+20);                 
-                    }
-                    motorLeft->stop();
-                    while(motorRight->getEncoder()<50){
-                        motorRight->moveBackward(PWM);                 
-                    }
-                    motorRight->stop();
-                    if(leftReading>=leftWhite){
-                        alinhou=true;
-                        stop(motorLeft,motorRight);
-                        return;
-                    }
-                    
-                    // if(!alinhou){
-                    //     resetEncoders(motorLeft,motorRight);
-                    //     while(motorLeft->getEncoder()<300){
-                    //         Serial.println("entrei aq");
-                    //         motorLeft->moveForward(PWM+20);                
-                    //     }
-                    // } 
-                      
-                    
-                    // motorRight->stop();
-                    
-                }
-
-            }
-            stop(motorLeft,motorRight);
-            delay(300);
-            return;
-        } else if (rightReading < leftReading) //ve branco
-            Serial.print("direito ve branco");
-            motorRight->setEncoder(0);
-            motorLeft->stop();
-            while (rightReading < leftReading&&motorRight->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco
-                
-                motorRight->moveForward(PWM);              
-                leftReading = leftIR->read();
-                rightReading = rightIR->read();
-                
-                Serial.print("leitura IR ao alinhar: ");            
-                Serial.print(leftReading);
-                Serial.print(" ");
-                Serial.println(rightReading);
-            }
-
-            leftReading = leftIR->read();
-            rightReading = rightIR->read();
-
-            if(rightReading >=rightWhite){
-                stop(motorLeft,motorRight);
-                resetEncoders(motorLeft,motorRight);
-                while(motorLeft->getEncoder() < 80){
-                    motorLeft->moveBackward(PWM);
-                }
-                motorLeft->stop();
-                alinhou=true;
-                
-                return;
-            }
-            else{
-                resetEncoders(motorLeft,motorRight);
-                motorLeft->stop();
-                while(rightReading<=rightWhite&&motorRight->getEncoder()<300){
-                    motorRight->moveBackward(PWM+20);  
-                    rightReading = leftIR->read();               
-                }
-                motorRight->stop();
-                if(rightReading>=rightWhite){
-                    alinhou=true;
-                    return;
-                }
-                else{
-                    resetEncoders(motorLeft,motorRight);
-                    while(rightIR->read()<=rightWhite&&motorRight->getEncoder()<300){   
-                        motorRight->moveBackward(PWM+20);                 
-                    }
-                    motorRight->stop();
-                    while(motorLeft->getEncoder()<50){
-                        motorLeft->moveBackward(PWM+20);                 
-                    }
-                    motorLeft->stop();
-                    if(rightReading>=rightWhite){
-                        alinhou=true;
-                        stop(motorLeft,motorRight);
-                        return;
-                    }
-                    
-                    // if(!alinhou){
-                    //     resetEncoders(motorLeft,motorRight);
-                    //     while(motorRight->getEncoder()<300){
-                    //         Serial.println("entrei aq");
-                    //         motorRight->moveForward(PWM);                
-                    //     }
-                    // } 
-                      
-                    
-                    // motorRight->stop();
-                    
-                }
-
-            }
-            stop(motorLeft,motorRight);
-            delay(300);
-            return;
-        }
-}
-
-
-// void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, MotorDC * motorRight, int PWM,LightSensor *middleIRDireita, LightSensor *middleIrEsquerda){
+//     int leftReading = leftIR->read();
+//     int rightReading = rightIR->read();
+//     Serial.print("sensores IR: ");
+//     Serial.print(leftReading);
+//     Serial.print(" ");
 //     bool alinhou=false;
-//     int vezes =2;
-//     while((!(leftIR->read()>100&&rightIR->read()>100)&&!(middleIRDireita->read()>100&&middleIrEsquerda->read()>100))&& vezes){
-//     if(middleIrEsquerda->read()>150&&leftIR->read()<100){
-//       motorRight->stop();
-//       motorLeft->setEncoder(0);
-//       while (leftIR->read()<100&&motorLeft->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco     
-//         motorLeft->moveForward(80);//70              
-//       }
-//       stop(motorLeft,motorRight);
-//       delay(500);
-//       if(leftIR->read() >=100){
-//         alinhou=true;
+//     Serial.println(rightReading);
+//     Serial.println("estou me alinhando");
+
+//     if ((leftReading>leftWhite || rightReading>rightWhite)&&!alinhou && !(leftIR->read()>leftWhite && rightIR->read()>rightWhite)){
+        
 //         stop(motorLeft,motorRight);
-//       }
-//       if(alinhou){
-//           motorLeft->stop();
-//           motorRight->setEncoder(0);
-//           while(motorRight->getEncoder()<50){
-//               motorRight->moveForward(80);//70+10
-//           }
-//           stop(motorLeft,motorRight);
-//           delay(500);
-//       }
-//       else{
-//         resetEncoders(motorLeft,motorRight);
-//         motorRight->stop();
-//         while(leftIR->read()<150&&motorLeft->getEncoder()<600){
-//             motorLeft->moveBackward(80);                 
-//         }
-//         motorLeft->stop();
-//         if(leftIR->read()>150){
-//             alinhou=true;
-//         }
-//         if(alinhou){
-//             motorLeft->stop();
-//             motorRight->setEncoder(0);
-//             while(motorRight->getEncoder()<50){
-//                 motorRight->moveBackward(80);       
+//         delay(500);
+//         if (leftReading<rightReading) //vê branco
+//         {   
+//             Serial.print("esquerdo ve branco ");
+//             motorLeft->setEncoder(0);
+//             motorRight->stop();
+//             while (leftReading < rightReading&&motorLeft->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco
+                
+//                 motorLeft->moveForward(PWM+20);              
+//                 leftReading = leftIR->read();
+//                 rightReading = rightIR->read();
+                
+//                 Serial.print("leitura IR ao alinhar: ");            
+//                 Serial.print(leftReading);
+//                 Serial.print(" ");
+//                 Serial.println(rightReading);
+//             }
+
+//             leftReading = leftIR->read();
+//             rightReading = rightIR->read();
+
+//             if(leftReading >=leftWhite){
+//                 stop(motorLeft,motorRight);
+//                 resetEncoders(motorLeft,motorRight);
+//                 while(motorRight->getEncoder() < 80){
+//                     motorRight->moveBackward(PWM);
+//                 }
+//                 motorRight->stop();
+//                 alinhou=true;
+                
+//                 return;
+//             }
+//             else{
+//                 resetEncoders(motorLeft,motorRight);
+//                 motorRight->stop();
+//                 while(leftReading<=leftWhite&&motorLeft->getEncoder()<300){
+//                     motorLeft->moveBackward(PWM+20);  
+//                     leftReading = leftIR->read();               
+//                 }
+//                 motorLeft->stop();
+//                 if(leftReading>=leftWhite){
+//                     alinhou=true;
+//                     return;
+//                 }
+//                 else{
+//                     resetEncoders(motorLeft,motorRight);
+//                     while(leftIR->read()<=leftWhite&&motorLeft->getEncoder()<300){   
+//                         motorLeft->moveBackward(PWM+20);                 
+//                     }
+//                     motorLeft->stop();
+//                     while(motorRight->getEncoder()<50){
+//                         motorRight->moveBackward(PWM);                 
+//                     }
+//                     motorRight->stop();
+//                     if(leftReading>=leftWhite){
+//                         alinhou=true;
+//                         stop(motorLeft,motorRight);
+//                         return;
+//                     }
+                    
+//                     // if(!alinhou){
+//                     //     resetEncoders(motorLeft,motorRight);
+//                     //     while(motorLeft->getEncoder()<300){
+//                     //         Serial.println("entrei aq");
+//                     //         motorLeft->moveForward(PWM+20);                
+//                     //     }
+//                     // } 
+                      
+                    
+//                     // motorRight->stop();
+                    
+//                 }
+
 //             }
 //             stop(motorLeft,motorRight);
-//             delay(500);
-//         }
-//         else{
-//             resetEncoders(motorLeft,motorRight);
-//             motorRight->stop();
-//             motorLeft->setEncoder(0);
-//             while(motorLeft->getEncoder()<300){
-//               motorLeft->moveForward(80);
+//             delay(300);
+//             return;
+//         } else if (rightReading < leftReading) //ve branco
+//             Serial.print("direito ve branco");
+//             motorRight->setEncoder(0);
+//             motorLeft->stop();
+//             while (rightReading < leftReading&&motorRight->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco
+                
+//                 motorRight->moveForward(PWM);              
+//                 leftReading = leftIR->read();
+//                 rightReading = rightIR->read();
+                
+//                 Serial.print("leitura IR ao alinhar: ");            
+//                 Serial.print(leftReading);
+//                 Serial.print(" ");
+//                 Serial.println(rightReading);
 //             }
-//           stop(motorLeft,motorRight);
-//           motorLeft->stop();
-//           motorRight->setEncoder(0);
-//           while(motorRight->getEncoder()<50){
-//             motorRight->moveForward(80);       
-//           }
-//           stop(motorLeft,motorRight);
+
+//             leftReading = leftIR->read();
+//             rightReading = rightIR->read();
+
+//             if(rightReading >=rightWhite){
+//                 stop(motorLeft,motorRight);
+//                 resetEncoders(motorLeft,motorRight);
+//                 while(motorLeft->getEncoder() < 80){
+//                     motorLeft->moveBackward(PWM);
+//                 }
+//                 motorLeft->stop();
+//                 alinhou=true;
+                
+//                 return;
+//             }
+//             else{
+//                 resetEncoders(motorLeft,motorRight);
+//                 motorLeft->stop();
+//                 while(rightReading<=rightWhite&&motorRight->getEncoder()<300){
+//                     motorRight->moveBackward(PWM+20);  
+//                     rightReading = leftIR->read();               
+//                 }
+//                 motorRight->stop();
+//                 if(rightReading>=rightWhite){
+//                     alinhou=true;
+//                     return;
+//                 }
+//                 else{
+//                     resetEncoders(motorLeft,motorRight);
+//                     while(rightIR->read()<=rightWhite&&motorRight->getEncoder()<300){   
+//                         motorRight->moveBackward(PWM+20);                 
+//                     }
+//                     motorRight->stop();
+//                     while(motorLeft->getEncoder()<50){
+//                         motorLeft->moveBackward(PWM+20);                 
+//                     }
+//                     motorLeft->stop();
+//                     if(rightReading>=rightWhite){
+//                         alinhou=true;
+//                         stop(motorLeft,motorRight);
+//                         return;
+//                     }
+                    
+//                     // if(!alinhou){
+//                     //     resetEncoders(motorLeft,motorRight);
+//                     //     while(motorRight->getEncoder()<300){
+//                     //         Serial.println("entrei aq");
+//                     //         motorRight->moveForward(PWM);                
+//                     //     }
+//                     // } 
+                      
+                    
+//                     // motorRight->stop();
+                    
+//                 }
+
+//             }
+//             stop(motorLeft,motorRight);
+//             delay(300);
+//             return;
 //         }
+// }
+
+
+void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, MotorDC * motorRight, int PWM,LightSensor *middleIRDireita, LightSensor *middleIrEsquerda){
+    bool alinhou=false;
+    int vezes =2;
+    while((!(leftIR->read()>100&&rightIR->read()>100)&&!(middleIRDireita->read()>100&&middleIrEsquerda->read()>100))&& vezes){
+    if(middleIrEsquerda->read()>150&&leftIR->read()<100){
+      motorRight->stop();
+      motorLeft->setEncoder(0);
+      while (leftIR->read()<100&&motorLeft->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco     
+        motorLeft->moveForward(80);//70              
+      }
+      stop(motorLeft,motorRight);
+      delay(500);
+      if(leftIR->read() >=100){
+        alinhou=true;
+        stop(motorLeft,motorRight);
+      }
+      if(alinhou){
+          motorLeft->stop();
+          motorRight->setEncoder(0);
+          while(motorRight->getEncoder()<50){
+              motorRight->moveForward(80);//70+10
+          }
+          stop(motorLeft,motorRight);
+          delay(500);
+      }
+      else{
+        resetEncoders(motorLeft,motorRight);
+        motorRight->stop();
+        while(leftIR->read()<150&&motorLeft->getEncoder()<600){
+            motorLeft->moveBackward(80);                 
+        }
+        motorLeft->stop();
+        if(leftIR->read()>150){
+            alinhou=true;
+        }
+        if(alinhou){
+            motorLeft->stop();
+            motorRight->setEncoder(0);
+            while(motorRight->getEncoder()<50){
+                motorRight->moveBackward(80);       
+            }
+            stop(motorLeft,motorRight);
+            delay(500);
+        }
+        else{
+            resetEncoders(motorLeft,motorRight);
+            motorRight->stop();
+            motorLeft->setEncoder(0);
+            while(motorLeft->getEncoder()<300){
+              motorLeft->moveForward(80);
+            }
+          stop(motorLeft,motorRight);
+          motorLeft->stop();
+          motorRight->setEncoder(0);
+          while(motorRight->getEncoder()<50){
+            motorRight->moveForward(80);       
+          }
+          stop(motorLeft,motorRight);
+        }
   
 
 
-//       }
-//     }
+      }
+    }
 
 
-//     if(middleIRDireita->read()>150&&rightIR->read()<100){//meio direita ver preto e o do canto direito não
-//       motorLeft->stop();
-//       motorRight->setEncoder(0);
-//       while (rightIR->read()<100&&motorRight->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco     
-//                 motorRight->moveForward(80);//70              
-//       }
-//       stop(motorLeft,motorRight);
-//       delay(500);
-//       if(rightIR->read() >=100){
-//         alinhou=true;
-//         stop(motorLeft,motorRight);
-//       }
-//       if(alinhou){
-//           motorRight->stop();
-//           motorLeft->setEncoder(0);
-//           while(motorLeft->getEncoder()<50){
-//               motorLeft->moveForward(80);//70+10
-//           }
-//           stop(motorLeft,motorRight);
-//           delay(500);
-//       }
-//       else{
-//         resetEncoders(motorLeft,motorRight);
-//         motorLeft->stop();
-//         while(rightIR->read()<150&&motorRight->getEncoder()<600){
-//             motorRight->moveBackward(80);                 
-//         }
-//         motorRight->stop();
-//         if(rightIR->read()>150){
-//             alinhou=true;
-//         }
-//         if(alinhou){
-//             motorRight->stop();
-//             motorLeft->setEncoder(0);
-//             while(motorLeft->getEncoder()<50){
-//                 motorLeft->moveBackward(80);       
-//             }
-//             stop(motorLeft,motorRight);
-//             delay(500);
-//         }
-//         else{
-//             resetEncoders(motorLeft,motorRight);
-//             motorRight->stop();
-//             motorLeft->setEncoder(0);
-//             while(motorLeft->getEncoder()<300){
-//               motorLeft->moveForward(80);
-//             }
-//             stop(motorLeft,motorRight);
-//             motorLeft->stop();
-//             motorRight->setEncoder(0);
-//             while(motorRight->getEncoder()<50){
-//                 motorRight->moveForward(80);      
-//             }
-//             stop(motorLeft,motorRight);
-//         }
-//       }
-//     }
+    if(middleIRDireita->read()>150&&rightIR->read()<100){//meio direita ver preto e o do canto direito não
+      motorLeft->stop();
+      motorRight->setEncoder(0);
+      while (rightIR->read()<100&&motorRight->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco     
+                motorRight->moveForward(80);//70              
+      }
+      stop(motorLeft,motorRight);
+      delay(500);
+      if(rightIR->read() >=100){
+        alinhou=true;
+        stop(motorLeft,motorRight);
+      }
+      if(alinhou){
+          motorRight->stop();
+          motorLeft->setEncoder(0);
+          while(motorLeft->getEncoder()<50){
+              motorLeft->moveForward(80);//70+10
+          }
+          stop(motorLeft,motorRight);
+          delay(500);
+      }
+      else{
+        resetEncoders(motorLeft,motorRight);
+        motorLeft->stop();
+        while(rightIR->read()<150&&motorRight->getEncoder()<600){
+            motorRight->moveBackward(80);                 
+        }
+        motorRight->stop();
+        if(rightIR->read()>150){
+            alinhou=true;
+        }
+        if(alinhou){
+            motorRight->stop();
+            motorLeft->setEncoder(0);
+            while(motorLeft->getEncoder()<50){
+                motorLeft->moveBackward(80);       
+            }
+            stop(motorLeft,motorRight);
+            delay(500);
+        }
+        else{
+            resetEncoders(motorLeft,motorRight);
+            motorRight->stop();
+            motorLeft->setEncoder(0);
+            while(motorLeft->getEncoder()<300){
+              motorLeft->moveForward(80);
+            }
+            stop(motorLeft,motorRight);
+            motorLeft->stop();
+            motorRight->setEncoder(0);
+            while(motorRight->getEncoder()<50){
+                motorRight->moveForward(80);      
+            }
+            stop(motorLeft,motorRight);
+        }
+      }
+    }
 
-//     if(middleIrEsquerda->read()>100&&middleIRDireita->read()<100){
+    if(middleIrEsquerda->read()>100&&middleIRDireita->read()<100){
 
-//       motorLeft->stop();
-//       motorRight->setEncoder(0);
-//       while (rightIR->read()<100&&motorRight->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco     
-//                 motorRight->moveForward(80);//70              
-//       }
-//       stop(motorLeft,motorRight);
-//       delay(500);
-//       if(rightIR->read() >=100){
-//         alinhou=true;
-//         stop(motorLeft,motorRight);
-//       }
-//       if(alinhou){
-//           motorRight->stop();
-//           motorLeft->setEncoder(0);
-//           while(motorLeft->getEncoder()<50){
-//               motorLeft->moveBackward(80);//70+10
-//           }
-//           stop(motorLeft,motorRight);
-//           delay(500);
-//       }
-//       else{
-//         resetEncoders(motorLeft,motorRight);
-//         motorLeft->stop();
-//         while(rightIR->read()<150&&motorRight->getEncoder()<600){
-//             motorRight->moveBackward(80);                 
-//         }
-//         motorRight->stop();
-//         if(rightIR->read()>150){
-//             alinhou=true;
-//         }
-//         if(alinhou){
-//             motorRight->stop();
-//             motorLeft->setEncoder(0);
-//             while(motorLeft->getEncoder()<50){
-//                 motorLeft->moveBackward(80);       
-//             }
-//             stop(motorLeft,motorRight);
-//             delay(500);
-//         }
-//         else{
-//             resetEncoders(motorLeft,motorRight);
-//             motorRight->stop();
-//             motorLeft->setEncoder(0);
-//             while(motorLeft->getEncoder()<300){
-//               motorLeft->moveForward(80);
-//             }
-//             motorLeft->stop();
-//             motorRight->setEncoder(0);
-//             while(motorRight->getEncoder()<50){
-//                 motorRight->moveForward(80);       
-//             }
+      motorLeft->stop();
+      motorRight->setEncoder(0);
+      while (rightIR->read()<100&&motorRight->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco     
+                motorRight->moveForward(80);//70              
+      }
+      stop(motorLeft,motorRight);
+      delay(500);
+      if(rightIR->read() >=100){
+        alinhou=true;
+        stop(motorLeft,motorRight);
+      }
+      if(alinhou){
+          motorRight->stop();
+          motorLeft->setEncoder(0);
+          while(motorLeft->getEncoder()<50){
+              motorLeft->moveBackward(80);//70+10
+          }
+          stop(motorLeft,motorRight);
+          delay(500);
+      }
+      else{
+        resetEncoders(motorLeft,motorRight);
+        motorLeft->stop();
+        while(rightIR->read()<150&&motorRight->getEncoder()<600){
+            motorRight->moveBackward(80);                 
+        }
+        motorRight->stop();
+        if(rightIR->read()>150){
+            alinhou=true;
+        }
+        if(alinhou){
+            motorRight->stop();
+            motorLeft->setEncoder(0);
+            while(motorLeft->getEncoder()<50){
+                motorLeft->moveBackward(80);       
+            }
+            stop(motorLeft,motorRight);
+            delay(500);
+        }
+        else{
+            resetEncoders(motorLeft,motorRight);
+            motorRight->stop();
+            motorLeft->setEncoder(0);
+            while(motorLeft->getEncoder()<300){
+              motorLeft->moveForward(80);
+            }
+            motorLeft->stop();
+            motorRight->setEncoder(0);
+            while(motorRight->getEncoder()<50){
+                motorRight->moveForward(80);       
+            }
 
-//             stop(motorLeft,motorRight);
-//         }
+            stop(motorLeft,motorRight);
+        }
 
-//       }
-//     }
+      }
+    }
 
-//     if(rightIR->read()>150&&leftIR->read()<100){
-//       motorRight->stop();
-//       motorLeft->setEncoder(0);
-//       while (leftIR->read()<100&&motorLeft->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco     
-//         motorLeft->moveForward(80);//70              
-//       }
-//       stop(motorLeft,motorRight);
-//       delay(500);
-//       if(leftIR->read() >=100){
-//         alinhou=true;
-//         stop(motorLeft,motorRight);
-//       }
-//       if(alinhou){
-//           motorLeft->stop();
-//           motorRight->setEncoder(0);
-//           while(motorRight->getEncoder()<50){
-//               motorRight->moveForward(80);//70+10
-//           }
-//           stop(motorLeft,motorRight);
-//           delay(500);
-//       }
-//       else{
-//         resetEncoders(motorLeft,motorRight);
-//         motorRight->stop();
-//         while(leftIR->read()<150&&motorLeft->getEncoder()<600){
-//             motorLeft->moveBackward(80);                 
-//         }
-//         motorLeft->stop();
-//         if(leftIR->read()>150){
-//             alinhou=true;
-//         }
-//         if(alinhou){
-//             motorLeft->stop();
-//             motorRight->setEncoder(0);
-//             while(motorRight->getEncoder()<50){
-//                 motorRight->moveBackward(80);       
-//             }
-//             stop(motorLeft,motorRight);
-//             delay(500);
-//         }
-//         else{
-//             resetEncoders(motorLeft,motorRight);
-//             motorRight->stop();
-//             motorLeft->setEncoder(0);
-//             while(motorLeft->getEncoder()<300){
-//               motorLeft->moveForward(80);
-//             }
-//         stop(motorLeft,motorRight);
-//           motorLeft->stop();
-//           motorRight->setEncoder(0);
-//           while(motorRight->getEncoder()<50){
-//             motorRight->moveForward(80);       
-//           }
-//         stop(motorLeft,motorRight);
-//         }
-//       }
-//     }
+    if(rightIR->read()>150&&leftIR->read()<100){
+      motorRight->stop();
+      motorLeft->setEncoder(0);
+      while (leftIR->read()<100&&motorLeft->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco     
+        motorLeft->moveForward(80);//70              
+      }
+      stop(motorLeft,motorRight);
+      delay(500);
+      if(leftIR->read() >=100){
+        alinhou=true;
+        stop(motorLeft,motorRight);
+      }
+      if(alinhou){
+          motorLeft->stop();
+          motorRight->setEncoder(0);
+          while(motorRight->getEncoder()<50){
+              motorRight->moveForward(80);//70+10
+          }
+          stop(motorLeft,motorRight);
+          delay(500);
+      }
+      else{
+        resetEncoders(motorLeft,motorRight);
+        motorRight->stop();
+        while(leftIR->read()<150&&motorLeft->getEncoder()<600){
+            motorLeft->moveBackward(80);                 
+        }
+        motorLeft->stop();
+        if(leftIR->read()>150){
+            alinhou=true;
+        }
+        if(alinhou){
+            motorLeft->stop();
+            motorRight->setEncoder(0);
+            while(motorRight->getEncoder()<50){
+                motorRight->moveBackward(80);       
+            }
+            stop(motorLeft,motorRight);
+            delay(500);
+        }
+        else{
+            resetEncoders(motorLeft,motorRight);
+            motorRight->stop();
+            motorLeft->setEncoder(0);
+            while(motorLeft->getEncoder()<300){
+              motorLeft->moveForward(80);
+            }
+        stop(motorLeft,motorRight);
+          motorLeft->stop();
+          motorRight->setEncoder(0);
+          while(motorRight->getEncoder()<50){
+            motorRight->moveForward(80);       
+          }
+        stop(motorLeft,motorRight);
+        }
+      }
+    }
 
 
-//     if(leftIR->read()>100&&rightIR->read()<100){
-//             motorLeft->stop();
-//       motorRight->setEncoder(0);
-//       while (rightIR->read()<100&&motorRight->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco     
-//                 motorRight->moveForward(80);//70              
-//       }
-//       stop(motorLeft,motorRight);
-//       delay(500);
-//       if(rightIR->read() >=100){
-//         alinhou=true;
-//         stop(motorLeft,motorRight);
-//       }
-//       if(alinhou){
-//           motorRight->stop();
-//           motorLeft->setEncoder(0);
-//           while(motorLeft->getEncoder()<50){
-//               motorLeft->moveBackward(80);//70+10
-//           }
-//           stop(motorLeft,motorRight);
-//           delay(500);
-//       }
-//       else{
-//         resetEncoders(motorLeft,motorRight);
-//         motorLeft->stop();
-//         while(rightIR->read()<150&&motorRight->getEncoder()<600){
-//             motorRight->moveBackward(80);                 
-//         }
-//         motorRight->stop();
-//         if(rightIR->read()>150){
-//             alinhou=true;
-//         }
-//         if(alinhou){
-//             motorRight->stop();
-//             motorLeft->setEncoder(0);
-//             while(motorLeft->getEncoder()<50){
-//                 motorLeft->moveBackward(80);       
-//             }
-//             stop(motorLeft,motorRight);
-//             delay(500);
-//         }
-//         else{
-//             resetEncoders(motorLeft,motorRight);
-//             motorRight->stop();
-//             motorLeft->setEncoder(0);
-//             while(motorLeft->getEncoder()<300){
-//               motorLeft->moveForward(80);
-//             }
-//             motorLeft->stop();
-//             motorRight->setEncoder(0);
-//             while(motorRight->getEncoder()<50){
-//                 motorRight->moveForward(80);       
-//             }
+    if(leftIR->read()>100&&rightIR->read()<100){
+            motorLeft->stop();
+      motorRight->setEncoder(0);
+      while (rightIR->read()<100&&motorRight->getEncoder()<300) { // && rightIR->read()>rightWhite){ // ve branco     
+                motorRight->moveForward(80);//70              
+      }
+      stop(motorLeft,motorRight);
+      delay(500);
+      if(rightIR->read() >=100){
+        alinhou=true;
+        stop(motorLeft,motorRight);
+      }
+      if(alinhou){
+          motorRight->stop();
+          motorLeft->setEncoder(0);
+          while(motorLeft->getEncoder()<50){
+              motorLeft->moveBackward(80);//70+10
+          }
+          stop(motorLeft,motorRight);
+          delay(500);
+      }
+      else{
+        resetEncoders(motorLeft,motorRight);
+        motorLeft->stop();
+        while(rightIR->read()<150&&motorRight->getEncoder()<600){
+            motorRight->moveBackward(80);                 
+        }
+        motorRight->stop();
+        if(rightIR->read()>150){
+            alinhou=true;
+        }
+        if(alinhou){
+            motorRight->stop();
+            motorLeft->setEncoder(0);
+            while(motorLeft->getEncoder()<50){
+                motorLeft->moveBackward(80);       
+            }
+            stop(motorLeft,motorRight);
+            delay(500);
+        }
+        else{
+            resetEncoders(motorLeft,motorRight);
+            motorRight->stop();
+            motorLeft->setEncoder(0);
+            while(motorLeft->getEncoder()<300){
+              motorLeft->moveForward(80);
+            }
+            motorLeft->stop();
+            motorRight->setEncoder(0);
+            while(motorRight->getEncoder()<50){
+                motorRight->moveForward(80);       
+            }
 
-//             stop(motorLeft,motorRight);
-//         }
-//       }
-//     }
-//     vezes--;
-//   }
-// }
+            stop(motorLeft,motorRight);
+        }
+      }
+    }
+    vezes--;
+  }
+}
+
 /*
 
     int leftBlack = 100;

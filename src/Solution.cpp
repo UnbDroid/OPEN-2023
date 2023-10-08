@@ -209,7 +209,7 @@ int*  bestBlock(int currentY,int currentX){
 void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic,LightSensor * middleSensor,LightSensor*backIr,LightSensor* middleSensorLeft){
     int destination[2];
     int *best = bestBlock(*y,*x);
-    // forkLift->forklift_up_steps(0,2);
+    forkLift->forklift_up_steps(0,2);
     while(*best!=0){
         if(state==0){
             destination[0]=*best;
