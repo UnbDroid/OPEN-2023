@@ -801,7 +801,7 @@ void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSenso
                 }
             }
         }
-        
+          
     }
     return ;
 }

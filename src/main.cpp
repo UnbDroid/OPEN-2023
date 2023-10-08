@@ -93,20 +93,20 @@ void setup()
   // Serial.println(direcao);
 
   
-  moveForSquare(3,&leftIR,&rightIR,&leftMotor,&rightMotor,&leftMiddleIR,&rightMiddleIR);
-  stop(&leftMotor, &rightMotor);
+  //moveForSquare(3,&leftIR,&rightIR,&leftMotor,&rightMotor,&leftMiddleIR,&rightMiddleIR);
+  //stop(&leftMotor, &rightMotor);
 }
  
 
 
 void loop(){
-  //int y=6;
-  //int x =7;
-  //int direcao=SOL::Norte; 
-  //int destination[2];
-  //destination[0]=1;
-  //destination[1]=6;
-  //stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&leftMiddleIR,&backIR,&leftIR);
+  int y=6;
+  int x =7;
+  int direcao=SOL::Norte; 
+  int destination[2];
+  destination[0]=1;
+  destination[1]=6;
+  stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&leftMiddleIR,&backIR,&leftIR);
   //forklift.forklift_up_steps(0,1);
   //pick_cube_from_right(&leftMotor, &rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor,&Robot_Claw, &forklift);
   //Robot_Claw.open_claw_with_cube();

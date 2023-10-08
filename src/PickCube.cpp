@@ -48,7 +48,7 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     stop(leftMotor,rightMotor);
     delay(500);
 
-    Fork->forklift_down_steps(1,0);  // Não apagar essas 4 linhas pq é a integração da visão e a empilhadeira precisa estar abaixada
+    Fork->forklift_down_steps(2,0);  // Não apagar essas 4 linhas pq é a integração da visão e a empilhadeira precisa estar abaixada
     delay(200);
     // c = return_type_of_cube();
     Fork->forklift_up_distance_cm(4.5);
@@ -72,7 +72,8 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     Fork->forklift_down_distance_cm(2.5);
     delay(500);
     RobotClaw->close_claw_with_cube();
-    // Fork->forklift_down_distance_cm(2); // Como ele subiu 4,5 cm antes, agora ele desceu 2.5cm, pegou o cubo, depois desceu mais 2 cm
+    Fork->forklift_up_steps(0,2);
+    Fork->forklift_down_distance_cm(2); // Como ele subiu 4,5 cm antes, agora ele desceu 2.5cm, pegou o cubo, depois desceu mais 2 cm
     
     delay(500);
 
