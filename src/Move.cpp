@@ -707,6 +707,18 @@ void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, Moto
             }
     }
 */
+
+
+void moveToSquareByCm(int distance,MotorDC*leftMotor, MotorDC*rightMotor, LightSensor * leftIR,LightSensor*rightIR,LightSensor *rightMiddleIR,LightSensor * backIR){
+    while(!(backIR->read()>150)){ 
+        leftMotor->moveBackward(80);
+        rightMotor->moveBackward(60);
+    }
+    stop(leftMotor,rightMotor);
+    delay(500);
+    move_cm(distance,leftMotor,rightMotor,leftIR,rightIR,rightMiddleIR);
+    stop(leftMotor,rightMotor);
+}
 void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleLeftIR, LightSensor * middleRightIR){
     quantityToMove++;
     int count =0;
@@ -1205,39 +1217,16 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
 }
 
 
-void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensorRight,LightSensor * middleSensorLeft){
-
+void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensorRight,LightSensor * middleSensorLeft,LightSensor * backIr){
+    
     if(*current<*destination){
-        while(*current<*destination){
-                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor,middleSensorRight,middleSensorLeft);
-                stop(leftMotor,rightMotor);
-                delay(500);
-                //align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,80);
-                *current = *current+1;
-                
-        }
-            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor,middleSensorRight,middleSensorLeft);
-            stop(leftMotor,rightMotor);
-            delay(500);
-            
-            //align(middleSensorLeft,middleSensorRight,leftMotor,rightMotor,70,middleSensorRight,middleSensorLeft);
-            stop(leftMotor,rightMotor);
-        }
+        moveToSquareByCm((*(destination-*current)*32),leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorRight,backIr)    ;
+        *current=*destination;
+    }
     else if(*current>*destination){
-        while(*current>*destination){
-                moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor,middleSensorRight,middleSensorLeft);
-                stop(leftMotor,rightMotor);
-                delay(500);
-                //align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,80);
-                *current = *current-1;
-        }
-            moveForSquare(0, lightSensorLeft, lightSensorRight, leftMotor,rightMotor,middleSensorRight,middleSensorLeft);
-            stop(leftMotor,rightMotor);
-            delay(500);
-            //align(middleSensorLeft,middleSensorRight,leftMotor,rightMotor,70,middleSensorRight,middleSensorLeft);
-            
-            stop(leftMotor,rightMotor);
-        }
+        moveToSquareByCm(((*current*-*destination)*32),leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorRight,backIr)    ;
+        *current=*destination;
+    }
     return ;
 }
 
@@ -1501,7 +1490,6 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
             while(!(middleSensorLeft->read()>100)){
                leftMotor->moveForward(80);
                rightMotor->moveForward(60);
-
             }
             
             stop(leftMotor,rightMotor);
@@ -1515,7 +1503,7 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
             stop(leftMotor,rightMotor);
             delay(500);
         }
-        changingAndCountingPosition(currentY,destinationYX,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensor,middleSensorLeft);
+        changingAndCountingPosition(currentY,destinationYX,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensor,middleSensorLeft,backIr);
         correctedYFlag=1;
         break;
     }
@@ -1554,7 +1542,7 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
             stop(leftMotor,rightMotor);
             delay(500);
         }           
-        changingAndCountingPosition(currentX,destinationYX+1,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensor,middleSensorLeft);
+        changingAndCountingPosition(currentX,destinationYX+1,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensor,middleSensorLeft,backIr);
         break;
     }
     correctedXFlag=0;

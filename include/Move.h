@@ -54,4 +54,8 @@ int beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Lig
 void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensorRight,LightSensor * middleSensorLeft);
 
 void move_cm(int distance_cm, MotorDC* motorLeft, MotorDC* motorRight,LightSensor * leftIr,LightSensor * rightIr,LightSensor*middleSensorRight);
+
+
+void moveToSquareByCm(int distance,MotorDC*leftMotor, MotorDC*rightMotor, LightSensor * leftIR,LightSensor*rightIR,LightSensor *rightMiddleIR,LightSensor * backIR);
+void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensorRight,LightSensor * middleSensorLeft,LightSensor * backIr);
 #endif
