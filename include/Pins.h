@@ -34,6 +34,7 @@
 #define A0_TRAS A10
 #define A0_MEIO_ESQUERDA  A13
 #define A0_MEIO_DIREITA A14 
+#define D0_DIGITAL 21
 
 //LDR
 #define pinLDR A13

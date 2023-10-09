@@ -22,7 +22,7 @@ static int deliveryLocations[][2][2]={  {{11,1},{15,1}},{{12,1},{16,1}},{{13,1},
                                     {{61,1},{67,1}},    {{62,1},{66,1}},    {{63,1},{65,1}},    {{64,1},{64,1}}
                             };
 //rgby -wxyz 
-int * \deliveryPlace(int y,int x,char blockType){
+int * deliveryPlace(int y,int x,char blockType){
     int lowest =90;    
     int *coordinatesPtr;
     switch (blockType)

@@ -61,3 +61,15 @@ char LightSensor::getCurrentColor(){
 void LightSensor::setCurrentColor(char color){
      this->currentColor=color;
 }
+
+int LightSensor::getBlackLines(){
+    return blackLines;
+}
+
+void LightSensor::setBlackLines(int value){
+    blackLines = value;
+}
+
+void LightSensor::coutingLines(){
+    blackLines ++;
+}

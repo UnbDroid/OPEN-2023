@@ -26,6 +26,7 @@ Ultrassonic lateralUltrassonic(TRIG_UlLTRASSONIC_LATERAL,ECHO_UlLTRASSONIC_LATER
 LightSensor rightIR(A0_DIREITA);
 LightSensor leftIR(A0_ESQUERDA);
 LightSensor leftMiddleIR(A0_MEIO_ESQUERDA);
+LightSensor digitalSensor(D0_DIGITAL);
 LightSensor rightMiddleIR(A0_MEIO_DIREITA);
 LightSensor backIR(A0_TRAS);
 LDR ldr(pinLDR);
@@ -44,8 +45,6 @@ Bumper bumper(BUMPER_PIN);
 // int y = 0;
 // int direcao=SOL::Norte; 
 
-
-
 void TakeMemoryLeftMotor(){ // fica na main
   leftMotor.readEncoder();
 }
@@ -54,7 +53,9 @@ void TakeMemoryRightMotor(){ // fica na main
   rightMotor.readEncoder();
 }
 
-
+// void TakeMemoryRightMotor(){ // fica na main
+//   rightMotor.readEncoder();
+// }
 
 void setup()
 {
@@ -92,12 +93,12 @@ void setup()
   // Serial.print(x);
   // Serial.print(" ");
   // Serial.println(direcao);
-  int y=2;
-  int x =7;
-  int direcao=SOL::Leste; 
-  int destination[2];
-  destination[0]=6;
-  destination[1]=5;
+  // int y=2;
+  // int x =7;
+  // int direcao=SOL::Leste; 
+  // int destination[2];
+  // destination[0]=6;
+  // destination[1]=5;
 
   // moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&rightMiddleIR,&backIR,&leftMiddleIR);
   // stop(&leftMotor,&rightMotor);
@@ -123,7 +124,7 @@ void setup()
   //   rightMotor.moveForward(100);
   // }
   // stop(&leftMotor,&rightMotor);
-  stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&leftMiddleIR,&backIR,&leftIR);
+  // stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&leftMiddleIR,&backIR,&leftIR);
 
 
 }
@@ -131,9 +132,11 @@ void setup()
 
 
 void loop(){
-  
+  Serial.println(digitalRead(D0_DIGITAL));
 // Robot_Claw.close_claw_entirely();
+// Serial.println(bumper.checkBumper());
 // forklift.forklift_up_steps(0,2);
+// forklift.forklift_down_steps(2,0);
   // leftMotor.moveForward(100);
   // rightMotor.moveForward(80);
   // Serial.print("leitura IR: ");
