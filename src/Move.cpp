@@ -872,27 +872,36 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
     if (leftIR->read() > leftBlack) {
         stopLow(leftMotor,rightMotor);
         delay(100);
+        unsigned int encoderEsquerdo =leftMotor->getEncoder();
+        unsigned int encoderDireito =rightMotor->getEncoder();
         resetEncoders(leftMotor,rightMotor);
+
         while(leftMotor->getEncoder() < 40){ 
             if(leftIR->read() < leftBlack){
                 break;
-            } else {
-                leftMotor->moveForward(100);
-                
+            } 
+            else {
+                leftMotor->moveForward(100);    
             }
         }
+        leftMotor->setEncoder(encoderEsquerdo);
+        rightMotor->setEncoder(encoderDireito);
     }   else if (rightIR->read() > rightBlack) {
         stopLow(leftMotor,rightMotor);
         delay(100);
-
+        unsigned int encoderEsquerdo =leftMotor->getEncoder();
+        unsigned int encoderDireito =rightMotor->getEncoder();
         resetEncoders(leftMotor,rightMotor);
         while(rightMotor->getEncoder()<40){ 
             if(rightIR->read() < rightBlack){
                 break;
-            } else {
+            } 
+            else {
                 rightMotor->moveForward(100);
             }
         }
+        leftMotor->setEncoder(encoderEsquerdo);
+        rightMotor->setEncoder(encoderDireito);
     }
 }
     // } else if (middleLeftIR->read() > middleLeftBlack && leftIR->read() < leftBlack && rightIR->read() < rightBlack&& middleRightIR->read() < middleRightBlack) {
@@ -1233,6 +1242,8 @@ void changingAndCountingPosition(int * current ,int *destination,LightSensor * l
 }
 
 
+
+
 void move_cm(int distance_cm, Directions direction ,MotorDC* motorLeft, MotorDC* motorRight){
     float circunference = 42;
     int leftEncoderValue = (2048/circunference)*distance_cm;
@@ -1287,6 +1298,23 @@ void move_cm(int distance_cm, Directions direction ,MotorDC* motorLeft, MotorDC*
     }
 
     delay(500);
+}
+
+void move_cm(int distance_cm, MotorDC* motorLeft, MotorDC* motorRight,LightSensor * leftIr,LightSensor * rightIr,LightSensor*middleSensorRight){
+    float circunference = 42;
+    int leftEncoderValue = (2048/circunference)*distance_cm;
+    int rightEncoderValue = (2020/circunference)*distance_cm;
+
+    resetEncoders(motorLeft,motorRight);
+    while(motorLeft->getEncoder() <= leftEncoderValue && motorRight->getEncoder() <= rightEncoderValue){
+        boucing(motorLeft, motorRight, leftIr, rightIr,leftIr, rightIr);
+    }
+    stop(motorLeft,motorRight);
+    delay(2000);
+    while(middleSensorRight->read()<100){
+        boucing(motorLeft, motorRight, leftIr, rightIr,leftIr, rightIr);
+    }
+    stop(motorLeft,motorRight);
 }
 
 void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* motorRight){

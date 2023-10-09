@@ -53,5 +53,5 @@ void correctDirection(int* atual,int destino,MotorDC * leftMotor, MotorDC * righ
 int beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, LightSensor * middleLeftIR,LightSensor * middleRightIR ,LightSensor * backIR, MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic,Bumper * bumper, LDR * ldr);
 void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensorRight,LightSensor * middleSensorLeft);
 
-
+void move_cm(int distance_cm, MotorDC* motorLeft, MotorDC* motorRight,LightSensor * leftIr,LightSensor * rightIr,LightSensor*middleSensorRight);
 #endif

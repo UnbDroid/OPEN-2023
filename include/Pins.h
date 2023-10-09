@@ -14,7 +14,7 @@
 #define M_RIGHT_LPWM A5//ANTIGO IN4
 #define EN_RIGHT_MOTOR 11
 
-#define ENC_A_RIGHT 21
+#define ENC_A_RIGHT 50
 #define ENC_B_RIGHT 18
 
 //bumper

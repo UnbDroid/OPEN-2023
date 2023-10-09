@@ -126,30 +126,46 @@ void setup()
   // stop(&leftMotor,&rightMotor);
   // stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&leftMiddleIR,&backIR,&leftIR);
 
+  //move_cm(30,FORWARD,&leftMotor,&rightMotor);
 
+  while(!(backIR.read()>150)){ 
+    leftMotor.moveBackward(80);
+    rightMotor.moveBackward(60);
+  }
+  stop(&leftMotor,&rightMotor);
+  delay(500);
+  move_cm(60,&leftMotor,&rightMotor,&leftIR,&rightIR,&rightMiddleIR);
+  stop(&leftMotor,&rightMotor);
 }
  
-
+//checar se os sensores estão certos
+// pegar o robô
 
 void loop(){
-  Serial.println(digitalRead(D0_DIGITAL));
+  // Serial.println(backIR.read());
+  // leftMotor.moveForward(100);
+  // rightMotor.moveForward(100);
+  /*
+  Serial.print("D0: ");
+  Serial.print(analogRead(D0_DIGITAL));
 // Robot_Claw.close_claw_entirely();
 // Serial.println(bumper.checkBumper());
 // forklift.forklift_up_steps(0,2);
 // forklift.forklift_down_steps(2,0);
   // leftMotor.moveForward(100);
   // rightMotor.moveForward(80);
-  // Serial.print("leitura IR: ");
-  // Serial.print(leftIR.read());
-  // Serial.print(" ");
-  // Serial.print(leftMiddleIR.read());
-  // Serial.print(" ");
-  // Serial.print(rightMiddleIR.read());
-  // Serial.print(" ");
-  // Serial.println(rightIR.read());
+  Serial.print(" leitura IR: ");
+  Serial.print(leftIR.read());
+  Serial.print(" ");
+  Serial.print(leftMiddleIR.read());
+  Serial.print(" ");
+  Serial.print(rightMiddleIR.read());
+  Serial.print(" ");
+  Serial.println(rightIR.read());
   // forklift.forklift_up_steps(0,2);
   // Robot_Claw.close_claw_entirely();
   // forklift.forklift_up_steps(0,2);
+  */
   
 
 
