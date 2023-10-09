@@ -15,9 +15,9 @@ LightSensor::LightSensor(int pinoA0){
 float LightSensor::read(){
     float read =analogRead(this->pinoA0);
     this->mediaPonderada = (float)this->mediaPonderada *ALPHA +(1 -ALPHA)*read;
-    char color = mediaPonderada>=300?'b':'w';
+    char color = mediaPonderada>=200?'b':'w';
     this->setCurrentColor(color);
-    if(this->mediaPonderada>=300 or (this->mediaPonderada<=110 and this->mediaPonderada>=24)){
+    if(this->mediaPonderada>=200 or (this->mediaPonderada<=110 and this->mediaPonderada>=24)){
         if(this->changesCounter<2){
             /* 
                Talvez o problema é que ele está contabilizando errado que atravessou, pois ele não está contando o

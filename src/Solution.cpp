@@ -10,7 +10,7 @@ char typeOfBlock=2;
 int smallPosition=0;
 int closestBlock[2];
 int indexShelf;
-int squareBlocks [][2]={ {22,0},{23,0},      {25,0},{26,1},
+int squareBlocks [][2]={ {22,0},{23,0},      {25,1},{26,1},
                         {52,0},{53,0},      {55,1},{56,1}
     };
                                     //  g7 0 ,d4 3,a1 6   h8 1,e5 4 ,b2 7  i9 3 ,f6 6 ,c3 8
@@ -22,7 +22,7 @@ static int deliveryLocations[][2][2]={  {{11,1},{15,1}},{{12,1},{16,1}},{{13,1},
                                     {{61,1},{67,1}},    {{62,1},{66,1}},    {{63,1},{65,1}},    {{64,1},{64,1}}
                             };
 //rgby -wxyz 
-int * deliveryPlace(int y,int x,char blockType){
+int * \deliveryPlace(int y,int x,char blockType){
     int lowest =90;    
     int *coordinatesPtr;
     switch (blockType)
@@ -233,6 +233,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             }
             
             correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
+
             int numberOfBlocks=2;
             //aqui entra a função da camera que retorna a quantidade de blocos
             /*
@@ -249,9 +250,16 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             }
         }
         if(state==1){
-            
-            pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,lightSensorRight,frontalUltrassonic,robotClaw,forkLift);
+        
+            pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,frontalUltrassonic,robotClaw,forkLift, middleSensor, middleSensorLeft, lightSensorRight, lightSensorLeft);
             //typeOfBlock= return_type_of_cube();
+
+            while(middleSensor->read()<200){
+                leftMotor->moveBackward(80);
+                rightMotor->moveBackward(60);
+            }
+            stop(leftMotor,rightMotor);
+            delay(500);
             typeOfBlock='y';
             int forkDestiny=1;
     
@@ -346,7 +354,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
     
 
 int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleLeftIR, LightSensor * middleRightIR, LDR * Ldr){
-    int blue = 40;
+    int blue = 35;
     int coord = 0;
     Serial.println("checando em qual verde to");
     
