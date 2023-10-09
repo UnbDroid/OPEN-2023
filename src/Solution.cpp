@@ -354,7 +354,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
     
 
 int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleLeftIR, LightSensor * middleRightIR, LDR * Ldr){
-    int blue = 35;
+    int blue = 100;
     int coord = 0;
     Serial.println("checando em qual verde to");
     
@@ -370,19 +370,20 @@ int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSenso
     stop(leftMotor,rightMotor);
     delay(500);
 
-    // while(middleLeftIR->read() < 600){
-    //     leftMotor->moveForward(80);
-    //     rightMotor->moveForward(60);
-    // } 
+    while(middleLeftIR->read() < 300){
+        leftMotor->moveForward(80);
+        rightMotor->moveForward(60);
+        Serial.println(middleLeftIR->read() );
+    } 
 
-    // stop(leftMotor,rightMotor);
-    // delay(500);
-    // align(middleLeftIR,middleRightIR,leftMotor,rightMotor,70,lightSensorLeft);
-    // stop(leftMotor,rightMotor);
-    // delay(500);
+    stop(leftMotor,rightMotor);
+    delay(500);
+    align(middleLeftIR,middleRightIR,leftMotor,rightMotor,70,lightSensorLeft,lightSensorRight);
+    stop(leftMotor,rightMotor);
+    delay(500);
 
     
-    move_cm(20,FORWARD,leftMotor,rightMotor);
+    move_cm(10,FORWARD,leftMotor,rightMotor);
     Serial.println("acabei de ir pra frente");
     
     stop(leftMotor,rightMotor);
@@ -485,15 +486,9 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
             
         } else {
             //pos 1.7
-            // if(orientacao == 0){
-            //     rotates(AROUND,leftMotor,rightMotor);
-            //     stop(leftMotor,rightMotor);
-            //     delay(500);
-            // } else {
                 rotates(RIGHT,leftMotor,rightMotor);
                 stop(leftMotor,rightMotor);
                 delay(500);
-            // }
         }
         Serial.println("vou p tras");
         move_cm(10,BACKWARD,leftMotor,rightMotor);
@@ -522,7 +517,7 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
         }
     }
 
-    while(leftIR->read()<=400 || rightIR->read()<=400){ //anda reto ate ver preto com o sensor IR e se alinha
+    while(leftIR->read()<=150 || rightIR->read()<=150){ //anda reto ate ver preto com o sensor IR e se alinha
         leftMotor->moveForward(80);
         rightMotor->moveForward(60);
     } 

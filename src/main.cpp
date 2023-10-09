@@ -64,7 +64,10 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
   // forklift.forklift_up_steps(0,2);
-  // int position = beginning(&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
+  // int position = 
+  // beginning(&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
+  // greenEdge(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&ldr);
+  //repositionBeginning(6, 1, 1,&leftMotor, &rightMotor, &leftIR, &rightIR, &leftMiddleIR,&rightMiddleIR,&backIR);
 
   // if(position == 17){
   //   y = 1;
@@ -93,80 +96,65 @@ void setup()
   // Serial.print(x);
   // Serial.print(" ");
   // Serial.println(direcao);
-  // int y=2;
-  // int x =7;
-  // int direcao=SOL::Leste; 
-  // int destination[2];
-  // destination[0]=6;
-  // destination[1]=5;
+
+
+  int y=6;
+  int x =1;
+  int direcao=SOL::Norte; 
+  int destination[2];
+  destination[0]=2;
+  destination[1]=2;
 
   // moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&rightMiddleIR,&backIR,&leftMiddleIR);
-  // stop(&leftMotor,&rightMotor);
-  // Serial.println("posicao: ");
-  // Serial.print(y);
-  // Serial.print(" ");
-  // Serial.println(x);
   
-  // moveForSquare(4,&leftIR,&rightIR,&leftMotor,&rightMotor,&leftMiddleIR,&rightMiddleIR);
-  // stop(&leftMotor, &rightMotor);
-  // align(&leftIR, &rightIR, &leftMotor,&rightMotor, 80,&leftMiddleIR,&rightMiddleIR);
-  // Serial.println("saii");
-  
-  
+  // while(!(backIR.read()>150)){ 
+  //       leftMotor.moveBackward(80);
+  //       rightMotor.moveBackward(60);
+  //   }
+  //   stop(&leftMotor,&rightMotor);
+  //   delay(500);
+  //   move_cm(128,&leftMotor,&rightMotor,&leftIR,&rightIR,&rightMiddleIR);
+  //   stop(&leftMotor,&rightMotor);
 
-  
-  // moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&rightMiddleIR,&backIR,&leftMiddleIR);
-  // Serial.println(x);
-  // Serial.print(" ");
-  // Serial.println(y);
-
-  // while(rightMotor.getEncoder() < 2020){
-  //   rightMotor.moveForward(100);
-  // }
-  // stop(&leftMotor,&rightMotor);
-  // stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&leftMiddleIR,&backIR,&leftIR);
-
-  //move_cm(30,FORWARD,&leftMotor,&rightMotor);
-
-  while(!(backIR.read()>150)){ 
-    leftMotor.moveBackward(80);
-    rightMotor.moveBackward(60);
-  }
-  stop(&leftMotor,&rightMotor);
-  delay(500);
-  move_cm(60,&leftMotor,&rightMotor,&leftIR,&rightIR,&rightMiddleIR);
-  stop(&leftMotor,&rightMotor);
 }
- 
-//checar se os sensores estão certos
-// pegar o robô
 
 void loop(){
+  Serial.println(backIR.read());
+  // Serial.println(frontalUltrassonic.distance_cm());
+  // Serial.println(leftMiddleIR.read());
+  
+  // Serial.println(frontalUltrassonic.distance_cm());
+  // Serial.println(ldr.read());
+  // Serial.print("Bumper, ultra: ");
+  // Serial.println(bumper.checkBumper());
+  // Serial.print(" ");
+  // Serial.println(frontalUltrassonic.distance_cm());
+
   // Serial.println(backIR.read());
   // leftMotor.moveForward(100);
   // rightMotor.moveForward(100);
-  /*
-  Serial.print("D0: ");
-  Serial.print(analogRead(D0_DIGITAL));
-// Robot_Claw.close_claw_entirely();
+  
+//   Serial.print("D0: ");
+//   Serial.print(analogRead(D0_DIGITAL));
+// // Robot_Claw.close_claw_entirely();
 // Serial.println(bumper.checkBumper());
 // forklift.forklift_up_steps(0,2);
 // forklift.forklift_down_steps(2,0);
   // leftMotor.moveForward(100);
   // rightMotor.moveForward(80);
-  Serial.print(" leitura IR: ");
-  Serial.print(leftIR.read());
-  Serial.print(" ");
-  Serial.print(leftMiddleIR.read());
-  Serial.print(" ");
-  Serial.print(rightMiddleIR.read());
-  Serial.print(" ");
-  Serial.println(rightIR.read());
+  // Serial.print(" leitura IR: ");
+  // Serial.print(leftIR.read());
+  // Serial.print(" ");
+  // Serial.print(leftMiddleIR.read());
+  // Serial.print(" ");
+  // Serial.print(rightMiddleIR.read());
+  // Serial.print(" ");
+  // Serial.println(rightIR.read());
   // forklift.forklift_up_steps(0,2);
   // Robot_Claw.close_claw_entirely();
   // forklift.forklift_up_steps(0,2);
-  */
   
+}
 
 
   
@@ -177,5 +165,4 @@ void loop(){
   //Robot_Claw.open_claw_with_cube();
 
   //boucing(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR);
-}
 
