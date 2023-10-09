@@ -10,7 +10,7 @@ char typeOfBlock=2;
 int smallPosition=0;
 int closestBlock[2];
 int indexShelf;
-int squareBlocks [][2]={ {22,0},{23,0},      {25,1},{26,1},
+int squareBlocks [][2]={ {22,1},{23,1},      {25,1},{26,1},
                         {52,0},{53,0},      {55,1},{56,1}
     };
                                     //  g7 0 ,d4 3,a1 6   h8 1,e5 4 ,b2 7  i9 3 ,f6 6 ,c3 8
@@ -217,14 +217,16 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             SOL::Direcao destinationDirection;
             moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor,backIr,middleSensorLeft);
             resetEncoders(leftMotor,rightMotor);
-            while(backIr->read()<80){
+
+
+            while(backIr->read()<200){
                 leftMotor->moveBackward(80);
                 rightMotor->moveBackward(60);
             }
             stop(leftMotor,rightMotor);
-
-            resetEncoders(leftMotor,rightMotor);
             delay(500);
+
+        
             if(*y==5){
                 destinationDirection=SOL::Norte;
             }
@@ -251,8 +253,8 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
         }
         if(state==1){
         
-            pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,frontalUltrassonic,robotClaw,forkLift, middleSensor, middleSensorLeft, lightSensorRight, lightSensorLeft);
-            //typeOfBlock= return_type_of_cube();
+            typeOfBlock= pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,frontalUltrassonic,robotClaw,forkLift, middleSensor, middleSensorLeft, lightSensorRight, lightSensorLeft);
+            
 
             while(middleSensor->read()<200){
                 leftMotor->moveBackward(80);
@@ -260,7 +262,6 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             }
             stop(leftMotor,rightMotor);
             delay(500);
-            typeOfBlock='y';
             int forkDestiny=1;
     
             if(typeOfBlock=='g'||typeOfBlock=='7'||typeOfBlock=='h'||typeOfBlock=='8'||typeOfBlock=='i'||typeOfBlock=='9'){

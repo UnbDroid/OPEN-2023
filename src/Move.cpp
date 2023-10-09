@@ -709,16 +709,19 @@ void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, Moto
 */
 
 
-void moveToSquareByCm(int distance,MotorDC*leftMotor, MotorDC*rightMotor, LightSensor * leftIR,LightSensor*rightIR,LightSensor *rightMiddleIR,LightSensor * backIR){
+void moveToSquareByCm(int distance,MotorDC*leftMotor, MotorDC*rightMotor, LightSensor * leftIR,LightSensor*rightIR,LightSensor *rightMiddleIR,LightSensor * backIR,LightSensor * leftMiddleIR){
     move_cm(distance,leftMotor,rightMotor,leftIR,rightIR,rightMiddleIR);
-    stop(leftMotor,rightMotor);
+    stopLow(leftMotor,rightMotor);
     delay(500);
-    Serial.println("valor no meio ");
-    Serial.println(rightMiddleIR->read());
-    while(rightMiddleIR->read()<110){
-        leftMotor->moveForward(100);
-        rightMotor->moveForward(80);
+    float brancoAtualDireito = rightMiddleIR->read();
+    float brancoAtualEsquerdo = leftMiddleIR->read();
+
+    //moveForSquare(0,leftIR,rightIR,leftMotor,rightMotor,leftMiddleIR,rightMiddleIR);
+    while(!(rightMiddleIR->read()>100)){
+        leftMotor->moveForward(80);
+        rightMotor->moveForward(60);
     }
+            
     stop(leftMotor,rightMotor);
     delay(500);
     return;
@@ -883,7 +886,7 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
 
     if((leftIR->read()>leftBlack && rightIR->read()>rightBlack) ||(leftIR->read()<leftBlack && rightIR->read()<rightBlack)){
             leftMotor->moveForward(100);
-            rightMotor->moveForward(80);
+            rightMotor->moveForward(70);
     }
 
     if (leftIR->read() > leftBlack) {
@@ -1109,7 +1112,7 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
     if(leftIR->read()>leftBlack && rightIR->read()>rightBlack){
         if(bumper->checkBumper()){
             stop(leftMotor,rightMotor);
-            Serial.println("vi bumper com boucing");
+            //Serial.println("vi bumper com boucing");
             return;
         } else {
             leftMotor->moveForward(90);
@@ -1123,18 +1126,18 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
     }
 
     if (leftIR->read() > leftBlack) {
-        Serial.print("left: ");
-        Serial.println(leftIR->read());
+        //Serial.print("left: ");
+        //Serial.println(leftIR->read());
         if(bumper->checkBumper()){
-            Serial.println("vi bumper com boucing");
+            //Serial.println("vi bumper com boucing");
             stop(leftMotor,rightMotor);
             return;
         } else {
             stopLow(leftMotor,rightMotor);
             delay(100);
 
-            // Serial.print("esquerdo preto ");
-            // Serial.println(leftIR->read());
+            // //Serial.print("esquerdo preto ");
+            // //Serial.println(leftIR->read());
 
             resetEncoders(leftMotor,rightMotor);
             while(leftMotor->getEncoder() < 40){//leftIR->read() > leftBlack && 
@@ -1143,13 +1146,13 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
                     return;
                 } else{
                     if(leftIR->read() < leftBlack){
-                        Serial.println("left viu branco");
+                        //Serial.println("left viu branco");
                         stopLow(leftMotor,rightMotor);
                         delay(100);
                         return;
                     } else {
                         leftMotor->moveForward(100);
-                        Serial.println("atuando com esquerdo");
+                        //Serial.println("atuando com esquerdo");
                         // rightMotor->moveForward(80);
                     }
                 }
@@ -1158,23 +1161,23 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
             delay(100);
         }
     }   else if (rightIR->read() > rightBlack) {
-        Serial.print("rightIR: ");
-        Serial.println(rightIR->read());
+        //Serial.print("rightIR: ");
+        //Serial.println(rightIR->read());
             if(bumper->checkBumper()){
-                Serial.println("vi bumper com boucing");
+                //Serial.println("vi bumper com boucing");
                 stop(leftMotor,rightMotor);
                 return;
         } else {
             stopLow(leftMotor,rightMotor);
             delay(100);
 
-            // Serial.print("direito preto R");
-            // Serial.println(rightIR->read());
+            // //Serial.print("direito preto R");
+            // //Serial.println(rightIR->read());
 
             resetEncoders(leftMotor,rightMotor);
             while(rightMotor->getEncoder()<40){ // rightIR->read() > rightBlack  && 
                 if(bumper->checkBumper()){
-                    Serial.println("vi bumper com boucing");
+                    //Serial.println("vi bumper com boucing");
                     stop(leftMotor,rightMotor);
                     return;
                 } else {
@@ -1189,9 +1192,10 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
                 }
             }
         }
+    /*
     } else if (middleLeftIR->read() > middleLeftBlack && leftIR->read() < leftBlack && rightIR->read() < rightBlack && middleRightIR->read() < middleRightBlack) {
         if(bumper->checkBumper()){
-            Serial.println("vi bumper com boucing");
+            //Serial.println("vi bumper com boucing");
             stop(leftMotor,rightMotor);
             return;
         } else {
@@ -1226,14 +1230,15 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
                 }
             }
         }
+        */
     }
+    
 }
-
 
 void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensorRight,LightSensor * middleSensorLeft,LightSensor * backIr){
     
     if(*current<*destination){
-        moveToSquareByCm((((*destination-*current))*32),leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorRight,backIr) ;
+        moveToSquareByCm((((*destination-*current))*28),leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorRight,backIr,middleSensorLeft) ;
         stop(leftMotor,rightMotor);
         delay(500);
         *current=*destination;
@@ -1241,7 +1246,7 @@ void changingAndCountingPosition(int * current ,int *destination,LightSensor * l
     }
     else if(*current>*destination){
         //if(((*current-*destination)-1) !=0){
-        moveToSquareByCm((((*current-*destination))*32),leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorRight,backIr) ;
+        moveToSquareByCm((((*current-*destination))*28),leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorRight,backIr,middleSensorLeft) ;
         *current=*destination;
         stop(leftMotor,rightMotor);
         delay(500);
@@ -1541,6 +1546,7 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
             delay(500);
         } 
         changingAndCountingPosition(currentX,destinationYX+1,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensor,middleSensorLeft,backIr);
+        stop(leftMotor,rightMotor);
     }
     correctedXFlag=0;
     correctedYFlag=0;
@@ -1558,25 +1564,27 @@ void moveTo(int * currentX,int *currentY,int *destinationYX,int *currentDirectio
     if(*currentX!=xDestino || *currentY !=yDestino){
         if((*currentY >=5 && yDestino>=5)  || (*currentY <=2  && yDestino<=2)){
         moveYandMoveX(currentX,currentY,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensorRight,backIr,middleSensorleft);
-    }
-    else{
-        int * lowestCrossBlock;
-        lowestCrossBlock = shortestArea(true,*currentY,*currentX);
-        moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensorRight,backIr,middleSensorleft);
-        stop(leftMotor,rightMotor);
-        delay(500);
-        if(*lowestCrossBlock==5){
-            *lowestCrossBlock =2;
-            moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensorRight,backIr,middleSensorleft);
         }
         else{
-            *lowestCrossBlock =5;
+            int * lowestCrossBlock;
+            lowestCrossBlock = shortestArea(true,*currentY,*currentX);
             moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensorRight,backIr,middleSensorleft);
+            stop(leftMotor,rightMotor);
+            delay(500);
+            
+            if(*lowestCrossBlock==5){
+                *lowestCrossBlock =2;
+                moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensorRight,backIr,middleSensorleft);
+            }
+            else{
+                *lowestCrossBlock =5;
+                moveYandMoveX(currentX,currentY,lowestCrossBlock,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensorRight,backIr,middleSensorleft);
+            }
+            stop(leftMotor,rightMotor);
+            delay(500);
+            moveYandMoveX(currentX,currentY,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensorRight,backIr,middleSensorleft);
+        
         }
-        stop(leftMotor,rightMotor);
-        delay(500);
-        moveYandMoveX(currentX,currentY,destinationYX,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor, middleSensorRight,backIr,middleSensorleft);
-    }
         
     }
          

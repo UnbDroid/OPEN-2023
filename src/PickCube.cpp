@@ -59,7 +59,7 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
 
     Fork->forklift_down_steps(2,0);  // Não apagar essas 4 linhas pq é a integração da visão e a empilhadeira precisa estar abaixada
     delay(500);
-    // c = return_type_of_cube();
+    c = return_type_of_cube();
     
     Fork->forklift_up_distance_cm(4.5);
     //checar essa distancia

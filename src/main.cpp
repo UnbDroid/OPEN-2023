@@ -33,6 +33,11 @@ LDR ldr(pinLDR);
 
 Ultrassonic frontalUltrassonicSensor(echo_ultrassom_frontal, trig_ultrassom_frontal);
 Ultrassonic lateralUltrassonicSensor(echo_ultrassom_lateral, trig_ultrassom_lateral);
+int y=5;
+int x =7;
+int direcao=SOL::Sul; 
+int destination[2];
+
 
 // int ldr = A13;//Atribui A0 a variável ldr
 // int valorldr = 0;//Declara a variável valorldr como inteiro
@@ -57,72 +62,54 @@ void TakeMemoryRightMotor(){ // fica na main
 //   rightMotor.readEncoder();
 // }
 
+
 void setup()
 {
 
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-  // forklift.forklift_up_steps(0,2);
-  // int position = 
-  // beginning(&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
-  // greenEdge(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&ldr);
-  //repositionBeginning(6, 1, 1,&leftMotor, &rightMotor, &leftIR, &rightIR, &leftMiddleIR,&rightMiddleIR,&backIR);
-
-  // if(position == 17){
-  //   y = 1;
-  //   x = 7;  
-  //   direcao=SOL::Sul; 
-
-  // } else if (position == 67){
-  //   y = 6;
-  //   x = 7;  
-  //   direcao=SOL::Norte; 
-
-  // } else if (position == 61){
-  //   y = 6;
-  //   x = 1;  
-  // direcao=SOL::Norte; 
-
-  // }else if (position == 11){
-  //   y = 1;
-  //   x = 1;  
-  //   direcao=SOL::Sul; 
-  // }
-
-  // Serial.print("posicao inicial: ");
-  // Serial.print(y);
-  // Serial.print(" ");
-  // Serial.print(x);
-  // Serial.print(" ");
-  // Serial.println(direcao);
-
-
-  int y=6;
-  int x =1;
-  int direcao=SOL::Oeste; 
-  int destination[2];
-  destination[0]=2;
-  destination[1]=2;
-
-  moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&rightMiddleIR,&backIR,&leftMiddleIR);
+  //forklift.forklift_up_steps(0,2);
+  destination[0]=5;
+  destination[1]=5;
+  //moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&rightMiddleIR,&backIR,&leftMiddleIR);
+  //stop(&leftMotor,&rightMotor);
   
-  // while(!(backIR.read()>150)){ 
-  //       leftMotor.moveBackward(80);
-  //       rightMotor.moveBackward(60);
-  //   }
-  //   stop(&leftMotor,&rightMotor);
-  //   delay(500);
-  //   move_cm(128,&leftMotor,&rightMotor,&leftIR,&rightIR,&rightMiddleIR);
-  //   stop(&leftMotor,&rightMotor);
+  
+  //rotates(LEFT,&leftMotor,&rightMotor);
+  /*
+  int position = beginning(&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
+  if(position == 17){
+     y = 1;
+     x = 7;  
+     direcao=SOL::Sul; 
 
+   } else if (position == 67){
+     y = 6;
+     x = 7;  
+     direcao=SOL::Norte; 
+
+   } else if (position == 61){
+     y = 6;
+     x = 1;  
+   direcao=SOL::Norte; 
+
+   }else if (position == 11){
+     y = 1;`
+     x = 1;  
+     direcao=SOL::Sul; 
+   }
+*/
 }
 
 void loop(){
-  //Serial.println(rightMiddleIR.read());
+  boucing(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR);
+  Serial.print(leftMiddleIR.read());
+  Serial.print(" ");
+  Serial.println(rightMiddleIR.read());
+  //stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&rightMiddleIR,&backIR,&leftMiddleIR);
+  //
   // Serial.println(frontalUltrassonic.distance_cm());
-  // Serial.println(leftMiddleIR.read());
-  
   // Serial.println(frontalUltrassonic.distance_cm());
   // Serial.println(ldr.read());
   // Serial.print("Bumper, ultra: ");
