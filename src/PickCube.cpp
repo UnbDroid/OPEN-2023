@@ -43,7 +43,7 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     */
     //AJUSTAR VALOR 
     Serial.println("indo p frente");
-    move_cm(5,FORWARD,leftMotor,rightMotor);
+    move_cm(3,FORWARD,leftMotor,rightMotor);
     stop(leftMotor,rightMotor);
     delay(500);
 

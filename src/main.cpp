@@ -100,12 +100,12 @@ void setup()
 
   int y=6;
   int x =1;
-  int direcao=SOL::Norte; 
+  int direcao=SOL::Oeste; 
   int destination[2];
   destination[0]=2;
   destination[1]=2;
 
-  // moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&rightMiddleIR,&backIR,&leftMiddleIR);
+  moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&rightMiddleIR,&backIR,&leftMiddleIR);
   
   // while(!(backIR.read()>150)){ 
   //       leftMotor.moveBackward(80);
@@ -119,7 +119,7 @@ void setup()
 }
 
 void loop(){
-  Serial.println(backIR.read());
+  //Serial.println(rightMiddleIR.read());
   // Serial.println(frontalUltrassonic.distance_cm());
   // Serial.println(leftMiddleIR.read());
   
