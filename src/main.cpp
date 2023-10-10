@@ -100,13 +100,29 @@ void setup()
      direcao=SOL::Sul; 
    }
 */
+
+while((backIR.read()<200)){
+  boucing(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR);
+}
+stop(&leftMotor,&rightMotor);
+delay(500);
+move_cm(2,FORWARD,&leftMotor,&rightMotor);
+
 }
 
 void loop(){
-  boucing(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR);
-  Serial.print(leftMiddleIR.read());
-  Serial.print(" ");
-  Serial.println(rightMiddleIR.read());
+  //Serial.println(backIR.read());
+  //Serial.print(frontalUltrassonic.distance_cm());
+  //Serial.print(" ");
+  //Serial.println(lateralUltrassonic.distance_cm());
+  //boucing(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR);
+  //Serial.print(leftIR.read());
+  //Serial.print(" ");
+  //Serial.print(leftMiddleIR.read());
+  //Serial.print(" ");
+  //Serial.print(rightMiddleIR.read());
+  //Serial.print(" ");
+  //Serial.println(rightIR.read());
   //stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&rightMiddleIR,&backIR,&leftMiddleIR);
   //
   // Serial.println(frontalUltrassonic.distance_cm());
