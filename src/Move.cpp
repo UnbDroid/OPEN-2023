@@ -1237,10 +1237,17 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
 }
 
 void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensorRight,LightSensor * middleSensorLeft,LightSensor * backIr){
-    if(abs(current-destination)==1){
+    Serial.println(*current-*destination);
+    if(abs(*current-*destination)==1){
+        
+        move_cm(1.4,FORWARD,leftMotor,rightMotor);
+        stop(leftMotor,rightMotor);
+        delay(200);
 
-        while((backIr->read()<200)){
+        while((backIr->read()<250)){
+            Serial.println(backIr->read());
             //Serial.println("to andando para frente");
+
             boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorLeft,middleSensorRight);
         }
         //Serial.println("corrigi");
@@ -1253,7 +1260,6 @@ void changingAndCountingPosition(int * current ,int *destination,LightSensor * l
         return ;
     }
     else if(*current<*destination){
-        //Serial.println("eu entrei no curren<destination");
         moveToSquareByCm((((*destination-*current)-1)*44),leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorRight,backIr,middleSensorLeft) ;
         stop(leftMotor,rightMotor);
         delay(500);
@@ -1516,7 +1522,11 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
     resetEncoders(leftMotor,rightMotor);
     if(!correctedYFlag &&(*currentY!=*destinationYX)){ 
         //Serial.println(backIr->read());
-        while(backIr->read()<200){
+        
+        long startTime = millis();
+        long loopDuration = 1350;
+
+        while(backIr->read()<250&& millis() - startTime < loopDuration){
             leftMotor->moveBackward(80);
             rightMotor->moveBackward(60);
         }  
@@ -1541,7 +1551,10 @@ void moveYandMoveX(int *currentX,int *currentY,int *destinationYX, int * current
     if(!correctedXFlag && (*currentX!=*(destinationYX+1))){
        // Serial.println("vim corrigir o X");
         resetEncoders(leftMotor,rightMotor);
-        while(backIr->read()<200){
+        long startTime = millis();
+        long loopDuration = 1350;
+
+        while(backIr->read()<250&& millis() - startTime < loopDuration){
             leftMotor->moveBackward(80);
             rightMotor->moveBackward(60);
         }

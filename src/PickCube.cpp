@@ -14,7 +14,12 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     stop(leftMotor,rightMotor);
     delay(500);
     resetEncoders(leftMotor,rightMotor);
-    move_cm(30,BACKWARD,leftMotor,rightMotor);
+    while(rightMiddleIR->read()<100&&leftMiddleIR->read()<100){
+        boucing(leftMotor,rightMotor,leftIR,rightIR,leftMiddleIR,rightMiddleIR);
+    }
+    stop(leftMotor,rightMotor);
+    delay(500);
+    //move_cm(30,BACKWARD,leftMotor,rightMotor);
 
     startTime = millis();
     loopDuration = 1800;
@@ -26,9 +31,9 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     do{
         right_distance = lateralUltrassonicSensor->distance_cm();
         //movePID(FORWARD, 60, leftMotor, rightMotor);
-        // leftMotor->moveForward(80);
-        // rightMotor->moveForward(60);
-        boucing(leftMotor,rightMotor,leftIR,rightIR,leftMiddleIR,rightMiddleIR);
+        leftMotor->moveBackward(80);
+        rightMotor->moveBackward(60);
+        //boucing(leftMotor,rightMotor,leftIR,rightIR,leftMiddleIR,rightMiddleIR);
     }
     while(right_distance >= 20 || right_distance < 1);
 
@@ -45,7 +50,7 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     */
     //AJUSTAR VALOR 
     // Serial.println("indo p frente");
-    move_cm(3,FORWARD,leftMotor,rightMotor);
+    move_cm(1,FORWARD,leftMotor,rightMotor);
     stop(leftMotor,rightMotor);
     delay(500);
 
@@ -59,13 +64,16 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     stop(leftMotor,rightMotor);
     delay(500);
 
+    move_cm(4,BACKWARD,leftMotor,rightMotor);
     Fork->forklift_down_steps(2,0);  // Não apagar essas 4 linhas pq é a integração da visão e a empilhadeira precisa estar abaixada
     delay(500);
-    c = return_type_of_cube();
+    //c = return_type_of_cube();
+    c = 'w';
+    
     
     Fork->forklift_up_distance_cm(4.5);
     //checar essa distancia
-    move_cm((int)(frontal_distance+7),FORWARD,leftMotor,rightMotor);
+    move_cm((int)(frontal_distance+9),FORWARD,leftMotor,rightMotor);
 
 
 

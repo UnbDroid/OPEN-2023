@@ -218,7 +218,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor,backIr,middleSensorLeft);
             resetEncoders(leftMotor,rightMotor);
 
-            while(backIr->read()<200){
+            while(backIr->read()<250){
                 leftMotor->moveBackward(80);
                 rightMotor->moveBackward(60);
             }
@@ -264,14 +264,15 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             
 
             typeOfBlock= pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,frontalUltrassonic,robotClaw,forkLift, middleSensor, middleSensorLeft, lightSensorRight, lightSensorLeft);
-            while(middleSensor->read()<200){
+            
+            while(middleSensor->read()<100){
                 leftMotor->moveBackward(80);
                 rightMotor->moveBackward(60);
             }
             stop(leftMotor,rightMotor);
             delay(500);
             int forkDestiny=1;
-            if(typeOfBlock='0'){
+            if(typeOfBlock=='0'){
                 typeOfBlock='g';
             }
             if(typeOfBlock=='g'||typeOfBlock=='7'||typeOfBlock=='h'||typeOfBlock=='8'||typeOfBlock=='i'||typeOfBlock=='9'){
@@ -307,6 +308,9 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 stop(leftMotor,rightMotor);
                 delay(500);
                 resetEncoders(leftMotor,rightMotor);
+                move_cm(2,BACKWARD,leftMotor,rightMotor);
+                stop(leftMotor,rightMotor);
+                delay(500);
                 while(!(lightSensorLeft->read()>=150 && lightSensorRight->read()>=150)){
                     //Serial.println(lightSensorLeft->read());
                     leftMotor->moveForward(100);
@@ -315,14 +319,15 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 stop(leftMotor,rightMotor);
                 delay(500);
                 resetEncoders(leftMotor,rightMotor);
-                while(leftMotor->getEncoder()<1313&&rightMotor->getEncoder()<1283){
+                while(leftMotor->getEncoder()<1250&&rightMotor->getEncoder()<1220){
                         leftMotor->moveForward(100);
                         rightMotor->moveForward(80);
                 }
                 stop(leftMotor,rightMotor);
+                delay(300);
                 robotClaw->open_claw_with_cube();
                 //indo agr voltar para pegar outro bloco
-                while(middleSensor->read()<80){
+                while(middleSensor->read()<100){
                     leftMotor->moveBackward(80);
                     rightMotor->moveBackward(60);
                 }
@@ -348,12 +353,14 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 }
                 stop(leftMotor,rightMotor);
                 delay(500);
+                forkLift->forklift_down_steps(2,0);
+                forkDestiny=0;
                 robotClaw->open_claw_with_cube();
                 *y=6;
             }
         
-        if(forkDestiny!=1){
-            forkLift->forklift_up_steps(forkDestiny,1);
+        if(forkDestiny!=2){
+            forkLift->forklift_up_steps(forkDestiny,2);
         }
         best = bestBlock(*y,*x);
         state=0;
