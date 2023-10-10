@@ -7,17 +7,19 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     unsigned long startTime;
     char c = '0';
 
+    move_cm(1.2,BACKWARD,leftMotor,rightMotor);
+    stop(leftMotor,rightMotor);
+    delay(500);
     rotates(LEFT, leftMotor,rightMotor);
     stop(leftMotor,rightMotor);
     delay(500);
 
+    move_cm(30,BACKWARD,leftMotor,rightMotor);
+
     startTime = millis();
     loopDuration = 1800;
     
-    while (rightMiddleIR->read()<200) {
-        leftMotor->moveBackward(80);
-        rightMotor->moveBackward(60);
-    }
+    
     stop(leftMotor,rightMotor);
     delay(500);
     Serial.println("fio p tras");

@@ -1646,12 +1646,14 @@ int beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Lig
                 stop(leftMotor,rightMotor);
                 delay(500);
                 align(middleLeftIR,middleRightIR,leftMotor,rightMotor,80);
-                move_cm(6,BACKWARD,leftMotor,rightMotor); 
+                move_cm(7,BACKWARD,leftMotor,rightMotor); 
                 Serial.println("fui pra tras agraa");
                 stop(leftMotor,rightMotor);
                 delay(500);
             
                 shelve = checksUltrassonic(frontalUltrassonic, lateralUltrassonic,leftMotor,rightMotor);
+                move_cm(5,BACKWARD,leftMotor,rightMotor); 
+
                 Serial.println("to aq apos shelve");
 
                 if (edge){

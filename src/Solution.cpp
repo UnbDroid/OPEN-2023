@@ -244,12 +244,13 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             move_cm(3,BACKWARD,leftMotor,rightMotor);
             stop(leftMotor,rightMotor);
             delay(500);
-            int numberOfBlocks = return_count_of_cubes();
+            // int numberOfBlocks = return_count_of_cubes();
+            int numberOfBlocks = 2;
             squareBlocks[smallPosition][1]=(squareBlocks[smallPosition][1])-1;
 
-            move_cm(3,FORWARD,leftMotor,rightMotor);
-            stop(leftMotor,rightMotor);
-            delay(500);
+            //move_cm(3,FORWARD,leftMotor,rightMotor);
+            //stop(leftMotor,rightMotor);
+            //delay(500);
 
 
             if(numberOfBlocks>0){
@@ -512,7 +513,7 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
             //pos 6.1
         } else {
             //pos 6.7
-            move_cm(15,BACKWARD,leftMotor,rightMotor);
+            move_cm(17.5,BACKWARD,leftMotor,rightMotor);
             stop(leftMotor,rightMotor);
             delay(500);
             Serial.println("entrei aqui");
@@ -521,12 +522,20 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
             rotates(RIGHT,leftMotor,rightMotor);
             stop(leftMotor,rightMotor);
             delay(500);
-            move_cm(8,FORWARD,leftMotor,rightMotor);
+            move_cm(11,FORWARD,leftMotor,rightMotor);
+            stop(leftMotor,rightMotor);
+            delay(500);
 
         }
     }
-
-    while(leftIR->read()<=150 || rightIR->read()<=150){ //anda reto ate ver preto com o sensor IR e se alinha
+    // Serial.print("leituras: ");
+    // Serial.print(leftIR->read());
+    // Serial.print(" ");
+    // Serial.println(rightIR->read());
+    while(leftIR->read()<=200 || rightIR->read()<=200){ //anda reto ate ver preto com o sensor IR e se alinha
+        // Serial.print(leftIR->read());
+        // Serial.print(" ");
+        // Serial.println(rightIR->read());
         leftMotor->moveForward(80);
         rightMotor->moveForward(60);
     } 
