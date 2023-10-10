@@ -51,7 +51,7 @@ void Forklift::forklift_down_steps(int initial_step, int final_step, int velocit
     if (initial_step == 1 && final_step == 0){
         distance += this->distance1_0;
     }
-    Serial.println(distance);
+    //Serial.println(distance);
     this->forklift_down_distance_cm(distance);
 }
 

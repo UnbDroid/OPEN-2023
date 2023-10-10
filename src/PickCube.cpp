@@ -13,7 +13,7 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     rotates(LEFT, leftMotor,rightMotor);
     stop(leftMotor,rightMotor);
     delay(500);
-
+    resetEncoders(leftMotor,rightMotor);
     move_cm(30,BACKWARD,leftMotor,rightMotor);
 
     startTime = millis();
@@ -22,7 +22,6 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     
     stop(leftMotor,rightMotor);
     delay(500);
-    Serial.println("fio p tras");
     
     do{
         right_distance = lateralUltrassonicSensor->distance_cm();

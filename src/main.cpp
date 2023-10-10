@@ -71,6 +71,7 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
   // Robot_Claw.close_claw_with_cube();
+  delay(5000);
   forklift.forklift_up_steps(0,2);
   // delay(20000);
   // Robot_Claw.open_claw_with_cube();
