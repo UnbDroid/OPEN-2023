@@ -25,10 +25,11 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     do{
         right_distance = lateralUltrassonicSensor->distance_cm();
         //movePID(FORWARD, 60, leftMotor, rightMotor);
-        leftMotor->moveForward(80);
-        rightMotor->moveForward(60);
+        // leftMotor->moveForward(80);
+        // rightMotor->moveForward(60);
+        boucing(leftMotor,rightMotor,leftIR,rightIR,leftMiddleIR,rightMiddleIR);
     }
-    while(right_distance >= 20);
+    while(right_distance >= 20 || right_distance < 1);
 
     stop(leftMotor,rightMotor);
     delay(500);
@@ -42,7 +43,7 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     }
     */
     //AJUSTAR VALOR 
-    Serial.println("indo p frente");
+    // Serial.println("indo p frente");
     move_cm(3,FORWARD,leftMotor,rightMotor);
     stop(leftMotor,rightMotor);
     delay(500);
@@ -63,7 +64,7 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     
     Fork->forklift_up_distance_cm(4.5);
     //checar essa distancia
-    move_cm((int)(frontal_distance+2),FORWARD,leftMotor,rightMotor);
+    move_cm((int)(frontal_distance+7),FORWARD,leftMotor,rightMotor);
 
 
 
