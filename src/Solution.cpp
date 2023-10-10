@@ -11,7 +11,7 @@ int smallPosition=0;
 int closestBlock[2];
 int indexShelf;
 int squareBlocks [][2]={ {22,1},{23,1},      {25,1},{26,1},
-                        {52,0},{53,0},      {55,1},{56,1}
+                        {52,1},{53,1},      {55,1},{56,1}
     };
                                     //  g7 0 ,d4 3,a1 6   h8 1,e5 4 ,b2 7  i9 3 ,f6 6 ,c3 8
 static int deliveryLocations[][2][2]={  {{11,1},{15,1}},{{12,1},{16,1}},{{13,1},{17,1}},
@@ -209,7 +209,7 @@ int*  bestBlock(int currentY,int currentX){
 void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic,LightSensor * middleSensor,LightSensor*backIr,LightSensor* middleSensorLeft){
     int destination[2];
     int *best = bestBlock(*y,*x);
-    forkLift->forklift_up_steps(0,2);
+    //forkLift->forklift_up_steps(0,2);
     while(*best!=0){
         if(state==0){
             destination[0]=*best;
@@ -217,7 +217,6 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             SOL::Direcao destinationDirection;
             moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor,backIr,middleSensorLeft);
             resetEncoders(leftMotor,rightMotor);
-
 
             while(backIr->read()<200){
                 leftMotor->moveBackward(80);
@@ -236,12 +235,13 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             
             correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
 
-            int numberOfBlocks=2;
+            
             //aqui entra a função da camera que retorna a quantidade de blocos
             /*
                 int numberOfBlocks = 2
                 squareBlocks[smallPosition][1]=numberOfBlocks;     
             */
+            int numberOfBlocks = return_count_of_cubes();
             squareBlocks[smallPosition][1]=(squareBlocks[smallPosition][1])-1;
 
             if(numberOfBlocks>0){

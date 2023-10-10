@@ -1726,7 +1726,11 @@ int beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Lig
             delay(500);
             resetEncoders(leftMotor,rightMotor);
 
-            move_cm(5,BACKWARD,leftMotor,rightMotor);
+            while(backIR->read() < 100){
+                leftMotor->moveBackward(80);
+                rightMotor->moveBackward(60);
+            }
+            // move_cm(5,BACKWARD,leftMotor,rightMotor);
   
             stop(leftMotor,rightMotor);
             delay(500);

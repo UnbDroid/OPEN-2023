@@ -33,9 +33,10 @@ LDR ldr(pinLDR);
 
 Ultrassonic frontalUltrassonicSensor(echo_ultrassom_frontal, trig_ultrassom_frontal);
 Ultrassonic lateralUltrassonicSensor(echo_ultrassom_lateral, trig_ultrassom_lateral);
-int y=2;
-int x =6;
-int direcao=SOL::Sul; 
+
+int y=0;
+int x =0;
+int direcao=SOL::Norte; 
 int destination[2];
 
 
@@ -69,15 +70,32 @@ void setup()
   Serial.begin(9600); 
   attachInterrupt(digitalPinToInterrupt(ENC_B_RIGHT), TakeMemoryRightMotor, RISING); //deixa na main
   attachInterrupt(digitalPinToInterrupt(ENC_B_LEFT),TakeMemoryLeftMotor, RISING); // deixa na main
-  //forklift.forklift_up_steps(0,2);
-  destination[0]=5;
-  destination[1]=5;
-  moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&rightMiddleIR,&backIR,&leftMiddleIR);
+  // Robot_Claw.close_claw_with_cube();
+  forklift.forklift_up_steps(0,2);
+  // delay(20000);
+  // Robot_Claw.open_claw_with_cube();
+  // forklift.forklift_down_steps(1,0);
+  // delay(5000);
+  // Robot_Claw.close_claw_with_cube();
+  // forklift.forklift_up_steps(0,2);
+  // delay(20000);
+  // Robot_Claw.open_claw_with_cube();
+  // forklift.forklift_down_steps(2,0);
+  // delay(5000);
+  // Robot_Claw.close_claw_with_cube();
+  // forklift.forklift_up_steps(0,3);
+  // delay(20000);
+  // Robot_Claw.open_claw_with_cube();
+  // forklift.forklift_down_steps(3,0);
+  // delay(5000);
+  // destination[0]=5;
+  // destination[1]=5;
+  //moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&rightMiddleIR,&backIR,&leftMiddleIR);
   //stop(&leftMotor,&rightMotor);
   
   
   //rotates(LEFT,&leftMotor,&rightMotor);
-  /*
+  
   int position = beginning(&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
   if(position == 17){
      y = 1;
@@ -95,16 +113,15 @@ void setup()
    direcao=SOL::Norte; 
 
    }else if (position == 11){
-     y = 1;`
+     y = 1;
      x = 1;  
      direcao=SOL::Sul; 
-   }
-*/
 
+}
 }
 
 void loop(){
-  
+  stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&rightMiddleIR,&backIR,&leftMiddleIR);
 
   //Serial.println(backIR.read());
   //Serial.print(frontalUltrassonic.distance_cm());
@@ -118,8 +135,7 @@ void loop(){
   //Serial.print(rightMiddleIR.read());
   //Serial.print(" ");
   //Serial.println(rightIR.read());
-  //stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&rightMiddleIR,&backIR,&leftMiddleIR);
-  //
+  
   // Serial.println(frontalUltrassonic.distance_cm());
   // Serial.println(frontalUltrassonic.distance_cm());
   // Serial.println(ldr.read());
@@ -153,14 +169,3 @@ void loop(){
   // forklift.forklift_up_steps(0,2);
   
 }
-
-
-  
-  
- 
-  //forklift.forklift_up_steps(0,1);
-  //pick_cube_from_right(&leftMotor, &rightMotor, &lateralUltrassonicSensor, &rightIR, &frontalUltrassonicSensor,&Robot_Claw, &forklift);
-  //Robot_Claw.open_claw_with_cube();
-
-  //boucing(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR);
-

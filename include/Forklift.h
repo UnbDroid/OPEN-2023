@@ -24,12 +24,12 @@ class Forklift: public StepMotor{
 
     private:
         float positions_per_cm = 200;
-        float distance0_1 = 7; // Distance from step 0 (floor) to 1 
-        float distance1_2 = 10.5;
-        float distance2_3 = 9.3011;
-        float distance1_0 = 7;
-        float distance2_1 = 10.5;
-        float distance3_2 = 9.3011;
+        float distance0_1 = 2.5; // Distance from step 0 (floor) to 1 
+        float distance1_2 = 11;
+        float distance2_3 = 11;
+        float distance1_0 = 2.5;
+        float distance2_1 = 11;
+        float distance3_2 = 11;
 };
 
 #endif
