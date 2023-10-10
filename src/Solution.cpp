@@ -241,8 +241,16 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 int numberOfBlocks = 2
                 squareBlocks[smallPosition][1]=numberOfBlocks;     
             */
+            move_cm(3,BACKWARD,leftMotor,rightMotor);
+            stop(leftMotor,rightMotor);
+            delay(500);
             int numberOfBlocks = return_count_of_cubes();
             squareBlocks[smallPosition][1]=(squareBlocks[smallPosition][1])-1;
+
+            move_cm(3,FORWARD,leftMotor,rightMotor);
+            stop(leftMotor,rightMotor);
+            delay(500);
+
 
             if(numberOfBlocks>0){
                 state=1;
@@ -252,10 +260,9 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             }
         }
         if(state==1){
-        
-            typeOfBlock= pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,frontalUltrassonic,robotClaw,forkLift, middleSensor, middleSensorLeft, lightSensorRight, lightSensorLeft);
             
 
+            typeOfBlock= pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,frontalUltrassonic,robotClaw,forkLift, middleSensor, middleSensorLeft, lightSensorRight, lightSensorLeft);
             while(middleSensor->read()<200){
                 leftMotor->moveBackward(80);
                 rightMotor->moveBackward(60);
@@ -339,6 +346,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 stop(leftMotor,rightMotor);
                 delay(500);
                 robotClaw->open_claw_with_cube();
+                *y=6;
             }
         
         if(forkDestiny!=1){
