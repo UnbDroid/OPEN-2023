@@ -33,8 +33,8 @@ LDR ldr(pinLDR);
 
 Ultrassonic frontalUltrassonicSensor(echo_ultrassom_frontal, trig_ultrassom_frontal);
 Ultrassonic lateralUltrassonicSensor(echo_ultrassom_lateral, trig_ultrassom_lateral);
-int y=5;
-int x =7;
+int y=2;
+int x =6;
 int direcao=SOL::Sul; 
 int destination[2];
 
@@ -72,7 +72,7 @@ void setup()
   //forklift.forklift_up_steps(0,2);
   destination[0]=5;
   destination[1]=5;
-  //moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&rightMiddleIR,&backIR,&leftMiddleIR);
+  moveTo(&x,&y,destination,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&rightMiddleIR,&backIR,&leftMiddleIR);
   //stop(&leftMotor,&rightMotor);
   
   
@@ -100,21 +100,11 @@ void setup()
      direcao=SOL::Sul; 
    }
 */
-move_cm(28,&leftMotor,&rightMotor,&leftIR,&rightIR,&rightMiddleIR);
-stop(&leftMotor,&rightMotor);
-delay(300);
-while((backIR.read()<100)){
-  boucing(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR);
-}
-stop(&leftMotor,&rightMotor);
-delay(500);
-move_cm(0.3,FORWARD,&leftMotor,&rightMotor);
-stop(&leftMotor,&rightMotor);
-delay(4000);
 
 }
 
 void loop(){
+  
 
   //Serial.println(backIR.read());
   //Serial.print(frontalUltrassonic.distance_cm());

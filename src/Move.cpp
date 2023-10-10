@@ -710,21 +710,22 @@ void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, Moto
 
 
 void moveToSquareByCm(int distance,MotorDC*leftMotor, MotorDC*rightMotor, LightSensor * leftIR,LightSensor*rightIR,LightSensor *rightMiddleIR,LightSensor * backIR,LightSensor * leftMiddleIR){
+    Serial.println("vou andar cm");
     move_cm(distance,leftMotor,rightMotor,leftIR,rightIR,rightMiddleIR);
     stopLow(leftMotor,rightMotor);
     delay(500);
-    float brancoAtualDireito = rightMiddleIR->read();
-    float brancoAtualEsquerdo = leftMiddleIR->read();
 
-    //moveForSquare(0,leftIR,rightIR,leftMotor,rightMotor,leftMiddleIR,rightMiddleIR);
-    while(!(rightMiddleIR->read()>100)){
-        leftMotor->moveForward(80);
-        rightMotor->moveForward(60);
+    while((backIR->read()<250)){
+        Serial.println("to andando para frente");
+        boucing(leftMotor,rightMotor,leftIR,rightIR,leftMiddleIR,rightMiddleIR);
     }
-            
+    Serial.println("corrigi");
     stop(leftMotor,rightMotor);
     delay(500);
-    return;
+    move_cm(0.2,FORWARD,leftMotor,rightMotor);
+    stop(leftMotor,rightMotor);
+    delay(500);
+    return ;
 }
 
 void moveForSquare(int quantityToMove, LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleLeftIR, LightSensor * middleRightIR){
@@ -1236,17 +1237,31 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
 }
 
 void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensorRight,LightSensor * middleSensorLeft,LightSensor * backIr){
-    
-    if(*current<*destination){
-        moveToSquareByCm((((*destination-*current))*28),leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorRight,backIr,middleSensorLeft) ;
+    if(abs(current-destination)==1){
+
+        while((backIr->read()<200)){
+            Serial.println("to andando para frente");
+            boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorLeft,middleSensorRight);
+        }
+        Serial.println("corrigi");
+        stop(leftMotor,rightMotor);
+        delay(500);
+        *current=*destination;
+        move_cm(0.2,FORWARD,leftMotor,rightMotor);
+        stop(leftMotor,rightMotor);
+        delay(500);
+        return ;
+    }
+    else if(*current<*destination){
+        Serial.println("eu entrei no curren<destination");
+        moveToSquareByCm((((*destination-*current)-1)*44),leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorRight,backIr,middleSensorLeft) ;
         stop(leftMotor,rightMotor);
         delay(500);
         *current=*destination;
         return ;   
     }
     else if(*current>*destination){
-        //if(((*current-*destination)-1) !=0){
-        moveToSquareByCm((((*current-*destination))*28),leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorRight,backIr,middleSensorLeft) ;
+        moveToSquareByCm((((*current-*destination)-1)*44),leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorRight,backIr,middleSensorLeft) ;
         *current=*destination;
         stop(leftMotor,rightMotor);
         delay(500);
