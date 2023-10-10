@@ -97,32 +97,31 @@ void setup()
   //rotates(LEFT,&leftMotor,&rightMotor);
   
   int position = beginning(&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
-  if(position == 17){
-     y = 1;
-     x = 7;  
-     direcao=SOL::Sul; 
+  // if(position == 17){
+  //    y = 1;
+  //    x = 7;  
+  //    direcao=SOL::Sul; 
 
-   } else if (position == 67){
-     y = 6;
-     x = 7;  
-     direcao=SOL::Norte; 
+  //  } else if (position == 67){
+  //    y = 6;
+  //    x = 7;  
+  //    direcao=SOL::Norte; 
 
-   } else if (position == 61){
-     y = 6;
-     x = 1;  
-   direcao=SOL::Norte; 
+  //  } else if (position == 61){
+  //    y = 6;
+  //    x = 1;  
+  //  direcao=SOL::Norte; 
 
-   }else if (position == 11){
-     y = 1;
-     x = 1;  
-     direcao=SOL::Sul; 
-
-}
+  //  }else if (position == 11){
+  //    y = 1;
+  //    x = 1;  
+  //    direcao=SOL::Sul; 
+// }
 }
 
 void loop(){
-  stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&rightMiddleIR,&backIR,&leftMiddleIR);
-
+  //stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&rightMiddleIR,&backIR,&leftMiddleIR);
+  // Serial.println(ldr.read());
   //Serial.println(backIR.read());
   //Serial.print(frontalUltrassonic.distance_cm());
   //Serial.print(" ");

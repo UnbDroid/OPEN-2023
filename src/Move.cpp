@@ -136,7 +136,7 @@ void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, Moto
         leftReading = leftIR->read();
         rightReading = rightIR->read();
         
-        if (leftReading<rightReading) //vê branco
+        if (leftReading<leftWhite) //vê branco
         {
             Serial.print("esquerdo ve branco ");
             while (leftReading < rightReading) { // && rightIR->read()>rightWhite){ // ve branco
@@ -153,7 +153,7 @@ void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, Moto
             delay(300);
             return;
         }
-        else if (rightReading < leftReading) //ve branco
+        else if (rightReading < rightWhite) //ve branco
         {
             Serial.println("direito ve branco");
             while (rightIR->read()<rightWhite) {// ve branco
@@ -1646,7 +1646,7 @@ int beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Lig
                 stop(leftMotor,rightMotor);
                 delay(500);
                 align(middleLeftIR,middleRightIR,leftMotor,rightMotor,80);
-                move_cm(5,BACKWARD,leftMotor,rightMotor); 
+                move_cm(6,BACKWARD,leftMotor,rightMotor); 
                 Serial.println("fui pra tras agraa");
                 stop(leftMotor,rightMotor);
                 delay(500);
@@ -1726,11 +1726,11 @@ int beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Lig
             delay(500);
             resetEncoders(leftMotor,rightMotor);
 
-            while(backIR->read() < 100){
-                leftMotor->moveBackward(80);
-                rightMotor->moveBackward(60);
-            }
-            // move_cm(5,BACKWARD,leftMotor,rightMotor);
+            // while(backIR->read() < 100){
+            //     leftMotor->moveBackward(80);
+            //     rightMotor->moveBackward(60);
+            // }
+            move_cm(6,BACKWARD,leftMotor,rightMotor);
   
             stop(leftMotor,rightMotor);
             delay(500);

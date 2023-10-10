@@ -355,7 +355,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
     
 
 int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleLeftIR, LightSensor * middleRightIR, LDR * Ldr){
-    int blue = 100;
+    int blue = 30;
     int coord = 0;
     Serial.println("checando em qual verde to");
     
@@ -478,7 +478,7 @@ bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralU
 }
 
 void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, MotorDC * rightMotor, LightSensor * leftIR, LightSensor * rightIR, LightSensor * middleLeftIR,LightSensor * middleRightIR, LightSensor * backIR){
-    move_cm(5,BACKWARD,leftMotor,rightMotor);
+    move_cm(1,BACKWARD,leftMotor,rightMotor);
 
     if (y == 1){
         if(x== 1){
@@ -530,7 +530,6 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
     delay(500);
     
     return;
-
 }
 
 float median(int x, int y, int z){
