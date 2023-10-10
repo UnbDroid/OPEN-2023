@@ -100,17 +100,22 @@ void setup()
      direcao=SOL::Sul; 
    }
 */
-
-while((backIR.read()<200)){
+move_cm(28,&leftMotor,&rightMotor,&leftIR,&rightIR,&rightMiddleIR);
+stop(&leftMotor,&rightMotor);
+delay(300);
+while((backIR.read()<100)){
   boucing(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR);
 }
 stop(&leftMotor,&rightMotor);
 delay(500);
-move_cm(2,FORWARD,&leftMotor,&rightMotor);
+move_cm(0.3,FORWARD,&leftMotor,&rightMotor);
+stop(&leftMotor,&rightMotor);
+delay(4000);
 
 }
 
 void loop(){
+
   //Serial.println(backIR.read());
   //Serial.print(frontalUltrassonic.distance_cm());
   //Serial.print(" ");

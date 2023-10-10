@@ -1257,7 +1257,7 @@ void changingAndCountingPosition(int * current ,int *destination,LightSensor * l
 
 
 
-void move_cm(int distance_cm, Directions direction ,MotorDC* motorLeft, MotorDC* motorRight){
+void move_cm(float distance_cm, Directions direction ,MotorDC* motorLeft, MotorDC* motorRight){
     float circunference = 42;
     int leftEncoderValue = (2048/circunference)*distance_cm;
     int rightEncoderValue = (2020/circunference)*distance_cm;
@@ -1313,7 +1313,7 @@ void move_cm(int distance_cm, Directions direction ,MotorDC* motorLeft, MotorDC*
     delay(500);
 }
 
-void move_cm(int distance_cm, MotorDC* motorLeft, MotorDC* motorRight,LightSensor * leftIr,LightSensor * rightIr,LightSensor*middleSensorRight){
+void move_cm(float distance_cm, MotorDC* motorLeft, MotorDC* motorRight,LightSensor * leftIr,LightSensor * rightIr,LightSensor*middleSensorRight){
     float circunference = 42;
     int leftEncoderValue = (2048/circunference)*distance_cm;
     int rightEncoderValue = (2020/circunference)*distance_cm;

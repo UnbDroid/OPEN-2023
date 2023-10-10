@@ -15,7 +15,7 @@ enum RotateDirections{LEFT, RIGHT, AROUND};
 
 void move(Directions direction, int velocity ,MotorDC* motorLeft, MotorDC* motorRight, LightSensor *lightSensorLeft,LightSensor* lightSensorRight);
 void movePID(Directions direction, float goalRPS ,MotorDC* motorLeft, MotorDC* motorRight);
-void move_cm(int distance_cm, Directions direction,MotorDC* motorLeft, MotorDC* motorRight);
+void move_cm(float distance_cm, Directions direction,MotorDC* motorLeft, MotorDC* motorRight);
 void stop(MotorDC* motorLeft, MotorDC* motorRight);
 void stopLow(MotorDC* motorLeft, MotorDC* motorRight);
 void resetEncoders(MotorDC* motorLeft, MotorDC* motorRight);
@@ -53,7 +53,7 @@ void correctDirection(int* atual,int destino,MotorDC * leftMotor, MotorDC * righ
 int beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, LightSensor * middleLeftIR,LightSensor * middleRightIR ,LightSensor * backIR, MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * frontalUltrassonic, Ultrassonic * lateralUltrassonic,Bumper * bumper, LDR * ldr);
 void changingAndCountingPosition(int * current ,int *destination,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * middleSensorRight,LightSensor * middleSensorLeft);
 
-void move_cm(int distance_cm, MotorDC* motorLeft, MotorDC* motorRight,LightSensor * leftIr,LightSensor * rightIr,LightSensor*middleSensorRight);
+void move_cm(float distance_cm, MotorDC* motorLeft, MotorDC* motorRight,LightSensor * leftIr,LightSensor * rightIr,LightSensor*middleSensorRight);
 
 
 void moveToSquareByCm(int distance,MotorDC*leftMotor, MotorDC*rightMotor, LightSensor * leftIR,LightSensor*rightIR,LightSensor *rightMiddleIR,LightSensor * backIR);
