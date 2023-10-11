@@ -10,7 +10,7 @@
 
 char return_type_of_cube(){ 
     char data;
-    int i, counter = 2;
+    int i, counter = 1;
     unsigned long startTime, loopDuration;
     while (counter <= 0){
     for(i=0; i<1000; i++){

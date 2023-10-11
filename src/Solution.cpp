@@ -209,7 +209,8 @@ int*  bestBlock(int currentY,int currentX){
 void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic,LightSensor * middleSensor,LightSensor*backIr,LightSensor* middleSensorLeft){
     int destination[2];
     int *best = bestBlock(*y,*x);
-    //forkLift->forklift_up_steps(0,2);
+    
+    robotClaw->open_claw_entirely();
     while(*best!=0){
         if(state==0){
             destination[0]=*best;
@@ -373,7 +374,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
     
 
 int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleLeftIR, LightSensor * middleRightIR, LDR * Ldr){
-    int blue = 30;
+    int blue = 26;
     int coord = 0;
     //Serial.println("checando em qual verde to");
     

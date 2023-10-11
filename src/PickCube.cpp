@@ -31,8 +31,8 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     do{
         right_distance = lateralUltrassonicSensor->distance_cm();
         //movePID(FORWARD, 60, leftMotor, rightMotor);
-        leftMotor->moveBackward(80);
-        rightMotor->moveBackward(60);
+        leftMotor->moveBackward(90);
+        rightMotor->moveBackward(70);
         //boucing(leftMotor,rightMotor,leftIR,rightIR,leftMiddleIR,rightMiddleIR);
     }
     while(right_distance >= 20 || right_distance < 1);
@@ -80,7 +80,7 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     stop(leftMotor,rightMotor);
     delay(500);
     
-    move_cm(2,BACKWARD,leftMotor,rightMotor);
+    move_cm(3,BACKWARD,leftMotor,rightMotor);
 
     stop(leftMotor,rightMotor);
     delay(500);

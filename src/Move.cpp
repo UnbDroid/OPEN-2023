@@ -984,7 +984,7 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
             delay(100);
 
             resetEncoders(leftMotor,rightMotor);
-            while(leftMotor->getEncoder() < 40){ //leftIR->read() > leftBlack && 
+            while(leftMotor->getEncoder() < 60){ //leftIR->read() > leftBlack && 
                 middleRightIR->read();
             if(middleRightIR->getCrossed()){
                 count++;
@@ -1020,7 +1020,7 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
             delay(100);
 
             resetEncoders(leftMotor,rightMotor);
-            while(rightMotor->getEncoder()<40){ // rightIR->read() > rightBlack  && 
+            while(rightMotor->getEncoder()<60){ // rightIR->read() > rightBlack  && 
             middleRightIR->read();
             if(middleRightIR->getCrossed()){
                 count++;
