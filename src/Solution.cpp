@@ -226,7 +226,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             stop(leftMotor,rightMotor);
             delay(500);
 
-        
+                
             if(*y==5){
                 destinationDirection=SOL::Norte;
             }
