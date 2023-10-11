@@ -206,7 +206,7 @@ int*  bestBlock(int currentY,int currentX){
     return closestBlock;
 }
 
-void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic,LightSensor * middleSensor,LightSensor*backIr,LightSensor* middleSensorLeft){
+void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic,LightSensor * middleSensor,LightSensor*backIr,LightSensor* middleSensorLeft, Bumper * bumper){
     int destination[2];
     int *best = bestBlock(*y,*x);
     
@@ -272,6 +272,58 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             }
             stop(leftMotor,rightMotor);
             delay(500);
+
+            move_cm(2,BACKWARD,leftMotor,rightMotor);
+            while(backIr->read()<200){
+                leftMotor->moveBackward(90);
+                rightMotor->moveBackward(70);
+            }
+            stop(leftMotor,rightMotor);
+            delay(500);
+            resetEncoders(leftMotor,rightMotor);
+            if((*y==2&&*x==5)||(*y==2&&*x==6)||(*y==5&&*x==2)||(*y==5&&*x==3)){
+                int direcaoDestino;
+                if(*y==5){
+                    *currentDirection=SOL::Oeste;
+                    //direcaoDestino=SOL::Oeste;
+                    //correctDirection(currentDirection,*destination,leftMotor,rightMotor);
+                    rotates(LEFT,leftMotor,rightMotor);
+                    *x= 1; 
+                }
+                else{
+                    *currentDirection=SOL::Leste;
+                    //direcaoDestino=SOL::Leste;
+                    Serial.println("estou aqui");
+                    rotates(LEFT,leftMotor,rightMotor);
+                    //correctDirection(currentDirection,*destination,leftMotor,rightMotor);
+                    *x=7;
+                }
+            }
+
+            else{
+                int direcaoDestino;
+                if(*y==5){
+                    *currentDirection=SOL::Leste;
+                    rotates(RIGHT,leftMotor,rightMotor);
+                    //correctDirection(currentDirection,*destination,leftMotor,rightMotor);
+                    *x= 7; 
+                }
+                else{
+                    *currentDirection=SOL::Oeste;
+                    //direcaoDestino=SOL::Oeste;
+                    //correctDirection(currentDirection,*destination,leftMotor,rightMotor);
+                    rotates(RIGHT,leftMotor,rightMotor);
+                    *x=1;
+                }
+            }
+            stop(leftMotor,rightMotor);
+            delay(500);
+            while(!bumper->checkBumper()){
+                boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorLeft,middleSensor,bumper);
+            }
+            stop(leftMotor,rightMotor);
+            delay(500);
+            
             int forkDestiny=1;
             if(typeOfBlock=='0'){
                 typeOfBlock='g';
@@ -309,20 +361,23 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 stop(leftMotor,rightMotor);
                 delay(500);
                 resetEncoders(leftMotor,rightMotor);
-                move_cm(2,BACKWARD,leftMotor,rightMotor);
-                stop(leftMotor,rightMotor);
-                delay(500);
-                while(!(lightSensorLeft->read()>=150 && lightSensorRight->read()>=150)){
+                //move_cm(2,BACKWARD,leftMotor,rightMotor);
+                //stop(leftMotor,rightMotor);
+                //delay(500);
+                while(backIr->read() < 200){
                     //Serial.println(lightSensorLeft->read());
-                    leftMotor->moveForward(100);
-                    rightMotor->moveForward(80);
+                    //leftMotor->moveForward(100);
+                    //rightMotor->moveForward(80);
+                    boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorLeft,middleSensor);
                 }
                 stop(leftMotor,rightMotor);
                 delay(500);
                 resetEncoders(leftMotor,rightMotor);
-                while(leftMotor->getEncoder()<1250&&rightMotor->getEncoder()<1220){
-                        leftMotor->moveForward(100);
-                        rightMotor->moveForward(80);
+                long startTime = millis();
+                long loopDuration = 2000;
+
+                while(millis() - startTime < loopDuration){
+                    boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorLeft,middleSensor);
                 }
                 stop(leftMotor,rightMotor);
                 delay(300);
@@ -339,7 +394,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor,backIr,middleSensorLeft);
                 stop(leftMotor,rightMotor);
                 delay(500);
-                while(backIr->read()<80){
+                while(backIr->read()<200){
                     leftMotor->moveBackward(80);
                     rightMotor->moveBackward(60);
                 }
@@ -349,8 +404,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 SOL::Direcao destinationDirection=SOL::Sul;
                 correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
                 while(middleSensor->read()<80){
-                    leftMotor->moveForward(100);
-                    rightMotor->moveForward(80);
+                    boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorLeft,middleSensor);
                 }
                 stop(leftMotor,rightMotor);
                 delay(500);
@@ -360,7 +414,10 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 *y=6;
             }
         
-        if(forkDestiny!=2){
+        if(forkDestiny>2){
+            forkLift->forklift_down_steps(forkDestiny,2);
+        }
+        else{
             forkLift->forklift_up_steps(forkDestiny,2);
         }
         best = bestBlock(*y,*x);
@@ -373,8 +430,8 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
 }
     
 
-int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleLeftIR, LightSensor * middleRightIR, LDR * Ldr){
-    int blue = 26;
+int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleLeftIR, LightSensor * middleRightIR, LightSensor * backIR, LDR * Ldr){
+    int blue = 28;
     int coord = 0;
     //Serial.println("checando em qual verde to");
     
@@ -382,7 +439,11 @@ int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSenso
     // int rightValue = lightSensorRight->read();
     stop(leftMotor,rightMotor);
     delay(500);
-    move_cm(7,BACKWARD,leftMotor,rightMotor);
+    //move_cm(7,BACKWARD,leftMotor,rightMotor);
+    while(backIR->read() < 350){
+        leftMotor->moveBackward(90);
+        rightMotor->moveBackward(70);
+    }
     //Serial.println("fui p tras");
     stop(leftMotor,rightMotor);
     delay(500);
@@ -454,7 +515,7 @@ bool checksUltrassonic (Ultrassonic * frontalUltrassonic, Ultrassonic * lateralU
     // }
     stopLow(leftMotor,rightMotor);
     delay(500);
-    move_cm(10,BACKWARD,leftMotor,rightMotor);
+    move_cm(11,BACKWARD,leftMotor,rightMotor);
 
     stop(leftMotor,rightMotor);
     delay(500);
@@ -522,9 +583,10 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
     } else {
         if(x == 1){
             //pos 6.1
+            move_cm(3,leftMotor,rightMotor,leftIR,rightIR,middleRightIR);
         } else {
             //pos 6.7
-            move_cm(17.5,BACKWARD,leftMotor,rightMotor);
+            move_cm(16.5,BACKWARD,leftMotor,rightMotor);
             stop(leftMotor,rightMotor);
             delay(500);
             //Serial.println("entrei aqui");
@@ -533,7 +595,7 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
             rotates(RIGHT,leftMotor,rightMotor);
             stop(leftMotor,rightMotor);
             delay(500);
-            move_cm(11,FORWARD,leftMotor,rightMotor);
+            move_cm(15,FORWARD,leftMotor,rightMotor);
             stop(leftMotor,rightMotor);
             delay(500);
 
@@ -543,14 +605,16 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
     // Serial.print(leftIR->read());
     // Serial.print(" ");
     // Serial.println(rightIR->read());
-    while(leftIR->read()<=200 || rightIR->read()<=200){ //anda reto ate ver preto com o sensor IR e se alinha
+    while(middleLeftIR->read()<=100 || middleRightIR->read()<=100){ //anda reto ate ver preto com o sensor IR e se alinha
         // Serial.print(leftIR->read());
         // Serial.print(" ");
         // Serial.println(rightIR->read());
-        leftMotor->moveForward(80);
-        rightMotor->moveForward(60);
+        //leftMotor->moveForward(80);
+        //rightMotor->moveForward(60);
+        boucing(leftMotor,rightMotor,leftIR,rightIR,middleLeftIR,middleRightIR);
     } 
 
+    move_cm(1.5,FORWARD,leftMotor,rightMotor);
     stop(leftMotor,rightMotor);
     delay(500);
     align(middleLeftIR,middleRightIR,leftMotor,rightMotor,80);

@@ -10,9 +10,9 @@
 
 char return_type_of_cube(){ 
     char data;
-    int i, counter = 1;
+    int i, counter = 0;
     unsigned long startTime, loopDuration;
-    while (counter <= 0){
+    while (counter <= 2){
     for(i=0; i<1000; i++){
     Serial.print("t");      // A letra 'T' significa que o RASP precisa retornar o TIPO cubo na frente dele
   }

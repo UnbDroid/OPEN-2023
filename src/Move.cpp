@@ -902,7 +902,7 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
                 break;
             } 
             else {
-                leftMotor->moveForward(100);    
+                leftMotor->moveForward(105);    
             }
         }
         leftMotor->setEncoder(encoderEsquerdo);
@@ -1152,7 +1152,7 @@ void boucing(MotorDC* leftMotor, MotorDC* rightMotor, LightSensor * leftIR, Ligh
                         delay(100);
                         return;
                     } else {
-                        leftMotor->moveForward(100);
+                        leftMotor->moveForward(110);
                         //Serial.println("atuando com esquerdo");
                         // rightMotor->moveForward(80);
                     }
@@ -1245,7 +1245,7 @@ void changingAndCountingPosition(int * current ,int *destination,LightSensor * l
         delay(200);
 
         while((backIr->read()<250)){
-            Serial.println(backIr->read());
+            //Serial.println(backIr->read());
             //Serial.println("to andando para frente");
 
             boucing(leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleSensorLeft,middleSensorRight);
@@ -1289,7 +1289,7 @@ void move_cm(float distance_cm, Directions direction ,MotorDC* motorLeft, MotorD
     case FORWARD:
         while(motorLeft->getEncoder() <= leftEncoderValue && motorRight->getEncoder() <= rightEncoderValue){
             motorLeft->moveForward(90);
-            motorRight->moveForward(70);
+            motorRight->moveForward(68);
             }
         // stop(motorLeft,motorRight);
         // if(motorLeft->getEncoder() < leftEncoderValue){
@@ -1308,7 +1308,7 @@ void move_cm(float distance_cm, Directions direction ,MotorDC* motorLeft, MotorD
     case BACKWARD:
         while(motorLeft->getEncoder() < leftEncoderValue && motorRight->getEncoder() < rightEncoderValue){
             motorLeft->moveBackward(90);
-            motorRight->moveBackward(70);
+            motorRight->moveBackward(68);
             }
         stop(motorLeft,motorRight);
         // if(motorLeft->getEncoder() < leftEncoderValue){
@@ -1480,7 +1480,7 @@ void moveBackAndCorrectDirection(SOL::Direcao destinationDirection,int*currentDi
         leftMotor->moveBackward(100);
         rightMotor->moveBackward(80);
     }    
-    Serial.println("corrigir direção");
+    //Serial.println("corrigir direção");
     stop(leftMotor,rightMotor);
     delay(1000);
     resetEncoders(leftMotor,rightMotor);
@@ -1671,7 +1671,7 @@ int beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Lig
 
                     } else {
                         position[0] = 6;
-                        position[1] = greenEdge(leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleLeftIR,middleRightIR,ldr);
+                        position[1] = greenEdge(leftMotor,rightMotor,lightSensorLeft,lightSensorRight,middleLeftIR,middleRightIR,backIR,ldr);
                         if(position[1] == 7){
                             positionReturned = 67;
                         } else {
@@ -1736,7 +1736,7 @@ int beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Lig
             //     leftMotor->moveBackward(80);
             //     rightMotor->moveBackward(60);
             // }
-            move_cm(6,BACKWARD,leftMotor,rightMotor);
+            move_cm(3,BACKWARD,leftMotor,rightMotor);
   
             stop(leftMotor,rightMotor);
             delay(500);
@@ -1751,8 +1751,9 @@ int beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Lig
             //Serial.print(middleLeftIR->read());
             //Serial.print(" ");
             //Serial.println(middleRightIR->read());
-
-            while(middleRightIR->read() < 300 || middleRightIR->read() < 300){//middleIR->read()
+            long startTime = millis();
+            long loopDuration = 2000;
+            while(middleRightIR->read() < 300 && middleRightIR->read() < 300 && millis() - startTime < loopDuration){//middleIR->read()
                 leftMotor->moveForward(90);
                 rightMotor->moveForward(70);       
                 
