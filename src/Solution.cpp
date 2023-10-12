@@ -225,10 +225,11 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             }
             stop(leftMotor,rightMotor);
             delay(500);
-
-            
+            int xDaBorda;
+            int yDaBorda;
             if(*x>4){
                 destinationDirection=SOL::Oeste;
+                
             }
             else {
                 destinationDirection=SOL::Leste;
@@ -241,9 +242,9 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 int numberOfBlocks = 2
                 squareBlocks[smallPosition][1]=numberOfBlocks;     
             */
-            move_cm(3,BACKWARD,leftMotor,rightMotor);
-            stop(leftMotor,rightMotor);
-            delay(500);
+            //move_cm(3,BACKWARD,leftMotor,rightMotor);
+            //stop(leftMotor,rightMotor);
+            //delay(500);
             // int numberOfBlocks = return_count_of_cubes();
             int numberOfBlocks = 2;
             //squareBlocks[smallPosition][1]=(squareBlocks[smallPosition][1])-1;
