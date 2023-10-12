@@ -27,6 +27,7 @@ bool checksBumper(Bumper * bumper,MotorDC * leftMotor, MotorDC * rightMotor1);
 void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, MotorDC * rightMotor, LightSensor * leftIR, LightSensor * rightIR, LightSensor * middleLeftIR,LightSensor * middleRightIR, LightSensor * backIR);
 float median(int x, int y, int z);
 float readingUltrasonic(Ultrassonic * ultrassonic);
+int*  bestBlock(int currentY,int currentX);
 
 
 #endif

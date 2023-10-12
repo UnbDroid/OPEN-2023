@@ -99,7 +99,7 @@ void setup()
   
   //rotates(LEFT,&leftMotor,&rightMotor);
   int position =0;
-  position = beginning(&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
+  //position = beginning(&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
   // greenEdge(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&ldr);
   
   if(position == 17){
@@ -121,12 +121,101 @@ void setup()
      y = 1;
      x = 1;  
      direcao=SOL::Sul; 
-}
+  }
 
+  /*
+  y = 5;
+  x = 7;
+  direcao = SOL::Sul;
+  int *best = bestBlock(y,x);
+  SOL::Direcao destinationDirection;
+  Robot_Claw.open_claw_entirely();
+
+
+  //moveTo(x,y,destination,direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&leftMiddleIR,&backIR,&rightMiddleIR);
+  
+  
+  resetEncoders(&leftMotor,&rightMotor);
+
+  while(backIR.read()<250){
+    leftMotor.moveBackward(80);
+    rightMotor.moveBackward(60);
+  }
+  stop(&leftMotor,&rightMotor);
+  delay(500);
+  if(x>4){
+      Serial.println("aaaaaaaaaaaa");
+      destinationDirection=SOL::Oeste;
+      correctDirection(&direcao,destinationDirection,&leftMotor,&rightMotor);
+  }
+  else {
+    Serial.println("abbbbbbbbbbbbbbbbbbbbbb");
+      destinationDirection=SOL::Leste;
+      correctDirection(&direcao,destinationDirection,&leftMotor,&rightMotor);
+  }
+  
+
+  int typeOfBlock= pick_cube_from_right(&leftMotor,&rightMotor,&lateralUltrassonic,&frontalUltrassonic,&Robot_Claw,&forklift, &rightMiddleIR, &leftMiddleIR, &rightIR, &leftIR,&bumper);
+  while(rightMiddleIR.read()<200&&leftMiddleIR.read() < 200){
+      leftMotor.moveBackward(90);
+      rightMotor.moveBackward(68);
+  }
+  stop(&leftMotor,&rightMotor);
+  delay(500);
+  align(&leftIR,&rightIR,&leftMotor,&rightMotor,80,&leftMiddleIR,&rightMiddleIR);
+  stop(&leftMotor,&rightMotor);
+  delay(500);
+  while(rightMiddleIR.read()<150){
+    leftMotor.moveBackward(90);
+    rightMotor.moveBackward(68);
+  }
+  stop(&leftMotor,&rightMotor);
+  delay(500);
+
+  resetEncoders(&leftMotor,&rightMotor);
+
+  if(y==5){
+      direcao=SOL::Oeste;
+      //direcaoDestino=SOL::Oeste;
+      //correctDirection(currentDirection,*destination,leftMotor,rightMotor);
+      rotates(LEFT,&leftMotor,&rightMotor);
+      x= 1; 
+  }
+  else{
+      direcao=SOL::Leste;
+      //direcaoDestino=SOL::Leste;
+      rotates(LEFT,&leftMotor,&rightMotor);
+      //correctDirection(currentDirection,*destination,leftMotor,rightMotor);
+      x=7;
+  }
+
+  stop(&leftMotor,&rightMotor);
+  delay(500);
+  while(!bumper.checkBumper()){
+      boucing(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&bumper);
+  }
+  stop(&leftMotor,&rightMotor);
+  delay(500);
+  align(&leftIR,&rightIR,&leftMotor,&rightMotor,70);
+  stop(&leftMotor,&rightMotor);
+  delay(500);
+  */
+         
 }
 
 void loop(){
-
+  /*
+  Serial.print(leftIR.read());
+  Serial.print(" ");
+  Serial.print(leftMiddleIR.read());
+  Serial.print(" ");
+  Serial.print(rightMiddleIR.read());
+  Serial.print(" ");
+  Serial.println(rightIR.read());
+  */
   //stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&rightMiddleIR,&backIR,&leftMiddleIR,&bumper);
+
+
+
   
   }

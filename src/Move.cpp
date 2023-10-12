@@ -180,8 +180,8 @@ void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, Moto
 //ABAIXO, ALIGNS ANTIGOS!!!
 // void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, MotorDC * motorRight, int PWM, LightSensor * backIR){
 void align(LightSensor * leftIR, LightSensor *rightIR, MotorDC * motorLeft, MotorDC * motorRight, int PWM,LightSensor *middleIRDireita, LightSensor *middleIrEsquerda){ 
-    int leftWhite = 110; //200
-    int rightWhite = 110;
+    int leftWhite = 200; //110
+    int rightWhite = 200; //110
 
     int leftReading = leftIR->read();
     int rightReading = rightIR->read();

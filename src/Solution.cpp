@@ -261,18 +261,20 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
         }
         if(state==1){
             typeOfBlock= pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,frontalUltrassonic,robotClaw,forkLift, middleSensor, middleSensorLeft, lightSensorRight, lightSensorLeft,bumper);
-            while(middleSensor->read()<100){
+            while(middleSensor->read()<200 && middleSensorLeft->read() < 200){
                 leftMotor->moveBackward(90);
                 rightMotor->moveBackward(68);
             }
 
             stop(leftMotor,rightMotor);
             delay(500);
-            align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,80,middleSensorLeft,middleSensor);
             
+            align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,80,middleSensorLeft,middleSensor);
+            stop(leftMotor,rightMotor);
+            delay(500);
             while(backIr->read()<200){
                 leftMotor->moveBackward(90);
-                rightMotor->moveBackward(70);
+                rightMotor->moveBackward(68);
             }
             stop(leftMotor,rightMotor);
             delay(500);
