@@ -226,16 +226,15 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             stop(leftMotor,rightMotor);
             delay(500);
 
-                
-            if(*y==5){
-                destinationDirection=SOL::Norte;
-            }
-            else if(*y==2){
-                destinationDirection=SOL::Sul;
-            }
             
+            if(*x>4){
+                destinationDirection=SOL::Oeste;
+            }
+            else {
+                destinationDirection=SOL::Leste;
+            }
             correctDirection(currentDirection,destinationDirection,leftMotor,rightMotor);
-
+            
             
             //aqui entra a função da camera que retorna a quantidade de blocos
             /*
@@ -247,7 +246,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             delay(500);
             // int numberOfBlocks = return_count_of_cubes();
             int numberOfBlocks = 2;
-            squareBlocks[smallPosition][1]=(squareBlocks[smallPosition][1])-1;
+            //squareBlocks[smallPosition][1]=(squareBlocks[smallPosition][1])-1;
 
             //move_cm(3,FORWARD,leftMotor,rightMotor);
             //stop(leftMotor,rightMotor);
@@ -267,13 +266,13 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             typeOfBlock= pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,frontalUltrassonic,robotClaw,forkLift, middleSensor, middleSensorLeft, lightSensorRight, lightSensorLeft);
             
             while(middleSensor->read()<100){
-                leftMotor->moveBackward(80);
-                rightMotor->moveBackward(60);
+                leftMotor->moveBackward(90);
+                rightMotor->moveBackward(68);
             }
             stop(leftMotor,rightMotor);
             delay(500);
-
-            move_cm(2,BACKWARD,leftMotor,rightMotor);
+            align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,80,middleSensorLeft,middleSensor);
+            
             while(backIr->read()<200){
                 leftMotor->moveBackward(90);
                 rightMotor->moveBackward(70);
@@ -323,6 +322,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             }
             stop(leftMotor,rightMotor);
             delay(500);
+            align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,70);
             
             int forkDestiny=1;
             if(typeOfBlock=='0'){
@@ -565,6 +565,8 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
         if(x== 1){
             //pos 1.1
             rotates(AROUND,leftMotor,rightMotor);
+            stop(leftMotor,rightMotor);
+            delay(500);
             
         } else {
             //pos 1.7

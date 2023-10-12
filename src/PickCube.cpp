@@ -7,15 +7,16 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     unsigned long startTime;
     char c = '0';
 
-    move_cm(1.2,BACKWARD,leftMotor,rightMotor);
-    stop(leftMotor,rightMotor);
-    delay(500);
-    rotates(LEFT, leftMotor,rightMotor);
-    stop(leftMotor,rightMotor);
-    delay(500);
-    resetEncoders(leftMotor,rightMotor);
+    //move_cm(1.2,BACKWARD,leftMotor,rightMotor);
+    //stop(leftMotor,rightMotor);
+    //delay(500);
+    //rotates(LEFT, leftMotor,rightMotor);
+    //stop(leftMotor,rightMotor);
+    //delay(500);
+    //resetEncoders(leftMotor,rightMotor);
     while(rightMiddleIR->read()<100&&leftMiddleIR->read()<100){
         boucing(leftMotor,rightMotor,leftIR,rightIR,leftMiddleIR,rightMiddleIR);
+        
     }
     stop(leftMotor,rightMotor);
     delay(500);
@@ -68,7 +69,7 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     Fork->forklift_down_steps(2,0);  // Não apagar essas 4 linhas pq é a integração da visão e a empilhadeira precisa estar abaixada
     delay(500);
     //c = return_type_of_cube();
-    c='3';
+    c='8';
     Fork->forklift_up_distance_cm(4.5);
     //checar essa distancia
     move_cm((int)(frontal_distance+9),FORWARD,leftMotor,rightMotor);

@@ -1736,7 +1736,7 @@ int beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Lig
             //     leftMotor->moveBackward(80);
             //     rightMotor->moveBackward(60);
             // }
-            move_cm(3,BACKWARD,leftMotor,rightMotor);
+            //move_cm(3,BACKWARD,leftMotor,rightMotor);
   
             stop(leftMotor,rightMotor);
             delay(500);
@@ -1781,6 +1781,9 @@ int beginning(LightSensor * lightSensorLeft, LightSensor * lightSensorRight, Lig
     // Serial.print(lastSeen);
     // Serial.print(" ");
     // Serial.println(edge);
+
+
+
 
     }
     //Serial.print("estou na: ");
