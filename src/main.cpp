@@ -99,7 +99,7 @@ void setup()
   
   //rotates(LEFT,&leftMotor,&rightMotor);
   int position =0;
-  //position = beginning(&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
+  position = beginning(&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&backIR,&leftMotor,&rightMotor,&frontalUltrassonic,&lateralUltrassonic,&bumper,&ldr);
   // greenEdge(&leftMotor,&rightMotor,&leftIR,&rightIR,&leftMiddleIR,&rightMiddleIR,&ldr);
   
   if(position == 17){
@@ -123,17 +123,20 @@ void setup()
      direcao=SOL::Sul; 
   }
 
-  /*
-  y = 5;
-  x = 7;
-  direcao = SOL::Sul;
-  int *best = bestBlock(y,x);
-  SOL::Direcao destinationDirection;
-  Robot_Claw.open_claw_entirely();
-
-
-  //moveTo(x,y,destination,direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&leftMiddleIR,&backIR,&rightMiddleIR);
   
+  //y = 5;
+  //x = 7;
+  //direcao = SOL::Sul;
+  //int *best = bestBlock(y,x);
+  //SOL::Direcao destinationDirection;
+  //Robot_Claw.open_claw_entirely();
+
+
+
+  /*
+  moveTo(x,y,destination,direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&leftMiddleIR,&backIR,&rightMiddleIR);
+  stop(&leftMotor,&rightMotor);
+  delay(500);
   
   resetEncoders(&leftMotor,&rightMotor);
 
@@ -200,10 +203,14 @@ void setup()
   stop(&leftMotor,&rightMotor);
   delay(500);
   */
-         
+  
+
+  
 }
 
 void loop(){
+  //Serial.println(backIR.read());
+  //Serial.println(ldr.read());
   /*
   Serial.print(leftIR.read());
   Serial.print(" ");
@@ -213,7 +220,7 @@ void loop(){
   Serial.print(" ");
   Serial.println(rightIR.read());
   */
-  //stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&rightMiddleIR,&backIR,&leftMiddleIR,&bumper);
+  stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&rightMiddleIR,&backIR,&leftMiddleIR,&bumper);
 
 
 

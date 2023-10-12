@@ -53,7 +53,7 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     */
     //AJUSTAR VALOR 
     // Serial.println("indo p frente");
-    move_cm(3,FORWARD,leftMotor,rightMotor);
+    move_cm(4,FORWARD,leftMotor,rightMotor);
     stop(leftMotor,rightMotor);
     delay(500);
 
@@ -61,7 +61,7 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     delay(500);
 
     frontal_distance = frontalUltrassonicSensor->distance_cm();  
-    if (frontal_distance >= 15)
+    if (frontal_distance >= 15) 
         frontal_distance =15;
     
     stop(leftMotor,rightMotor);
@@ -70,7 +70,7 @@ char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassoni
     move_cm(4,BACKWARD,leftMotor,rightMotor);
     Fork->forklift_down_steps(2,0);  // Não apagar essas 4 linhas pq é a integração da visão e a empilhadeira precisa estar abaixada
     delay(500);
-    //c = return_type_of_cube();
+    c = return_type_of_cube();
     //c='8';
     Fork->forklift_up_distance_cm(4.5);
     //checar essa distancia
@@ -167,7 +167,7 @@ char pick_cube_from_left( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic
     move_cm(4,BACKWARD,leftMotor,rightMotor);
     Fork->forklift_down_steps(2,0);  // Não apagar essas 4 linhas pq é a integração da visão e a empilhadeira precisa estar abaixada
     delay(500);
-    c = return_type_of_cube();
+    //c = return_type_of_cube();
     //c='8';
     Fork->forklift_up_distance_cm(4.5);
     //checar essa distancia

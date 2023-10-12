@@ -362,7 +362,19 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
                 stop(leftMotor,rightMotor);
                 delay(300);
                 robotClaw->open_claw_with_cube();
+
+
                 //indo agr voltar para pegar outro bloco
+                resetEncoders(leftMotor,rightMotor);
+                move_cm(5,BACKWARD,leftMotor,rightMotor);
+
+                while(backIr->read()<200){
+                    leftMotor->moveBackward(80);
+                    rightMotor->moveBackward(60);
+                }
+                stop(leftMotor,rightMotor);
+                delay(500);
+
                 while(middleSensor->read()<100){
                     leftMotor->moveBackward(80);
                     rightMotor->moveBackward(60);
@@ -395,6 +407,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             }
         
         if(forkDestiny>2){
+            
             forkLift->forklift_down_steps(forkDestiny,2);
         }
         else{
@@ -411,7 +424,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
     
 
 int greenEdge(MotorDC * leftMotor, MotorDC * rightMotor,LightSensor * lightSensorLeft, LightSensor * lightSensorRight,LightSensor * middleLeftIR, LightSensor * middleRightIR, LightSensor * backIR, LDR * Ldr){
-    int blue = 28;
+    int blue = 26;
     int coord = 0;
     //Serial.println("checando em qual verde to");
     
