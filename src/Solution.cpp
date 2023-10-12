@@ -10,8 +10,7 @@ char typeOfBlock=2;
 int smallPosition=0;
 int closestBlock[2];
 int indexShelf;
-int squareBlocks [][2]={ {22,1},{23,1},      {25,1},{26,1},
-                        {52,1},{53,1},      {55,1},{56,1}
+int squareBlocks [][2]={ {21,1},{57,1}
     };
                                     //  g7 0 ,d4 3,a1 6   h8 1,e5 4 ,b2 7  i9 3 ,f6 6 ,c3 8
 static int deliveryLocations[][2][2]={  {{11,1},{15,1}},{{12,1},{16,1}},{{13,1},{17,1}},
@@ -209,13 +208,13 @@ int*  bestBlock(int currentY,int currentX){
 void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorLeft, LightSensor *lightSensorRight, MotorDC * leftMotor, MotorDC * rightMotor,Claw*robotClaw, Forklift * forkLift, Ultrassonic * lateralUltrassonic,Ultrassonic*frontalUltrassonic,LightSensor * middleSensor,LightSensor*backIr,LightSensor* middleSensorLeft, Bumper * bumper){
     int destination[2];
     int *best = bestBlock(*y,*x);
-    
+    SOL::Direcao destinationDirection;
+
     robotClaw->open_claw_entirely();
     while(*best!=0){
         if(state==0){
             destination[0]=*best;
             destination[1]=*(best+1);
-            SOL::Direcao destinationDirection;
             moveTo(x,y,destination,currentDirection,lightSensorLeft,lightSensorRight,leftMotor,rightMotor,middleSensor,backIr,middleSensorLeft);
             resetEncoders(leftMotor,rightMotor);
 
@@ -229,7 +228,6 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             int yDaBorda;
             if(*x>4){
                 destinationDirection=SOL::Oeste;
-                
             }
             else {
                 destinationDirection=SOL::Leste;
@@ -262,14 +260,12 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             }
         }
         if(state==1){
-            
-
             typeOfBlock= pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,frontalUltrassonic,robotClaw,forkLift, middleSensor, middleSensorLeft, lightSensorRight, lightSensorLeft,bumper);
-            
             while(middleSensor->read()<100){
                 leftMotor->moveBackward(90);
                 rightMotor->moveBackward(68);
             }
+
             stop(leftMotor,rightMotor);
             delay(500);
             align(lightSensorLeft,lightSensorRight,leftMotor,rightMotor,80,middleSensorLeft,middleSensor);
@@ -281,41 +277,22 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
             stop(leftMotor,rightMotor);
             delay(500);
             resetEncoders(leftMotor,rightMotor);
-            if((*y==2&&*x==5)||(*y==2&&*x==6)||(*y==5&&*x==2)||(*y==5&&*x==3)){
-                int direcaoDestino;
-                if(*y==5){
-                    *currentDirection=SOL::Oeste;
-                    //direcaoDestino=SOL::Oeste;
-                    //correctDirection(currentDirection,*destination,leftMotor,rightMotor);
-                    rotates(LEFT,leftMotor,rightMotor);
-                    *x= 1; 
-                }
-                else{
-                    *currentDirection=SOL::Leste;
-                    //direcaoDestino=SOL::Leste;
-                    Serial.println("estou aqui");
-                    rotates(LEFT,leftMotor,rightMotor);
-                    //correctDirection(currentDirection,*destination,leftMotor,rightMotor);
-                    *x=7;
-                }
+
+            if(*y==5){
+                *currentDirection=SOL::Oeste;
+                //direcaoDestino=SOL::Oeste;
+                //correctDirection(currentDirection,*destination,leftMotor,rightMotor);
+                rotates(LEFT,leftMotor,rightMotor);
+                *x= 1; 
+            }
+            else{
+                *currentDirection=SOL::Leste;
+                //direcaoDestino=SOL::Leste;
+                rotates(LEFT,leftMotor,rightMotor);
+                //correctDirection(currentDirection,*destination,leftMotor,rightMotor);
+                *x=7;
             }
 
-            else{
-                int direcaoDestino;
-                if(*y==5){
-                    *currentDirection=SOL::Leste;
-                    rotates(RIGHT,leftMotor,rightMotor);
-                    //correctDirection(currentDirection,*destination,leftMotor,rightMotor);
-                    *x= 7; 
-                }
-                else{
-                    *currentDirection=SOL::Oeste;
-                    //direcaoDestino=SOL::Oeste;
-                    //correctDirection(currentDirection,*destination,leftMotor,rightMotor);
-                    rotates(RIGHT,leftMotor,rightMotor);
-                    *x=1;
-                }
-            }
             stop(leftMotor,rightMotor);
             delay(500);
             while(!bumper->checkBumper()){

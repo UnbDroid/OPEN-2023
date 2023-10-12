@@ -126,6 +126,7 @@ void setup()
 }
 
 void loop(){
-  stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&rightMiddleIR,&backIR,&leftMiddleIR,&bumper);
+
+  //stateMachine(&y,&x,&direcao,&leftIR,&rightIR,&leftMotor,&rightMotor,&Robot_Claw,&forklift,&lateralUltrassonicSensor,&frontalUltrassonicSensor,&rightMiddleIR,&backIR,&leftMiddleIR,&bumper);
   
   }
