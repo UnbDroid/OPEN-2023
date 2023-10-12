@@ -74,6 +74,7 @@ void setup()
   
   forklift.forklift_up_steps(0,2);
   Robot_Claw.close_claw_entirely();
+  
   // delay(20000);
   // Robot_Claw.open_claw_with_cube();
   // forklift.forklift_down_steps(1,0);

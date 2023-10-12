@@ -263,7 +263,7 @@ void stateMachine(int* y,int* x,int *currentDirection,LightSensor * lightSensorL
         if(state==1){
             
 
-            typeOfBlock= pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,frontalUltrassonic,robotClaw,forkLift, middleSensor, middleSensorLeft, lightSensorRight, lightSensorLeft);
+            typeOfBlock= pick_cube_from_right(leftMotor,rightMotor,lateralUltrassonic,frontalUltrassonic,robotClaw,forkLift, middleSensor, middleSensorLeft, lightSensorRight, lightSensorLeft,bumper);
             
             while(middleSensor->read()<100){
                 leftMotor->moveBackward(90);
@@ -565,8 +565,8 @@ void repositionBeginning(int y, int x, int orientacao, MotorDC * leftMotor, Moto
         if(x== 1){
             //pos 1.1
             rotates(AROUND,leftMotor,rightMotor);
-            stop(leftMotor,rightMotor);
-            delay(500);
+            //stop(leftMotor,rightMotor);
+            //delay(500);
             
         } else {
             //pos 1.7

@@ -14,7 +14,7 @@
 
 
 
-char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * lateralUltrassonicSensor, Ultrassonic * frontalUltrassonicSensor, Claw * RobotClaw, Forklift * Fork, LightSensor * rightMiddleIR,LightSensor * leftMiddleIR,LightSensor * rightIR,LightSensor * leftIR);
+char pick_cube_from_right( MotorDC * leftMotor, MotorDC * rightMotor, Ultrassonic * lateralUltrassonicSensor, Ultrassonic * frontalUltrassonicSensor, Claw * RobotClaw, Forklift * Fork, LightSensor * rightMiddleIR,LightSensor * leftMiddleIR,LightSensor * rightIR,LightSensor * leftIR, Bumper * bumper);
 
 
 #endif
